@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 
 <html lang="pt-BR">
 <head>
@@ -596,9 +596,20 @@ body[data-theme="light"] body[data-theme="light"] .mod-controls .di-dark{border-
 <!-- Nav Footer -->
 <div class="nav-footer">
 <a class="nav-btn" href="modulo-11-ia.html">← Anterior: IA</a>
-<a class="nav-btn primary" href="modulo-13-simulado.html">Próximo: Simulado Final →</a>
+<a class="nav-btn primary" href="modulo-13-simulado.html" onclick="markGlossaryDone()">Próximo: Simulado Final →</a>
 </div>
-</main>
+
+<script>
+function markGlossaryDone(){
+  var p=JSON.parse(localStorage.getItem('pdi_progress')||'{}');
+  if(!p[12])p[12]={visited:true,quizDone:false,quizScore:0,quizTotal:0};
+  p[12].quizDone=true;
+  p[12].quizScore=5;
+  p[12].quizTotal=5;
+  p[12].completedAt=new Date().toISOString();
+  localStorage.setItem('pdi_progress',JSON.stringify(p));
+}
+</script></main>
 <script>
 const search=document.getElementById('search');
 const filters=document.querySelectorAll('.filter-btn');
