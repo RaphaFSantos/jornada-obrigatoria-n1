@@ -407,11 +407,18 @@ git push origin feature/new-api
 <div class="quiz-feedback nok">Não foi dessa vez. Releia o conteúdo e tente novamente!</div>
 </div>
 </div>
+
+<div class="quiz-retry-banner" id="quiz-banner">
+  <div class="score" id="quiz-score-display"></div>
+  <div class="msg" id="quiz-msg"></div>
+  <button onclick="retryQuiz()">🔄 Tentar novamente</button>
+</div>
+
 <!-- Aprofundamento -->
 <section class="section">
 <div class="card">
 <h2>🎓 Aprofundamento</h2>
-<p class="muted">Este é um <strong>mini-curso/resumo</strong>. Para explorar a fundo:</p>
+<p class="muted">Para explorar a fundo cada tema:</p>
 <ul>
 <li><strong>Udemy:</strong> GitLab CI/CD (Gabriel Henrique), Jenkins Complete Guide (Maximilian Schwarzmüller)</li>
 <li><strong>Alura:</strong> Curso de CI/CD — começando com pipelines, Docker avançado</li>

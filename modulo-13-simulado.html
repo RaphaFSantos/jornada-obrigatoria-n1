@@ -134,7 +134,7 @@ body[data-theme="light"] body[data-theme="light"] .mod-controls .di-dark{border-
 <div class="hero">
 <div class="icon">🎯</div>
 <h1>Simulado Final</h1>
-<p class="sub">50 questões — 5 de cada módulo. Teste tudo que aprendeu!</p>
+<p class="sub">55 questões — 5 de cada módulo. Teste tudo que aprendeu!</p>
 </div>
 <div class="quiz-app" id="app"></div>
 <div class="nav-footer">
@@ -212,7 +212,14 @@ const questions=[
 {cat:"Mensageria",q:"Lag no Kafka indica?",opts:["Velocidade","Mensagens acumuladas sem consumir","Erro no broker","Tópico deletado"],correct:1,ok:"Lag = diferença entre produção e consumo. Cresce quando consumer é lento.",nok:"Não foi dessa vez. Releia o conteúdo e tente novamente!"},
 {cat:"Mensageria",q:"DLQ serve para?",opts:["Fila principal","Msgs que falharam no processamento","Prioridade","Backup"],correct:1,ok:"Dead Letter Queue = onde vão msgs que falharam N vezes.",nok:"Não foi dessa vez. Releia o conteúdo e tente novamente!"},
 {cat:"Mensageria",q:"At-least-once delivery significa?",opts:["Exatamente 1x","Pode entregar mais de 1x","Nunca entrega","No máximo 1x"],correct:1,ok:"Garante entrega mas pode duplicar. Consumer deve ser idempotente.",nok:"Não foi dessa vez. Releia o conteúdo e tente novamente!"},
-{cat:"Mensageria",q:"Consumer Group distribui?",opts:["Tópicos","Partições entre consumers","Backups","Alertas"],correct:1,ok:"Cada partição vai pra 1 consumer do grupo, escalando paralelo.",nok:"Não foi dessa vez. Releia o conteúdo e tente novamente!"}
+{cat:"Mensageria",q:"Consumer Group distribui?",opts:["Tópicos","Partições entre consumers","Backups","Alertas"],correct:1,ok:"Cada partição vai pra 1 consumer do grupo, escalando paralelo.",nok:"Não foi dessa vez. Releia o conteúdo e tente novamente!"},
+
+// -- IA & Automacao (5) --
+{cat:"IA",q:"O que e Machine Learning?",opts:["Programacao manual de regras","Algoritmos que aprendem padroes a partir de dados","Robos fisicos","Inteligencia humana artificial"],correct:1,ok:"ML = algoritmos que melhoram automaticamente com experiencia/dados.",nok:"Nao foi dessa vez. Releia o conteudo e tente novamente!"},
+{cat:"IA",q:"LLM (Large Language Model) e treinado com?",opts:["Imagens medicas","Grandes volumes de texto da internet","Dados de sensores IoT","Planilhas Excel"],correct:1,ok:"LLMs como GPT sao treinados com bilhoes de tokens de texto.",nok:"Nao foi dessa vez. Releia o conteudo e tente novamente!"},
+{cat:"IA",q:"O que e um prompt em IA generativa?",opts:["O modelo em si","A instrucao/pergunta enviada ao modelo","O dataset de treino","A GPU que processa"],correct:1,ok:"Prompt = input que guia a resposta do modelo.",nok:"Nao foi dessa vez. Releia o conteudo e tente novamente!"},
+{cat:"IA",q:"RAG (Retrieval-Augmented Generation) combina?",opts:["Duas GPUs","Busca em base de conhecimento + geracao de texto","Imagem + audio","Frontend + backend"],correct:1,ok:"RAG busca documentos relevantes e usa como contexto para o LLM gerar respostas precisas.",nok:"Nao foi dessa vez. Releia o conteudo e tente novamente!"},
+{cat:"IA",q:"Qual o principal risco de alucinacao em LLMs?",opts:["A GPU superaquece","O modelo gera informacoes falsas com aparencia verdadeira","O modelo para de funcionar","O custo aumenta"],correct:1,ok:"Alucinacao = resposta convincente mas factualmente incorreta. Validacao humana e essencial.",nok:"Nao foi dessa vez. Releia o conteudo e tente novamente!"}
 ];
 
 let current=0,score=0,answers=[];
@@ -327,6 +334,9 @@ render();
   var m = document.title.match(/Módulo (\d+)/);
   if (!m) return;
   var mod = parseInt(m[1]);
+
+  // Simulado (mod 13) tem tracking proprio no showResult() - nao duplicar
+  if (mod === 13) return;
 
   // Carregar progresso existente do localStorage
   var p = JSON.parse(localStorage.getItem('pdi_progress') || '{}');

