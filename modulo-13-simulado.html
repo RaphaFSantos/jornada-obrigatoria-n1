@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 
 <html lang="pt-BR">
 <head>
@@ -284,12 +284,12 @@ function showResult(){
   if(passed)p[13].completedAt=new Date().toISOString();
   localStorage.setItem('pdi_progress',JSON.stringify(p));
   var emoji,msg,banner='';
-  if(pct>=95){emoji='u{1F3C6}';msg='Perfeito! Vocu{00EA} u{00E9} mestre do Command Center!'}
-  else if(pct>=85){emoji='u{1F389}';msg='Parabu{00E9}ns! Simulado concluu{00ED}do com sucesso!'}
-  else if(pct>=70){emoji='u{1F4AA}';msg='Quase lu{00E1}! Precisa de 85% pra concluir. Revise os pontos fracos.'}
-  else if(pct>=50){emoji='u{1F4DA}';msg='Na mu{00E9}dia, mas precisa de 85% pra concluir. Revise os mu{00F3}dulos.'}
-  else{emoji='u{1F62C}';msg='Precisa revisar os mu{00F3}dulos! Mu{00ED}nimo 85% pra concluir.'}
-  if(passed){banner='<div style="background:rgba(33,194,94,0.15);border:1px solid var(--accent);border-radius:12px;padding:16px 20px;margin-bottom:20px;text-align:center"><span style="font-size:1.3rem">&#9989;</span> <strong style="color:var(--accent)">Simulado Concluu{00ED}do!</strong><span style="color:var(--muted);margin-left:8px">Sua nota foi registrada.</span></div>';}
+  if(pct>=95){emoji='🏆';msg='Perfeito! Você é mestre do Command Center!'}
+  else if(pct>=85){emoji='🎉';msg='Parabéns! Simulado concluído com sucesso!'}
+  else if(pct>=70){emoji='💪';msg='Quase lá! Precisa de 85% pra concluir. Revise os pontos fracos.'}
+  else if(pct>=50){emoji='📚';msg='Na média, mas precisa de 85% pra concluir. Revise os módulos.'}
+  else{emoji='😬';msg='Precisa revisar os módulos! Mínimo 85% pra concluir.'}
+  if(passed){banner='<div style="background:rgba(33,194,94,0.15);border:1px solid var(--accent);border-radius:12px;padding:16px 20px;margin-bottom:20px;text-align:center"><span style="font-size:1.3rem">&#9989;</span> <strong style="color:var(--accent)">Simulado Concluído!</strong><span style="color:var(--muted);margin-left:8px">Sua nota foi registrada.</span></div>';}
 const catScores={};
   cats.forEach(c=>{catScores[c]={total:0,correct:0}});
   answers.forEach(a=>{catScores[a.cat].total++;if(a.correct)catScores[a.cat].correct++});
