@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"/>
+<link href="data:image/svg+xml,&lt;svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22&gt;&lt;text y=%22.9em%22 font-size=%2290%22&gt;🎓&lt;/text&gt;&lt;/svg&gt;" rel="icon"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Módulo 6 — Observabilidade | Jornada Obrigatória N1 PicPay</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Fira+Code:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0a0e1a;--card:rgba(255,255,255,0.06);--text:#f0f0f5;--muted:#8b8fa3;--accent:#21C25E;--accent-dim:rgba(33,194,94,0.15);--code-bg:#1a1f2e;--border:rgba(255,255,255,0.08)}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);line-height:1.7;min-height:100vh}
+code,pre{font-family:'Fira Code',monospace}
+header{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,14,26,0.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:14px 24px;display:flex;justify-content:space-between;align-items:center}
+header .brand{font-weight:700;font-size:1.05rem;color:var(--text)}
+header .tag{font-size:.82rem;color:var(--muted);background:var(--card);padding:4px 12px;border-radius:20px;border:1px solid var(--border)}
+.home-btn{position:fixed;bottom:24px;right:24px;z-index:100;width:52px;height:52px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;text-decoration:none;font-size:1.4rem;box-shadow:0 4px 20px rgba(33,194,94,0.35);transition:transform .2s,box-shadow .2s}
+.home-btn:hover{transform:scale(1.1);box-shadow:0 6px 28px rgba(33,194,94,0.5)}
+main{max-width:820px;margin:0 auto;padding:100px 20px 60px}
+.hero{text-align:center;margin-bottom:48px}
+.hero .icon{font-size:3.2rem;margin-bottom:12px}
+.hero h1{font-size:2rem;font-weight:700;margin-bottom:8px;background:linear-gradient(135deg,var(--accent),#17a84e);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero .sub{color:var(--muted);font-size:1rem}
+.section{margin-bottom:40px}
+.section .card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:28px;transition:transform .25s,border-color .25s}
+.section .card:hover{transform:translateY(-4px);border-color:rgba(33,194,94,0.3)}
+.section .card h2{font-size:1.35rem;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:10px}
+.section .card h2 .num{background:var(--accent);color:#0a0e1a;font-size:.75rem;font-weight:700;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.section .card p{color:var(--text);margin-bottom:12px;font-size:.95rem}
+.section .card p.muted{color:var(--muted);font-size:.88rem}
+.section .card ul{margin:8px 0 12px 20px;color:var(--muted);font-size:.9rem}
+.section .card ul li{margin-bottom:6px}
+.section .card ul li strong{color:var(--text)}
+code.inline{background:var(--code-bg);padding:2px 7px;border-radius:5px;font-size:.85rem;color:var(--accent)}
+pre.code-block{background:var(--code-bg);border:1px solid var(--border);border-radius:10px;padding:16px 18px;overflow-x:auto;font-size:.82rem;line-height:1.6;margin:12px 0;color:var(--muted)}
+.picpay-box{border-left:4px solid var(--accent);background:var(--accent-dim);border-radius:0 10px 10px 0;padding:14px 18px;margin-top:16px}
+.picpay-box p{color:var(--text);margin:0;font-size:.9rem}
+.analogy{background:rgba(99,102,241,0.08);border:1px solid rgba(99,102,241,0.18);border-radius:10px;padding:14px 18px;margin:12px 0}
+.analogy p{color:#a5b4fc;margin:0;font-size:.88rem}
+.vs-table{width:100%;border-collapse:collapse;margin:12px 0}
+.vs-table th,.vs-table td{padding:10px 14px;text-align:left;font-size:.88rem;border-bottom:1px solid var(--border)}
+.vs-table th{color:var(--accent);font-weight:600;font-size:.8rem;text-transform:uppercase;letter-spacing:.5px}
+.vs-table td{color:var(--muted)}
+.vs-table td:first-child{color:var(--text);font-weight:500}
+
+/* Quiz */
+.quiz-section{margin-top:48px}
+.quiz-section h2{font-size:1.4rem;font-weight:700;margin-bottom:24px;text-align:center}
+.quiz-question{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:24px;margin-bottom:20px}
+.quiz-q{font-weight:600;font-size:1rem;margin-bottom:16px}
+.quiz-options{display:flex;flex-direction:column;gap:8px}
+.quiz-opt{padding:12px 16px;border-radius:10px;border:1px solid var(--border);cursor:pointer;font-size:.9rem;transition:all .2s;background:var(--code-bg)}
+.quiz-opt:hover:not(.disabled){border-color:var(--accent);background:var(--accent-dim)}
+.quiz-opt.disabled{cursor:default;opacity:.65}
+.quiz-opt.correct{border-color:var(--accent)!important;background:var(--accent-dim)!important;opacity:1!important;color:var(--accent);font-weight:600}
+.quiz-opt.wrong{border-color:#ef4444!important;background:rgba(239,68,68,0.12)!important;opacity:1!important;color:#ef4444}
+.quiz-feedback{display:none;margin-top:14px;padding:12px 16px;border-radius:10px;font-size:.88rem;line-height:1.5}
+.quiz-feedback.ok{background:var(--accent-dim);color:var(--accent)}
+.quiz-feedback.nok{background:rgba(239,68,68,0.1);color:#f87171}
+.quiz-feedback.show{display:block}
+
+/* Nav footer */
+.nav-footer{display:flex;justify-content:space-between;gap:12px;margin-top:48px;padding-top:28px;border-top:1px solid var(--border)}
+.nav-btn{padding:12px 24px;border-radius:10px;text-decoration:none;font-size:.9rem;font-weight:600;border:1px solid var(--border);color:var(--muted);transition:all .2s}
+.nav-btn:hover{border-color:var(--accent);color:var(--text)}
+.nav-btn.primary{background:var(--accent);color:#0a0e1a;border-color:var(--accent)}
+.nav-btn.primary:hover{background:#1db854;box-shadow:0 4px 16px rgba(33,194,94,0.3)}
+
+@media(max-width:600px){
+  main{padding:88px 14px 50px}
+  .section .card{padding:20px}
+  .hero h1{font-size:1.5rem}
+  .nav-footer{flex-direction:column}
+}
+.std-header{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,14,26,0.92);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,0.08);padding:14px 24px;display:flex;align-items:center;justify-content:space-between}
+.std-header .sh-title{font-weight:700;font-size:14px;color:#8b8fa3}
+.std-header .sh-module{font-weight:800;font-size:15px;color:#21C25E}
+/* === STANDARD OVERRIDE === */
+.std-header{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,14,26,0.92);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,0.08);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;height:56px}
+.std-header .sh-title{font-weight:700;font-size:14px;color:#8b8fa3}
+.std-header .sh-module{font-weight:800;font-size:15px;color:#21C25E}
+.home-btn,.hb{position:fixed!important;bottom:24px!important;right:24px!important;z-index:200!important;width:52px!important;height:52px!important;border-radius:50%!important;background:#21C25E!important;color:#0a0e1a!important;border:none!important;cursor:pointer!important;display:flex!important;align-items:center!important;justify-content:center!important;font-size:1.4rem!important;box-shadow:0 4px 20px rgba(33,194,94,0.4)!important;transition:all .3s!important;text-decoration:none!important}
+.home-btn:hover,.hb:hover{transform:scale(1.1)!important;box-shadow:0 6px 30px rgba(33,194,94,0.6)!important}
+/* Ensure content doesn't hide behind fixed header */
+body>div:not(.std-header):not(.home-btn):not([class*="hb"]):first-of-type,
+body>main:first-of-type,
+.container,.main-content,main{padding-top:80px!important}
+/* Nav footer standardization */
+.nav-footer,.nf,.nav-buttons{display:flex!important;justify-content:space-between!important;margin-top:60px!important;padding-top:30px!important;border-top:1px solid rgba(255,255,255,0.08)!important;flex-wrap:wrap!important;gap:12px!important}
+.nav-btn,.nb{padding:14px 28px!important;border-radius:12px!important;text-decoration:none!important;font-weight:700!important;font-size:.9rem!important;transition:all .3s!important;border:1px solid rgba(255,255,255,0.08)!important;color:#8b8fa3!important;display:inline-flex!important;align-items:center!important;background:transparent!important}
+.nav-btn:hover,.nb:hover{border-color:#21C25E!important;color:#21C25E!important;background:rgba(33,194,94,0.12)!important}
+.nav-btn.primary,.nb.np,.nav-btn.next{background:#21C25E!important;color:#0a0e1a!important;border-color:#21C25E!important}
+.nav-btn.primary:hover,.nb.np:hover,.nav-btn.next:hover{background:#1db854!important;transform:translateY(-2px)!important;box-shadow:0 4px 20px rgba(33,194,94,0.3)!important}
+/* PicPay box standardization */
+.picpay-box,.pb{background:rgba(33,194,94,0.12)!important;border-left:4px solid #21C25E!important;border-radius:0 12px 12px 0!important;padding:20px 24px!important;margin:24px 0!important}
+.picpay-box p,.pb p{color:#f0f0f5!important;margin:0!important;font-size:.93rem!important;line-height:1.6!important}
+.picpay-box strong,.pb strong{color:#21C25E!important}
+/* Quiz feedback standardization */
+.quiz-feedback,.qf{margin-top:12px!important;padding:14px 18px!important;border-radius:12px!important;font-size:.88rem!important;display:none!important;line-height:1.6!important}
+.quiz-feedback.show,.qf.show{display:block!important}
+.quiz-feedback.ok,.qf.ok,.quiz-feedback.correct-fb,.qf.correct-fb{background:rgba(33,194,94,0.1)!important;border:1px solid rgba(33,194,94,0.2)!important;color:#21C25E!important}
+.quiz-feedback.nok,.qf.nok,.quiz-feedback.wrong-fb,.qf.wrong-fb{background:rgba(239,68,68,0.1)!important;border:1px solid rgba(239,68,68,0.2)!important;color:#ef4444!important}
+/* Quiz option standardization */
+.quiz-opt,.qp,.quiz-option{padding:14px 18px!important;border-radius:12px!important;border:1px solid rgba(255,255,255,0.08)!important;cursor:pointer!important;transition:all .25s!important;font-size:.9rem!important;color:#8b8fa3!important;background:rgba(255,255,255,0.02)!important;display:block!important;width:100%!important;text-align:left!important;font-family:'Inter',sans-serif!important;margin-bottom:0!important}
+.quiz-opt:hover,.qp:hover,.quiz-option:hover{border-color:#21C25E!important;color:#f0f0f5!important;background:rgba(33,194,94,0.12)!important}
+.quiz-opt.correct,.qp.correct,.quiz-option.correct{background:rgba(33,194,94,0.2)!important;border-color:#21C25E!important;color:#21C25E!important}
+.quiz-opt.wrong,.qp.wrong,.quiz-option.wrong{background:rgba(239,68,68,0.2)!important;border-color:#ef4444!important;color:#ef4444!important}
+.quiz-opt.disabled,.qp.disabled,.quiz-option:disabled{pointer-events:none!important;opacity:.7!important}
+/* === END OVERRIDE === */
+/* Temas */
+body[data-theme="light"]{--bg:#f5f5f7;--card:rgba(0,0,0,0.04);--text:#1a1a2e;--muted:#6b7280;--accent:#21C25E;--accent-dim:rgba(33,194,94,0.1);--code-bg:#e8e8ec;--border:rgba(0,0,0,0.08)}
+body[data-theme="light"] .std-header{background:rgba(245,245,247,0.92)!important}
+body[data-theme="light"] .sh-title{color:#6b7280!important}
+body[data-theme="light"] .home-btn{box-shadow:0 4px 20px rgba(33,194,94,0.25)!important}
+body[data-theme="picpay"]{--bg:#052e16;--card:rgba(33,194,94,0.06);--text:#f0fdf4;--muted:#86efac;--accent:#21C25E;--accent-dim:rgba(33,194,94,0.15);--code-bg:#022c22;--border:rgba(33,194,94,0.15)}
+body[data-theme="picpay"] .std-header{background:rgba(5,46,22,0.92)!important}
+/* === GLOBAL FIX v2 === */
+a{color:#21C25E!important;text-decoration:none!important}
+a:hover{color:#1db854!important;text-decoration:underline!important}
+.nav-footer a[href="index.html"]:not(:first-child):not(:last-child),
+.nf a[href="index.html"]:not(:first-child):not(:last-child){display:none!important}
+.nav-footer,.nf,.nav-buttons{display:flex!important;justify-content:space-between!important;margin-top:60px!important;padding-top:30px!important;border-top:1px solid rgba(255,255,255,0.08)!important;flex-wrap:wrap!important;gap:12px!important}
+/* === END GLOBAL FIX v2 === */
+
+/* === MODULE CONTROLS === */
+.mod-controls{display:flex;align-items:center;gap:10px}
+.mod-controls .mc-themes{display:flex;gap:4px;align-items:center}
+.mod-controls .mc-dot{width:18px;height:18px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:all .2s;padding:0;background:none;display:flex;align-items:center;justify-content:center}
+.mod-controls .mc-dot.active{border-color:var(--accent)}
+.mod-controls .mc-dot .dot-inner{width:12px;height:12px;border-radius:50%}
+.mod-controls .mc-dot .di-dark{background:#0a0e1a;border:1px solid #555}
+.mod-controls .mc-dot .di-light{background:#fff;border:1px solid #ccc}
+.mod-controls .mc-dot .di-pp{background:#21C25E;border:1px solid #1a9e4a}
+body[data-theme="light"] body[data-theme="light"] .mod-controls .di-dark{border-color:#999}
+/* === END MODULE CONTROLS === */
+
+/* Quiz retry banner */
+.quiz-retry-banner{display:none;text-align:center;margin:24px 0;padding:20px;background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.2);border-radius:14px}
+.quiz-retry-banner.show{display:block}
+.quiz-retry-banner .score{font-size:1.4rem;font-weight:800;margin-bottom:8px}
+.quiz-retry-banner .score.perfect{color:#21C25E}
+.quiz-retry-banner .score.retry{color:#f59e0b}
+.quiz-retry-banner .msg{color:var(--muted);font-size:.9rem;margin-bottom:16px}
+.quiz-retry-banner button{padding:12px 28px;border-radius:10px;border:1px solid #f59e0b;background:rgba(245,158,11,0.15);color:#f59e0b;font-weight:700;font-size:.9rem;cursor:pointer;transition:all .2s}
+.quiz-retry-banner button:hover{background:#f59e0b;color:#0a0e1a}
+.quiz-retry-banner.perfect-banner{background:rgba(33,194,94,0.1);border-color:rgba(33,194,94,0.2)}
+.quiz-retry-banner.perfect-banner button{display:none}
+</style>
+</head>
+<body>
+<script>(function(){var t=localStorage.getItem('pdi_theme');if(t)document.body.setAttribute('data-theme',t);})()</script>
+<header class="std-header"><span class="sh-title">🎓 Jornada Obrigatória N1 — PicPay</span><span class="sh-module">06 — Observabilidade</span><div class="mod-controls"><div class="mc-themes"><button class="mc-dot active" data-theme="dark" title="Dark"><span class="dot-inner di-dark"></span></button><button class="mc-dot" data-theme="light" title="Light"><span class="dot-inner di-light"></span></button></div></div></header>
+<a class="home-btn" href="index.html" title="Voltar ao início">🏠</a>
+<main>
+<div class="hero">
+<div class="icon">📊</div>
+<h1>Observabilidade</h1>
+<p class="sub">Métricas, logs e traces — os 3 pilares pra entender o que acontece nos seus sistemas</p>
+</div>
+<!-- 1. O que é Observabilidade -->
+<div class="section">
+<div class="card">
+<h2><span class="num">1</span> O que é Observabilidade?</h2>
+<p>Observabilidade é a <strong>capacidade de entender o estado interno de um sistema</strong> apenas olhando suas saídas (métricas, logs e traces). Não é só "monitorar se está no ar" — é conseguir responder <strong>"por que está lento?"</strong> ou <strong>"onde o erro aconteceu?"</strong> sem precisar acessar o servidor.</p>
+<p>A diferença entre <strong>monitoramento</strong> e <strong>observabilidade</strong>:</p>
+<table class="vs-table">
+<tr><th>Aspecto</th><th>Monitoramento</th><th>Observabilidade</th></tr>
+<tr><td>Pergunta</td><td>"Está funcionando?"</td><td>"Por que não está funcionando?"</td></tr>
+<tr><td>Abordagem</td><td>Alertas pré-definidos</td><td>Exploração livre dos dados</td></tr>
+<tr><td>Foco</td><td>Dashboards com métricas conhecidas</td><td>Investigação de cenários desconhecidos</td></tr>
+<tr><td>Quando serve</td><td>Problemas previsíveis</td><td>Problemas que você nunca viu antes</td></tr>
+</table>
+<div class="analogy">
+<p>🏥 <strong>Analogia:</strong> Monitoramento é o monitor cardíaco (bip... bip... bip — tá vivo). Observabilidade é a ressonância magnética — você consegue ver dentro do corpo, entender o que cada órgão está fazendo e descobrir problemas que o monitor cardíaco nunca mostraria.</p>
+</div>
+<div class="picpay-box">
+<p>💡 <strong>No PicPay...</strong> observabilidade é estratégica. Com centenas de microserviços, não dá pra depender de "olhar log no servidor". Usamos Prometheus (métricas), OpenSearch (logs), Jaeger (traces) e Grafana (dashboards) pra ter visibilidade completa de tudo que acontece — do request do cliente até o banco de dados.</p>
+</div>
+</div>
+</div>
+<!-- 2. Os 3 Pilares -->
+<div class="section">
+<div class="card">
+<h2><span class="num">2</span> Os 3 Pilares da Observabilidade</h2>
+<p>Toda observabilidade se apoia em <strong>3 tipos de dado</strong>. Sozinhos, cada um conta parte da história. Juntos, contam a história completa.</p>
+<table class="vs-table">
+<tr><th>Pilar</th><th>O que é</th><th>Exemplo</th><th>Ferramenta</th></tr>
+<tr><td>Métricas</td><td>Números que variam ao longo do tempo</td><td>CPU 78%, latência p99=200ms, 1500 req/s</td><td>Prometheus, VictoriaMetrics</td></tr>
+<tr><td>Logs</td><td>Eventos textuais com timestamp</td><td>"2026-03-25 ERROR: Connection refused to Redis"</td><td>OpenSearch, ELK, CloudWatch</td></tr>
+<tr><td>Traces</td><td>Caminho de uma requisição entre serviços</td><td>API GW → ms-pix → ms-wallets → DB (total: 340ms)</td><td>Jaeger, Dynatrace, Tempo</td></tr>
+</table>
+<div class="analogy">
+<p>🔍 <strong>Analogia:</strong> Imagine investigar um acidente de carro. <strong>Métricas</strong> = velocímetro (mostra os números no momento). <strong>Logs</strong> = depoimento das testemunhas ("vi o carro frear às 14:32"). <strong>Traces</strong> = câmera de segurança (mostra o caminho completo do carro, quadro a quadro). Cada um dá uma perspectiva diferente — juntos, você reconstrói o que aconteceu.</p>
+</div>
+<p><strong>Como se complementam:</strong></p>
+<ul>
+<li><strong>Métrica</strong> diz que algo está errado (error rate subiu pra 5%)</li>
+<li><strong>Log</strong> diz o que está errado ("timeout connecting to Redis on port 6379")</li>
+<li><strong>Trace</strong> diz onde está errado (ms-payments → Redis call = 30s timeout no span 4)</li>
+</ul>
+<div class="picpay-box">
+<p>💡 <strong>No PicPay...</strong> o fluxo típico de investigação é: alerta de métrica dispara → SRE abre o dashboard Grafana → identifica o serviço afetado → consulta logs no OpenSearch → abre o trace no Jaeger pra ver exatamente qual chamada entre serviços está lenta. Tudo correlacionado pelo <code class="inline">trace_id</code>.</p>
+</div>
+</div>
+</div>
+<!-- 3. Métricas e Prometheus -->
+<div class="section">
+<div class="card">
+<h2><span class="num">3</span> Métricas e Prometheus</h2>
+<p><strong>Prometheus</strong> é o sistema de métricas mais usado em Kubernetes. Ele "raspa" (scrape) endpoints <code class="inline">/metrics</code> dos seus serviços e armazena as séries temporais.</p>
+<p><strong>Tipos de métrica:</strong></p>
+<table class="vs-table">
+<tr><th>Tipo</th><th>O que faz</th><th>Exemplo</th></tr>
+<tr><td>Counter</td><td>Só sobe (conta eventos acumulados)</td><td>http_requests_total = 1.523.847</td></tr>
+<tr><td>Gauge</td><td>Sobe e desce (valor atual)</td><td>cpu_usage_percent = 72.3</td></tr>
+<tr><td>Histogram</td><td>Distribui valores em buckets</td><td>request_duration_seconds (p50, p95, p99)</td></tr>
+<tr><td>Summary</td><td>Similar ao histogram, calcula percentis</td><td>response_time{quantile="0.99"} = 0.210</td></tr>
+</table>
+<p><strong>PromQL básico</strong> (linguagem de query do Prometheus):</p>
+<pre class="code-block"># Taxa de requests por segundo nos últimos 5 minutos
+rate(http_requests_total[5m])
+
+# Percentil 99 de latência
+histogram_quantile(0.99, rate(http_request_duration_seconds_bucket[5m]))
+
+# Taxa de erro (% de 5xx)
+rate(http_requests_total{status=~"5.."}[5m])
+/ rate(http_requests_total[5m]) * 100
+
+# Uso de CPU dos pods do ms-pix
+container_cpu_usage_seconds_total{namespace="pix"}</pre>
+<div class="analogy">
+<p>🌡️ <strong>Analogia:</strong> Prometheus é o termômetro digital da casa. A cada 15 segundos ele mede a temperatura (scrape). Guarda o histórico pra você ver a evolução. PromQL é a pergunta: "qual foi a temperatura máxima na última hora?" ou "qual cômodo está mais quente?"</p>
+</div>
+<div class="picpay-box">
+<p>💡 <strong>No PicPay...</strong> usamos <strong>VictoriaMetrics</strong> como backend de longa retenção (Prometheus guarda por padrão só 15 dias). As métricas são raspadas pelo OTel Collector e enviadas via <code class="inline">prometheusremotewrite</code> pro VictoriaMetrics. Dashboards Grafana consultam ambos.</p>
+</div>
+</div>
+</div>
+<!-- 4. Logs Estruturados -->
+<div class="section">
+<div class="card">
+<h2><span class="num">4</span> Logs Estruturados</h2>
+<p>Log estruturado é log em <strong>formato JSON</strong> — cada campo tem nome e valor, o que permite buscas, filtros e agregações automáticas. O oposto é log em texto livre (difícil de parsear).</p>
+<table class="vs-table">
+<tr><th>Aspecto</th><th>Texto Livre</th><th>JSON Estruturado</th></tr>
+<tr><td>Exemplo</td><td>ERROR 2026-03-25 Payment failed for user 123</td><td>{"level":"ERROR","timestamp":"2026-03-25T14:30:00Z","msg":"Payment failed","user_id":"123"}</td></tr>
+<tr><td>Busca</td><td>Regex, grep (frágil)</td><td>Filtro por campo: user_id=123 AND level=ERROR</td></tr>
+<tr><td>Dashboard</td><td>Difícil de agregar</td><td>Fácil: "top 10 erros por tipo"</td></tr>
+</table>
+<p><strong>Campos obrigatórios num bom log:</strong></p>
+<ul>
+<li><strong>timestamp</strong> — Quando aconteceu (ISO 8601)</li>
+<li><strong>level</strong> — Severidade: DEBUG, INFO, WARN, ERROR, FATAL</li>
+<li><strong>message</strong> — O que aconteceu (texto descritivo)</li>
+<li><strong>service</strong> — Qual serviço gerou o log</li>
+<li><strong>trace_id</strong> — Correlação com traces (conecta os 3 pilares)</li>
+<li><strong>user_id / request_id</strong> — Contexto da operação</li>
+</ul>
+<pre class="code-block">{
+  "timestamp": "2026-03-25T14:30:02.341Z",
+  "level": "ERROR",
+  "service": "ms-pix",
+  "trace_id": "abc123def456",
+  "message": "Timeout connecting to Redis",
+  "host": "ms-pix-7b8d9-xkf2p",
+  "duration_ms": 30000,
+  "error_type": "ConnectionTimeoutException"
+}</pre>
+<div class="analogy">
+<p>📝 <strong>Analogia:</strong> Log em texto livre é uma carta escrita à mão — legível pra humanos, difícil pra computadores. Log em JSON é um formulário preenchido — cada campo no lugar certo, fácil de filtrar e organizar automaticamente.</p>
+</div>
+<div class="picpay-box">
+<p>💡 <strong>No PicPay...</strong> logs vão pra <strong>OpenSearch</strong> (fork do Elasticsearch). O pipeline é: app → stdout (JSON) → Filebeat/Fluent Bit (coleta) → Kafka (buffer) → Flink/Logstash (processamento) → OpenSearch (armazenamento e busca). Sempre em JSON estruturado com <code class="inline">trace_id</code> pra correlação.</p>
+</div>
+</div>
+</div>
+<!-- 5. Distributed Tracing -->
+<div class="section">
+<div class="card">
+<h2><span class="num">5</span> Distributed Tracing</h2>
+<p>Quando uma requisição passa por <strong>vários microserviços</strong>, como saber onde ela ficou lenta? Distributed tracing rastreia o <strong>caminho completo</strong> da requisição, serviço por serviço.</p>
+<p><strong>Conceitos-chave:</strong></p>
+<ul>
+<li><strong>Trace</strong> — A jornada completa de uma requisição (do início ao fim)</li>
+<li><strong>Span</strong> — Uma etapa individual do trace (ex: chamada ao banco, request HTTP)</li>
+<li><strong>Trace ID</strong> — Identificador único que conecta todos os spans de uma requisição</li>
+<li><strong>Parent/Child</strong> — Spans formam uma árvore (o span pai chama o span filho)</li>
+<li><strong>Context Propagation</strong> — O trace ID é passado nos headers HTTP entre serviços</li>
+</ul>
+<p><strong>Exemplo visual de um trace:</strong></p>
+<pre class="code-block">Trace ID: abc-123-def-456    Total: 340ms
+
+├─ [API Gateway]              0ms ─── 340ms  (340ms)
+│  ├─ [ms-pix]                5ms ─── 330ms  (325ms)
+│  │  ├─ [ms-wallets]        10ms ─── 120ms  (110ms)
+│  │  │  └─ [PostgreSQL]     15ms ───  80ms  ( 65ms) ← OK
+│  │  ├─ [ms-fraud]         125ms ─── 180ms  ( 55ms) ← OK
+│  │  └─ [Redis cache]      185ms ─── 315ms  (130ms) ← LENTO!
+│  └─ [Response]            320ms ─── 330ms  ( 10ms)</pre>
+<div class="analogy">
+<p>📦 <strong>Analogia:</strong> Trace é como rastrear uma encomenda dos Correios. O Trace ID é o código de rastreamento. Cada span é um ponto de passagem ("saiu do centro de distribuição SP", "chegou em BH", "saiu pra entrega"). Se a encomenda atrasou, você vê exatamente em qual etapa travou.</p>
+</div>
+<div class="picpay-box">
+<p>💡 <strong>No PicPay...</strong> usamos <strong>Jaeger</strong> e <strong>Dynatrace</strong> pra visualizar traces. O <code class="inline">trace_id</code> é propagado automaticamente via headers (<code class="inline">traceparent</code> no padrão W3C). Quando um Pix demora mais que o esperado, o SRE abre o trace e vê exatamente qual microserviço ou banco está lento — sem precisar adivinhar.</p>
+</div>
+</div>
+</div>
+<!-- 6. Dashboards e Grafana -->
+<div class="section">
+<div class="card">
+<h2><span class="num">6</span> Dashboards e Grafana</h2>
+<p><strong>Grafana</strong> é a ferramenta de dashboards mais usada no ecossistema cloud. Conecta em dezenas de fontes de dados (Prometheus, VictoriaMetrics, OpenSearch, CloudWatch) e exibe tudo num único lugar.</p>
+<p><strong>Anatomia de um bom dashboard:</strong></p>
+<ul>
+<li><strong>Os 4 Golden Signals no topo</strong> — Latência, Tráfego, Erros, Saturação (visão rápida)</li>
+<li><strong>Gráficos de tendência</strong> — Linha do tempo mostrando evolução (últimas 1h, 6h, 24h)</li>
+<li><strong>Tabelas de detalhamento</strong> — Top endpoints mais lentos, top erros por tipo</li>
+<li><strong>Variáveis de filtro</strong> — Dropdown pra selecionar serviço, namespace, ambiente</li>
+<li><strong>Links rápidos</strong> — Logs no OpenSearch, traces no Jaeger, runbook no Confluence</li>
+</ul>
+<p><strong>Os 4 Golden Signals (recap):</strong></p>
+<table class="vs-table">
+<tr><th>Sinal</th><th>Métrica PromQL</th><th>O que indica</th></tr>
+<tr><td>Latência</td><td>histogram_quantile(0.99, rate(http_duration_bucket[5m]))</td><td>Experiência do usuário</td></tr>
+<tr><td>Tráfego</td><td>rate(http_requests_total[5m])</td><td>Volume de carga</td></tr>
+<tr><td>Erros</td><td>rate(http_requests_total{status=~"5.."}[5m])</td><td>Taxa de falha</td></tr>
+<tr><td>Saturação</td><td>container_memory_usage_bytes / container_spec_memory_limit</td><td>Risco de esgotamento</td></tr>
+</table>
+<div class="analogy">
+<p>🎛️ <strong>Analogia:</strong> Grafana é o painel do carro. Velocímetro (latência), conta-giros (tráfego), luz de alerta (erros), marcador de combustível (saturação). Tudo no campo de visão do motorista, sem precisar abrir o capô pra saber como o motor está.</p>
+</div>
+<div class="picpay-box">
+<p>💡 <strong>No PicPay...</strong> todo microserviço tem um dashboard Grafana padrão gerado automaticamente. O SRE de plantão (on-call) usa Grafana como primeira tela de investigação. Temos dashboards por serviço, por squad, por domínio (Pix, carteira, cartão) e dashboards de infra (Kafka, Redis, RDS). Mais de 500 dashboards ativos.</p>
+</div>
+</div>
+</div>
+<!-- 7. Alertas -->
+<div class="section">
+<div class="card">
+<h2><span class="num">7</span> Alertas</h2>
+<p>Alerta é uma <strong>notificação automática</strong> que dispara quando uma métrica ultrapassa um threshold. O objetivo: detectar problemas antes que o cliente perceba.</p>
+<p><strong>Bom alerta vs Mau alerta:</strong></p>
+<table class="vs-table">
+<tr><th>Característica</th><th>Bom Alerta</th><th>Mau Alerta</th></tr>
+<tr><td>Ação</td><td>Requer ação humana imediata</td><td>Informativo (ninguém faz nada)</td></tr>
+<tr><td>Precisão</td><td>Dispara quando tem problema real</td><td>Falso positivo constante</td></tr>
+<tr><td>Contexto</td><td>Diz o que está errado e link pro runbook</td><td>"Alerta: CPU alta" (sem contexto)</td></tr>
+<tr><td>Threshold</td><td>Baseado em SLO e impacto ao usuário</td><td>Número arbitrário ("CPU &gt; 80%")</td></tr>
+</table>
+<p><strong>Alert Fatigue:</strong> Quando alertas disparam demais (falsos positivos), o time para de prestar atenção — e quando vem um alerta real, ninguém responde. É o <strong>"menino que gritava lobo"</strong> da tecnologia.</p>
+<p><strong>Severidades:</strong></p>
+<ul>
+<li><strong>P1 — Crítico:</strong> Impacto ao cliente, precisa agir AGORA (ex: Pix fora do ar)</li>
+<li><strong>P2 — Alto:</strong> Degradação significativa, agir em até 30 min</li>
+<li><strong>P3 — Médio:</strong> Problema isolado, pode esperar horário comercial</li>
+<li><strong>P4 — Baixo:</strong> Informativo, sem impacto direto</li>
+</ul>
+<pre class="code-block"># Exemplo de alerta no Prometheus (AlertManager)
+groups:
+  - name: ms-pix-alerts
+    rules:
+      - alert: HighErrorRate
+        expr: rate(http_requests_total{status=~"5..",service="ms-pix"}[5m])
+              / rate(http_requests_total{service="ms-pix"}[5m]) &gt; 0.05
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "ms-pix error rate acima de 5%"
+          runbook: "https://confluence.picpay.com/runbook/ms-pix-errors"</pre>
+<div class="analogy">
+<p>🚨 <strong>Analogia:</strong> Alerta bom é o alarme de incêndio — só toca quando tem fogo de verdade, e todo mundo sabe o que fazer (evacuar). Alerta ruim é o alarme do carro do vizinho — toca toda noite, ninguém liga mais, e quando roubam o carro de verdade ninguém reage.</p>
+</div>
+<div class="picpay-box">
+<p>💡 <strong>No PicPay...</strong> alertas P1/P2 notificam via <strong>PagerDuty</strong> (telefone/SMS do on-call). P3/P4 vão pro Slack. Todo alerta tem link pro runbook. O time de O11y revisa alertas periodicamente pra eliminar falsos positivos e reduzir alert fatigue. Mais de 100 alertas configurados.</p>
+</div>
+</div>
+</div>
+<!-- 8. SLI/SLO na Prática -->
+<div class="section">
+<div class="card">
+<h2><span class="num">8</span> SLI/SLO na Prática</h2>
+<p>Vimos SLI/SLO no módulo de SRE. Agora vamos ver <strong>como implementar de verdade</strong> — escolhendo métricas e definindo alvos realistas.</p>
+<p><strong>Escolhendo bons SLIs:</strong></p>
+<ul>
+<li><strong>Disponibilidade:</strong> % de requests com sucesso (status != 5xx)</li>
+<li><strong>Latência:</strong> % de requests abaixo de um threshold (ex: &lt; 300ms)</li>
+<li><strong>Corretude:</strong> % de respostas com dado correto (mais difícil de medir)</li>
+<li><strong>Throughput:</strong> Volume de operações completadas por segundo</li>
+</ul>
+<p><strong>Exemplo prático — Pix PicPay:</strong></p>
+<table class="vs-table">
+<tr><th>SLI</th><th>SLO</th><th>Medição</th></tr>
+<tr><td>Disponibilidade</td><td>99.95% das transações com sucesso</td><td>1 - (count 5xx / count total) por janela de 30 dias</td></tr>
+<tr><td>Latência p99</td><td>99% dos Pix concluídos em &lt; 2s</td><td>histogram_quantile(0.99, rate(pix_duration_bucket[30d]))</td></tr>
+<tr><td>Latência p50</td><td>50% dos Pix concluídos em &lt; 500ms</td><td>histogram_quantile(0.50, rate(pix_duration_bucket[30d]))</td></tr>
+</table>
+<p><strong>Não exagere nos "nines":</strong></p>
+<ul>
+<li><strong>99.9%</strong> = 43 min de downtime/mês — bom pra maioria dos serviços</li>
+<li><strong>99.99%</strong> = 4 min de downtime/mês — caro demais pra serviços não-críticos</li>
+<li><strong>Dica:</strong> Comece com SLO mais relaxado e aperte conforme ganha confiança</li>
+</ul>
+<div class="analogy">
+<p>🎯 <strong>Analogia:</strong> SLO é como meta de corrida. Se você nunca correu, não define "vou correr uma maratona em 3 horas". Começa com "vou completar 5km em menos de 40 minutos" — e vai apertando conforme treina. SLO agressivo demais engessa o time; relaxado demais não protege o cliente.</p>
+</div>
+<div class="picpay-box">
+<p>💡 <strong>No PicPay...</strong> SLOs são definidos por domínio (Pix, Carteira, Pagamentos) e revisados trimestralmente. O dashboard de error budget mostra quanto "saldo" cada serviço ainda tem no mês. Se um serviço queima 80% do budget na primeira semana, o time congela releases e prioriza estabilidade.</p>
+</div>
+</div>
+</div>
+<!-- 9. OpenTelemetry -->
+<div class="section">
+<div class="card">
+<h2><span class="num">9</span> OpenTelemetry (OTel)</h2>
+<p>OpenTelemetry é o <strong>padrão open-source</strong> pra instrumentação de métricas, logs e traces. Em vez de usar SDKs diferentes pra cada ferramenta (Prometheus, Jaeger, Datadog), você instrumenta uma vez com OTel e envia pra qualquer backend.</p>
+<p><strong>Componentes do OTel:</strong></p>
+<ul>
+<li><strong>SDK</strong> — Biblioteca que você adiciona no código (Java, Go, Python, etc.)</li>
+<li><strong>Auto-instrumentação</strong> — Captura métricas/traces automaticamente (sem mudar código)</li>
+<li><strong>OTel Collector</strong> — Agente que recebe, processa e exporta telemetria</li>
+<li><strong>OTLP</strong> — OpenTelemetry Protocol — protocolo padrão de envio de dados</li>
+</ul>
+<p><strong>Fluxo típico:</strong></p>
+<pre class="code-block">┌──────────┐    OTLP     ┌──────────────┐    export    ┌──────────────┐
+│  App     │───────────▶│  OTel        │────────────▶│  Backends    │
+│  + SDK   │  (gRPC/    │  Collector   │             │              │
+│          │   HTTP)    │  (recebe,    │  ┌──────────▶ Prometheus   │
+└──────────┘            │   filtra,    │  │          │  VictoriaM.  │
+                        │   enriquece) │──┤          │  Jaeger      │
+                        └──────────────┘  │          │  OpenSearch  │
+                                          └──────────▶ Dynatrace   │
+                                                     └──────────────┘</pre>
+<p><strong>Instrumentação automática vs manual:</strong></p>
+<table class="vs-table">
+<tr><th>Tipo</th><th>Como funciona</th><th>Quando usar</th></tr>
+<tr><td>Automática</td><td>Java agent / Go middleware — captura HTTP, DB, gRPC sem mudar código</td><td>80% dos casos (início rápido)</td></tr>
+<tr><td>Manual</td><td>Você cria spans e métricas customizadas no código</td><td>Lógica de negócio específica (ex: "tempo do cálculo de IOF")</td></tr>
+</table>
+<div class="analogy">
+<p>🔌 <strong>Analogia:</strong> OTel é um adaptador universal de tomada. Em vez de ter um carregador diferente pra cada país (Prometheus, Jaeger, Datadog), você usa um adaptador universal (OTel) que funciona em qualquer lugar. Instrumenta uma vez, envia pra qualquer backend.</p>
+</div>
+<div class="picpay-box">
+<p>💡 <strong>No PicPay...</strong> o OTel Collector roda como DaemonSet/Deployment em todos os clusters EKS. As libs <code class="inline">lib-java-olly</code> (Java) e <code class="inline">lib-go-instrumentation</code> (Go) adicionam instrumentação automática. O Collector recebe via OTLP, processa (filtra, enriquece, faz batch) e envia pra VictoriaMetrics (métricas), Jaeger/Dynatrace (traces) e OpenSearch (logs).</p>
+</div>
+</div>
+</div>
+<!-- 10. Troubleshooting com Observabilidade -->
+<div class="section">
+<div class="card">
+<h2><span class="num">10</span> Troubleshooting com Observabilidade</h2>
+<p>Quando um problema acontece em produção, o <strong>método reverso</strong> é o mais eficiente: comece pela ponta do usuário e vá voltando até encontrar a causa raiz.</p>
+<p><strong>Método Reverso (UI → Backend → Infra):</strong></p>
+<pre class="code-block">1. 🖥️  UI/Cliente
+   → O que o usuário está vendo? Erro? Lentidão? Timeout?
+
+2. 📊 Dashboards (Grafana)
+   → Qual serviço está com error rate alto ou latência degradada?
+
+3. 📋 Logs (OpenSearch)
+   → Qual o erro exato? Timeout? NullPointer? Connection refused?
+
+4. 🔗 Traces (Jaeger)
+   → Qual span está lento? Qual dependência está falhando?
+
+5. ⚙️  Infra (kubectl, CloudWatch)
+   → Pod reiniciando? OOMKilled? CPU saturada? Disco cheio?
+
+6. 🗄️  Dependências (DB, Redis, Kafka)
+   → Slow queries? Redis sem memória? Kafka lag alto?</pre>
+<p><strong>Dicas práticas:</strong></p>
+<ul>
+<li><strong>Correlacione sempre</strong> — Use o <code class="inline">trace_id</code> pra ligar métrica + log + trace</li>
+<li><strong>"O que mudou?"</strong> — 80% dos problemas vêm de deploy recente (git log + ArgoCD history)</li>
+<li><strong>Compare com baseline</strong> — "Está lento comparado a quê?" Use o mesmo horário de ontem/semana passada como referência</li>
+<li><strong>Não assuma, verifique</strong> — "Deve ser o banco" não é diagnóstico. Abra o dashboard do RDS e comprove</li>
+<li><strong>Documente</strong> — Achou a causa? Atualize o runbook pra próxima vez ser mais rápido</li>
+</ul>
+<div class="analogy">
+<p>🕵️ <strong>Analogia:</strong> Troubleshooting é trabalho de detetive. Você chega na cena do crime (alerta disparou), coleta evidências (métricas, logs, traces), cruza informações (correlação), elimina suspeitos (descarta hipóteses), e prende o culpado (identifica a causa raiz). O pior erro é prender o inocente (fix errado que não resolve o problema).</p>
+</div>
+<div class="picpay-box">
+<p>💡 <strong>No PicPay...</strong> o fluxo de incidente segue esse método. O on-call recebe o alerta, abre Grafana (métricas), consulta OpenSearch (logs), abre Jaeger (traces), e verifica infra com <code class="inline">kubectl</code>. Se não resolver em 15 minutos, escala pro tech lead. Todo incidente P1/P2 tem postmortem obrigatório com timeline, causa raiz e ações preventivas.</p>
+</div>
+</div>
+</div>
+<!-- Quiz -->
+<div class="quiz-section">
+<h2>🧪 Quiz — Teste seus Conhecimentos</h2>
+<div class="quiz-question" data-correct="1">
+<div class="quiz-q">1. Qual é a diferença entre métricas, logs e traces?</div>
+<div class="quiz-options">
+<div class="quiz-opt" data-idx="0">a) São todos iguais, só muda o nome</div>
+<div class="quiz-opt" data-idx="1">b) Métricas=números ao longo do tempo, Logs=eventos textuais, Traces=caminho da requisição entre serviços</div>
+<div class="quiz-opt" data-idx="2">c) Logs são versões resumidas das métricas</div>
+<div class="quiz-opt" data-idx="3">d) Traces são logs compactados</div>
+</div>
+<div class="quiz-feedback ok">✅ Correto! Métricas medem valores numéricos ao longo do tempo, logs registram eventos textuais, e traces rastreiam o caminho de uma requisição entre serviços.</div>
+<div class="quiz-feedback nok">Não foi dessa vez. Releia o conteúdo e tente novamente!</div>
+</div>
+<div class="quiz-question" data-correct="0">
+<div class="quiz-q">2. O que é P99 de latência?</div>
+<div class="quiz-options">
+<div class="quiz-opt" data-idx="0">a) 99% dos requests são mais rápidos que esse valor</div>
+<div class="quiz-opt" data-idx="1">b) 99% de uptime do serviço</div>
+<div class="quiz-opt" data-idx="2">c) Porcentagem de erros</div>
+<div class="quiz-opt" data-idx="3">d) Tempo máximo absoluto de resposta</div>
+</div>
+<div class="quiz-feedback ok">✅ Correto! P99=200ms significa que 99% das requisições levam menos que 200ms. Só 1% é mais lento que isso.</div>
+<div class="quiz-feedback nok">Não foi dessa vez. Releia o conteúdo e tente novamente!</div>
+</div>
+<div class="quiz-question" data-correct="1">
+<div class="quiz-q">3. Qual é a principal ferramenta de dashboards no PicPay?</div>
+<div class="quiz-options">
+<div class="quiz-opt" data-idx="0">a) Datadog</div>
+<div class="quiz-opt" data-idx="1">b) Grafana</div>
+<div class="quiz-opt" data-idx="2">c) Kibana</div>
+<div class="quiz-opt" data-idx="3">d) Tableau</div>
+</div>
+<div class="quiz-feedback ok">✅ Correto! Grafana é a principal ferramenta de dashboards no PicPay, integrada com Prometheus e VictoriaMetrics pra métricas.</div>
+<div class="quiz-feedback nok">Não foi dessa vez. Releia o conteúdo e tente novamente!</div>
+</div>
+<div class="quiz-question" data-correct="1">
+<div class="quiz-q">4. O que é um alerta falso-positivo?</div>
+<div class="quiz-options">
+<div class="quiz-opt" data-idx="0">a) Um alerta que não chegou ao destinatário</div>
+<div class="quiz-opt" data-idx="1">b) Um alerta que disparou sem haver problema real</div>
+<div class="quiz-opt" data-idx="2">c) Um alerta que foi ignorado pelo time</div>
+<div class="quiz-opt" data-idx="3">d) Um alerta de severidade crítica</div>
+</div>
+<div class="quiz-feedback ok">✅ Correto! Falso-positivo é quando o alerta dispara sem ter problema real. Causa alert fatigue — o time para de confiar nos alertas.</div>
+<div class="quiz-feedback nok">Não foi dessa vez. Releia o conteúdo e tente novamente!</div>
+</div>
+<div class="quiz-question" data-correct="2">
+<div class="quiz-q">5. Qual é o protocolo padrão do OpenTelemetry?</div>
+<div class="quiz-options">
+<div class="quiz-opt" data-idx="0">a) HTTP</div>
+<div class="quiz-opt" data-idx="1">b) TCP</div>
+<div class="quiz-opt" data-idx="2">c) OTLP</div>
+<div class="quiz-opt" data-idx="3">d) SMTP</div>
+</div>
+<div class="quiz-feedback ok">✅ Correto! OTLP = OpenTelemetry Protocol — o padrão unificado pra enviar métricas, logs e traces pros backends.</div>
+<div class="quiz-feedback nok">Não foi dessa vez. Releia o conteúdo e tente novamente!</div>
+</div>
+</div>
+<!-- Aprofundamento -->
+<div class="section">
+<div class="card">
+<h2>🎓 Aprofundamento</h2>
+<p class="muted">Este é um <strong>mini-curso/resumo</strong>. Para explorar a fundo:</p>
+<ul>
+<li><strong>Udemy:</strong> <a href="https://www.udemy.com/course/prometheus-grafana/" target="_blank">Prometheus e Grafana Masterclass — Udemy</a></li>
+<li><strong>Alura:</strong> <a href="https://www.alura.com.br/curso-online-observabilidade" target="_blank">Observabilidade — Do conceito à prática — Alura</a></li>
+<li><strong>YouTube:</strong> <a href="https://www.youtube.com/playlist?list=PLy7NrYWoggjziYQIDorlXjTvvwweTYoNC" target="_blank">TechWorld with Nana — Observability Playlist</a></li>
+<li><strong>Docs:</strong> <a href="https://prometheus.io/docs/" target="_blank">prometheus.io</a> | <a href="https://grafana.com/docs/" target="_blank">grafana.com</a> | <a href="https://opentelemetry.io/docs/" target="_blank">opentelemetry.io</a></li>
+</ul>
+</div>
+</div>
+<!-- Nav Footer -->
+<div class="nav-footer">
+<a class="nav-btn" href="modulo-5-sre.html">← Anterior: SRE</a>
+<a class="nav-btn primary" href="modulo-7-command-center-ccn1.html">Próximo: Command Center →</a>
+</div>
+</main>
+<script>
+document.querySelectorAll('.quiz-question').forEach(q=>{const correct=parseInt(q.dataset.correct);const opts=q.querySelectorAll('.quiz-opt');const fbOk=q.querySelector('.quiz-feedback.ok');const fbNok=q.querySelector('.quiz-feedback.nok');opts.forEach(opt=>{opt.addEventListener('click',()=>{if(opt.classList.contains('disabled'))return;opts.forEach(o=>{o.classList.add('disabled');o.classList.remove('correct','wrong')});const idx=parseInt(opt.dataset.idx);if(idx===correct){opt.classList.add('correct');fbOk.classList.add('show')}else{opt.classList.add('wrong');fbNok.classList.add('show')}})})});
+</script>
+<script>
+/**
+ * Tracking de Progresso — Jornada Obrigatória N1 PicPay
+ * 
+ * Offline-first: salva no localStorage sempre.
+ * Se pdi_api_url e pdi_user estiverem configurados no localStorage,
+ * sincroniza em background via sendBeacon (fire-and-forget).
+ * 
+ * localStorage keys usadas:
+ *   pdi_progress  - objeto {módulo: {visited, quizDone, quizScore, quizTotal, ...}}
+ *   pdi_api_url   - URL do Google Apps Script (configurado pelo coordenador)
+ *   pdi_user      - nome do aluno (configurado no primeiro acesso)
+ *   pdi_user_email - email do aluno (opcional)
+ */
+(function(){
+  // Detectar módulo pelo título da página
+  var m = document.title.match(/Módulo (\d+)/);
+  if (!m) return;
+  var mod = parseInt(m[1]);
+
+  // Carregar progresso existente do localStorage
+  var p = JSON.parse(localStorage.getItem('pdi_progress') || '{}');
+  if (!p[mod]) p[mod] = {visited: false, quizDone: false, quizScore: 0, quizTotal: 0};
+
+  // Marcar módulo como visitado
+  p[mod].visited = true;
+  p[mod].lastVisit = new Date().toISOString();
+  localStorage.setItem('pdi_progress', JSON.stringify(p));
+
+  // Sync com API em background (não bloqueia)
+  syncToApi(p);
+
+  // Observar conclusão do quiz (MutationObserver no DOM)
+  var quizArea = document.querySelector('.quiz-section');
+  if (quizArea) {
+    var _obs2 = new MutationObserver(function() {
+      checkQuizDone(mod, p, _obs2);
+    });
+    _obs2.observe(quizArea, {subtree: true, attributes: true, attributeFilter: ['class']});
+  }
+
+  /**
+   * Verifica se todas as questões do quiz foram respondidas.
+   * Quando todas estão respondidas, marca quizDone e sincroniza.
+   */
+  var _quizHandled2=false;
+  function checkQuizDone(mod, p, obs) {
+    if(_quizHandled2)return;
+    var qs = document.querySelectorAll('.quiz-question');
+    if (!qs.length) return;
+    var answered = 0, correct = 0;
+    qs.forEach(function(q) {
+      var done = false, wrong = false;
+      q.querySelectorAll('.quiz-opt').forEach(function(o) {
+        if (o.classList.contains('disabled')) done = true;
+        if (o.classList.contains('wrong')) wrong = true;
+      });
+      if (done) { answered++; if (!wrong) correct++; }
+    });
+    if (answered === qs.length) {
+      _quizHandled2=true;if(obs)obs.disconnect();
+      p[mod].quizScore = correct;
+      p[mod].quizTotal = qs.length;
+      p[mod].quizDone = (correct === qs.length);
+      p[mod].completedAt = new Date().toISOString();
+      localStorage.setItem('pdi_progress', JSON.stringify(p));
+      syncToApi(p);
+    }
+  }
+
+  /**
+   * Envia progresso pro Google Apps Script em background.
+   * Usa sendBeacon (sobrevive a navegação de página) com fallback pra fetch keepalive.
+   * Falhas são silenciosas — o localStorage é a fonte de verdade.
+   */
+  function syncToApi(progress) {
+    var url = localStorage.getItem('pdi_api_url');
+    var user = localStorage.getItem('pdi_user');
+    if (!url || !user) return;
+
+    var payload = JSON.stringify({
+      name: user,
+      email: localStorage.getItem('pdi_user_email') || '',
+      progress: progress
+    });
+
+    // sendBeacon: fire-and-forget, sobrevive a navegação entre páginas
+    if (navigator.sendBeacon) {
+      try {
+        navigator.sendBeacon(url, new Blob([payload], {type: 'application/json'}));
+      } catch(e) {
+        // Fallback silencioso
+        fetchFallback(url, payload);
+      }
+    } else {
+      fetchFallback(url, payload);
+    }
+  }
+
+  /**
+   * Fallback com fetch + keepalive pra browsers que não suportam sendBeacon.
+   */
+  function fetchFallback(url, payload) {
+    try {
+      fetch(url, {
+        method: 'POST',
+        body: payload,
+        headers: {'Content-Type': 'application/json'},
+        keepalive: true,
+        mode: 'no-cors' // Apps Script redireciona — no-cors evita erro de CORS
+      }).catch(function(){});
+    } catch(e) {
+      // Silencioso — localStorage tem os dados
+    }
+  }
+})();
+
+</script>
+<script>
+(function(){
+  var API='https://script.google.com/a/macros/picpay.com/s/AKfycbyGSJXeR6PvMqkyQrS8kvyZvJMTaOZbyC8NrPh9PL0DhKIezY84AgRZ7qJ9Fl4qkFzx/exec';
+  var m=document.title.match(/M\u00f3dulo (\d+)/);if(!m)return;
+  var mod=parseInt(m[1]);
+  var p=JSON.parse(localStorage.getItem('pdi_progress')||'{}');
+  if(!p[mod])p[mod]={visited:false,quizDone:false,quizScore:0,quizTotal:0};
+  p[mod].visited=true;
+  p[mod].lastVisit=new Date().toISOString();
+  localStorage.setItem('pdi_progress',JSON.stringify(p));
+  syncApi(p);
+  var qa=document.querySelector('.quiz-section');
+  if(qa){var _obs=new MutationObserver(function(){checkQuiz(mod,p,_obs)});_obs.observe(qa,{subtree:true,attributes:true,attributeFilter:['class']})}
+  var _quizHandled=false;
+  function checkQuiz(mod,p,obs){
+    if(_quizHandled)return;
+    var qs=document.querySelectorAll('.quiz-question');if(!qs.length)return;
+    var ans=0,cor=0;
+    qs.forEach(function(q){var d=false,wrong=false;q.querySelectorAll('.quiz-opt').forEach(function(o){if(o.classList.contains('disabled'))d=true;if(o.classList.contains('wrong'))wrong=true});if(d){ans++;if(!wrong)cor++}});
+    if(ans===qs.length){
+      _quizHandled=true;if(obs)obs.disconnect();
+      p=JSON.parse(localStorage.getItem('pdi_progress')||'{}');if(!p[mod])p[mod]={visited:false,quizDone:false,quizScore:0,quizTotal:0};if(!p[mod].quizAttempts)p[mod].quizAttempts=0;p[mod].quizAttempts++;p[mod].quizScore=cor;p[mod].quizTotal=qs.length;p[mod].quizDone=(cor===qs.length);
+      p[mod].completedAt=new Date().toISOString();
+      localStorage.setItem('pdi_progress',JSON.stringify(p));
+      syncApi(p);
+      // Show score banner
+      var banner = document.getElementById('quiz-banner');
+      if (banner) {
+        var scoreDisp = document.getElementById('quiz-score-display');
+        var msgEl = document.getElementById('quiz-msg');
+        scoreDisp.textContent = cor + '/' + qs.length;
+        if (cor === qs.length) {
+          banner.className = 'quiz-retry-banner perfect-banner show';
+          scoreDisp.className = 'score perfect';
+          msgEl.textContent = '🎉 Perfeito! Módulo concluído!';
+        } else {
+          banner.className = 'quiz-retry-banner show';
+          scoreDisp.className = 'score retry';
+          msgEl.textContent = 'Você precisa acertar todas pra concluir o módulo. Tente novamente!';
+        }
+      }
+    }
+  }
+  function syncApi(progress){
+    var user=localStorage.getItem('pdi_user');if(!user)return;
+    var s=document.createElement('script');
+    s.src=API+'?action=save&name='+encodeURIComponent(user)+'&progress='+encodeURIComponent(JSON.stringify(progress))+'&_='+Date.now();
+    s.onerror=function(){if(s.parentNode)s.parentNode.removeChild(s)};
+    s.onload=function(){if(s.parentNode)s.parentNode.removeChild(s)};
+    document.head.appendChild(s);
+  }
+})();
+</script>
+<script>
+/* Module theme controls */
+(function(){
+  var savedT = localStorage.getItem('pdi_theme') || 'dark';
+  document.querySelectorAll('.mc-dot').forEach(function(btn){
+    btn.classList.toggle('active', btn.dataset.theme === savedT);
+    btn.addEventListener('click', function(){
+      var t = btn.dataset.theme;
+      document.body.setAttribute('data-theme', t);
+      localStorage.setItem('pdi_theme', t);
+      document.querySelectorAll('.mc-dot').forEach(function(b){ b.classList.toggle('active', b.dataset.theme===t); });
+    });
+  });
+})();
+</script>
+<script>
+function retryQuiz() {
+  // Reset progress for this module then reload
+  var m = document.title.match(/M\u00f3dulo (\d+)/);
+  if (m) {
+    var mod = parseInt(m[1]);
+    var p = JSON.parse(localStorage.getItem('pdi_progress') || '{}');
+    if (p[mod]) { p[mod].quizDone = false; p[mod].quizScore = 0; p[mod].quizTotal = 0; }
+    localStorage.setItem('pdi_progress', JSON.stringify(p));
+  }
+  location.reload();
+}
+</script>
+</body>
+</html>

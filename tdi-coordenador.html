@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>📋 TDI da Equipe — Painel do Coordenador</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📋</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0a0e1a;--bg2:#0d1220;--bg3:#111827;--card:rgba(255,255,255,0.04);--card2:rgba(255,255,255,0.06);--card3:rgba(255,255,255,0.08);--text:#f0f0f5;--muted:#8b8fa3;--accent:#21C25E;--accent2:#1db854;--accent-dim:rgba(33,194,94,0.12);--border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.12);--yellow:#f59e0b;--red:#ef4444;--blue:#3b82f6;--purple:#a855f7;--cyan:#06b6d4;--pink:#ec4899;--orange:#f97316;--radius:14px;--transition:.2s ease}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh;-webkit-font-smoothing:antialiased}
+::selection{background:var(--accent);color:#0a0e1a}
+::-webkit-scrollbar{width:5px;height:5px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.08);border-radius:3px}
+a{color:var(--accent);text-decoration:none}
+body[data-theme="light"]{--bg:#f5f7fa;--bg2:#edf0f4;--bg3:#e2e6ec;--card:rgba(0,0,0,0.03);--card2:rgba(0,0,0,0.05);--card3:rgba(0,0,0,0.07);--text:#1a1a2e;--muted:#6b7280;--border:rgba(0,0,0,0.08);--border2:rgba(0,0,0,0.12)}
+body[data-theme="light"] .hdr{background:rgba(245,247,250,0.92)}
+body[data-theme="light"] .auth-overlay{background:#f5f7fa}
+body[data-theme="light"] .auth-box{background:#fff;border-color:rgba(0,0,0,0.1)}
+body[data-theme="light"] .auth-form input{background:#f5f7fa;border-color:rgba(0,0,0,0.1);color:#1a1a2e}
+.mc-themes{display:flex;gap:3px;align-items:center}
+.mc-dot{width:16px;height:16px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:all var(--transition);padding:0;background:none;display:flex;align-items:center;justify-content:center}
+.mc-dot.active{border-color:var(--accent)}
+.mc-dot .di{width:10px;height:10px;border-radius:50%}
+.di-dark{background:#0a0e1a;border:1px solid #555}.di-light{background:#fff;border:1px solid #ccc}
+
+/* AUTH */
+.auth-overlay{min-height:100vh;width:100vw;display:flex;align-items:center;justify-content:center;background:var(--bg);padding:20px;position:fixed;top:0;left:0;z-index:200}
+.auth-box{background:rgba(17,24,39,0.95);border:1px solid rgba(33,194,94,0.15);border-radius:24px;padding:48px 40px;max-width:420px;width:100%;text-align:center;backdrop-filter:blur(20px)}
+.auth-box h2{font-size:1.5rem;margin-bottom:4px}
+.auth-sub{color:var(--muted);font-size:.85rem;margin-bottom:28px}
+.auth-tabs{display:flex;gap:4px;margin-bottom:24px;background:rgba(255,255,255,0.04);border-radius:12px;padding:4px}
+.auth-tab{flex:1;padding:10px;border:none;background:transparent;color:var(--muted);font-size:.9rem;font-weight:600;cursor:pointer;border-radius:10px;transition:all var(--transition)}
+.auth-tab.active{background:var(--accent);color:#0a0e1a}
+.auth-form{display:flex;flex-direction:column;gap:12px}
+.auth-form input{width:100%;padding:14px 18px;border-radius:12px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:.95rem;outline:none;transition:border-color var(--transition)}
+.auth-form input:focus{border-color:var(--accent)}
+.auth-btn{width:100%;padding:14px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#0a0e1a;border:none;font-size:1rem;font-weight:700;cursor:pointer;margin-top:8px;transition:all var(--transition)}
+.auth-btn:hover{transform:translateY(-1px);box-shadow:0 4px 20px rgba(33,194,94,0.3)}
+.auth-error{color:#ef4444;font-size:.85rem;margin-top:12px;display:none}
+
+/* HEADER */
+.hdr{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:52px;background:rgba(10,14,26,0.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+.hdr-left{display:flex;align-items:center;gap:12px}
+.hdr-brand{font-weight:800;font-size:.9rem;color:var(--muted)}
+.hdr-title{font-weight:700;font-size:.85rem;color:var(--yellow)}
+.hdr-right{display:flex;align-items:center;gap:10px}
+.hdr-user{font-size:.82rem;color:var(--muted)}
+.hdr-user strong{color:var(--text)}
+.btn{padding:7px 16px;border-radius:10px;border:1px solid var(--border);background:transparent;color:var(--muted);font-weight:700;cursor:pointer;font-size:.78rem;transition:all var(--transition);display:inline-flex;align-items:center;gap:6px}
+.btn:hover{border-color:var(--accent);color:var(--text);transform:translateY(-1px)}
+.btn-primary{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#0a0e1a;border-color:var(--accent)}
+.btn-primary:hover{box-shadow:0 4px 16px rgba(33,194,94,0.3)}
+.logout-btn:hover{border-color:var(--red);color:var(--red)}
+
+/* LAYOUT */
+.wrap{max-width:1200px;margin:0 auto;padding:68px 24px 40px}
+.hero{text-align:center;padding:24px 0 12px}
+.hero h1{font-size:1.7rem;font-weight:900;margin-bottom:6px;background:linear-gradient(135deg,var(--accent),var(--yellow));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero p{color:var(--muted);font-size:.88rem;margin-bottom:18px;line-height:1.5}
+.hero-actions{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+
+/* KPIs */
+.kpi-row{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:24px}
+@media(max-width:900px){.kpi-row{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:500px){.kpi-row{grid-template-columns:repeat(2,1fr)}}
+.kpi{background:var(--card2);border:1px solid var(--border);border-radius:var(--radius);padding:18px 16px;text-align:center;position:relative;overflow:hidden;transition:all .3s}
+.kpi:hover{border-color:var(--border2);transform:translateY(-2px)}
+.kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:var(--radius) var(--radius) 0 0}
+.kpi:nth-child(1)::before{background:var(--accent)}.kpi:nth-child(2)::before{background:var(--red)}.kpi:nth-child(3)::before{background:var(--yellow)}.kpi:nth-child(4)::before{background:var(--blue)}.kpi:nth-child(5)::before{background:var(--purple)}
+.kpi-icon{font-size:1.3rem;margin-bottom:4px}
+.kpi-val{font-size:1.6rem;font-weight:900}
+.kpi-lbl{font-size:.62rem;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-top:3px}
+.c-green{color:var(--accent)}.c-yellow{color:var(--yellow)}.c-blue{color:var(--blue)}.c-purple{color:var(--purple)}.c-red{color:var(--red)}.c-cyan{color:var(--cyan)}
+
+/* TABLE */
+.sec{margin:20px 0 10px;display:flex;align-items:center;justify-content:space-between}
+.sec h2{font-size:1rem;font-weight:800;display:flex;align-items:center;gap:8px}
+.sec .badge{font-size:.68rem;color:var(--muted);font-weight:600;background:var(--card2);padding:2px 10px;border-radius:12px}
+.tbl-wrap{overflow-x:auto;border-radius:var(--radius);border:1px solid var(--border);margin-bottom:24px}
+table{width:100%;border-collapse:collapse}
+th{background:var(--card2);padding:10px 14px;text-align:left;font-size:.72rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;cursor:pointer;user-select:none;white-space:nowrap;border-bottom:1px solid var(--border)}
+th:hover{color:var(--accent)}
+th.sorted{color:var(--accent)}
+.sort-arrow{font-size:.6rem;margin-left:4px;opacity:.5}
+th.sorted .sort-arrow{opacity:1}
+td{padding:10px 14px;font-size:.82rem;border-bottom:1px solid var(--border)}
+.data-row{cursor:pointer;transition:background .2s}
+.data-row:hover{background:var(--card)}
+.data-row.expanded{background:var(--card2)}
+.user-name{display:flex;align-items:center;gap:8px;font-weight:600}
+.expand-icon{font-size:.6rem;color:var(--muted);transition:transform .2s;display:inline-block}
+.expand-icon.open{transform:rotate(90deg)}
+
+/* PROGRESS MINI */
+.progress-mini{width:80px;height:6px;background:var(--card3);border-radius:3px;overflow:hidden;display:inline-block;vertical-align:middle}
+.progress-mini-fill{height:100%;border-radius:3px}
+.pf-green{background:var(--accent)}.pf-yellow{background:var(--yellow)}.pf-red{background:var(--red)}
+.status-badge{font-size:.7rem;padding:2px 10px;border-radius:12px;font-weight:700}
+.status-has-tdi{background:rgba(33,194,94,0.12);color:var(--accent)}
+.status-no-tdi{background:rgba(239,68,68,0.12);color:var(--red)}
+
+/* DETAIL ROW */
+.detail-row{display:none}
+.detail-row.visible{display:table-row}
+.detail-row td{padding:0;background:var(--bg2)}
+.detail-content{padding:20px 24px}
+.detail-themes{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px;margin-bottom:16px}
+.dt-card{background:var(--card2);border:1px solid var(--border);border-radius:14px;padding:18px;transition:all .3s;position:relative;overflow:hidden}
+.dt-card:hover{border-color:var(--border2);transform:translateY(-2px);box-shadow:0 4px 16px rgba(0,0,0,0.2)}
+.dt-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:14px 14px 0 0}
+.dt-card:nth-child(odd)::before{background:var(--blue)}.dt-card:nth-child(even)::before{background:var(--purple)}
+.dt-card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.dt-card-name{font-weight:700;font-size:.88rem;display:flex;align-items:center;gap:8px}
+.dt-card-type{font-size:.6rem;padding:3px 10px;border-radius:12px;font-weight:700;text-transform:uppercase;letter-spacing:.3px}
+.dt-type-hard{background:rgba(59,130,246,0.15);color:var(--blue)}
+.dt-type-soft{background:rgba(168,85,247,0.15);color:var(--purple)}
+.dt-bar{height:8px;border-radius:4px;background:var(--card3);margin:8px 0;overflow:hidden}
+.dt-bar-fill{height:100%;border-radius:4px;transition:width .6s ease}
+.dt-meta{font-size:.75rem;color:var(--muted);display:flex;justify-content:space-between;align-items:center}
+.dt-meta .dt-pct{font-weight:800}
+.dt-notes{font-size:.75rem;color:var(--muted);margin-top:8px;font-style:italic;padding:8px 10px;background:rgba(255,255,255,0.02);border-radius:8px;border-left:3px solid var(--accent)}
+.dt-resources{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.dt-res-tag{font-size:.68rem;padding:4px 10px;border-radius:8px;background:rgba(59,130,246,0.08);color:var(--blue);border:1px solid rgba(59,130,246,0.15);transition:all .2s;text-decoration:none}
+.dt-res-tag:hover{background:rgba(59,130,246,0.15);border-color:var(--blue)}
+
+/* EDIT PANEL (inline no detail) */
+.edit-panel{background:linear-gradient(135deg,rgba(33,194,94,0.03),rgba(59,130,246,0.03));border:1px solid rgba(33,194,94,0.2);border-radius:16px;padding:24px;margin-top:16px}
+.edit-panel h4{font-size:.92rem;font-weight:800;margin-bottom:16px;display:flex;align-items:center;gap:8px;color:var(--accent)}
+.ep-themes{display:flex;flex-direction:column;gap:12px;margin-bottom:16px}
+.ep-theme{background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:16px;transition:all .2s}
+.ep-theme:hover{border-color:var(--border2)}
+.ep-row{display:grid;grid-template-columns:2fr 1fr;gap:10px;margin-bottom:8px}
+@media(max-width:600px){.ep-row{grid-template-columns:1fr}}
+.ep-row input,.ep-row select,.ep-row textarea{padding:10px 14px;border-radius:10px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:.85rem;outline:none;font-family:inherit;transition:border-color .2s}
+.ep-row input:focus,.ep-row select:focus,.ep-row textarea:focus{border-color:var(--accent);box-shadow:0 0 0 2px rgba(33,194,94,0.1)}
+.ep-row textarea{resize:vertical;min-height:60px;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:10px;padding:10px 14px;font-size:.85rem;font-family:inherit;outline:none}
+.ep-row select{cursor:pointer;-webkit-appearance:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%238b8fa3' d='M6 8L1 3h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center}
+.ep-slider{display:flex;align-items:center;gap:10px;padding:4px 0}
+.ep-slider span:first-child{font-size:.72rem;color:var(--muted);font-weight:600}
+.ep-slider input[type=number]{width:70px;padding:8px 12px;border-radius:10px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:.9rem;font-weight:700;outline:none;text-align:center;font-family:inherit}
+.ep-slider input[type=number]:focus{border-color:var(--accent);box-shadow:0 0 0 2px rgba(33,194,94,0.1)}
+.ep-slider-val{font-size:.82rem;color:var(--muted);font-weight:600}
+.ep-actions{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;margin-top:8px}
+.ep-row input[type=date],.ep-theme input[type=date]{padding:10px 14px;border-radius:10px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:.85rem;outline:none;font-family:inherit;cursor:pointer;color-scheme:dark}
+.ep-add-btn{width:100%;padding:12px;border:2px dashed var(--border);border-radius:10px;background:transparent;color:var(--muted);cursor:pointer;font-size:.82rem;font-weight:700;transition:all .3s}
+.ep-add-btn:hover{border-color:var(--accent);color:var(--accent);background:rgba(33,194,94,0.03)}
+.ep-del-btn{background:none;border:1px solid rgba(239,68,68,0.2);color:var(--red);padding:6px 12px;border-radius:8px;cursor:pointer;font-size:.72rem;font-weight:700;transition:all .2s}
+.ep-del-btn:hover{background:rgba(239,68,68,0.1);border-color:var(--red)}
+
+/* TOP THEMES BAR */
+.panel{background:var(--card2);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:24px;position:relative;overflow:hidden}
+.panel::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--blue),var(--purple));border-radius:var(--radius) var(--radius) 0 0}
+.panel h3{font-size:.88rem;font-weight:800;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.bar-row{display:flex;align-items:center;gap:12px;margin-bottom:8px;padding:4px 0}
+.bar-label{font-size:.78rem;min-width:200px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:500}
+.bar-track{flex:1;height:10px;background:var(--card3);border-radius:6px;overflow:hidden}
+.bar-fill{height:100%;border-radius:6px;transition:width .6s ease}
+.bar-pct{font-size:.75rem;font-weight:800;min-width:36px;text-align:right}
+
+/* LOADING / ERROR / EMPTY */
+#loading{display:none;text-align:center;padding:80px 20px;color:var(--muted);font-size:.9rem}
+#error-msg{display:none;text-align:center;padding:24px;color:var(--red);background:rgba(239,68,68,0.06);border:1px solid rgba(239,68,68,0.15);border-radius:14px;margin:20px 0;font-size:.88rem}
+#emptyState{display:none;text-align:center;padding:80px 20px;color:var(--muted);font-size:.9rem}
+
+/* TOAST */
+.save-toast{position:fixed;bottom:24px;right:24px;padding:12px 20px;border-radius:12px;font-size:.82rem;font-weight:700;z-index:200;transform:translateY(80px);opacity:0;transition:all .3s}
+.save-toast.show{transform:translateY(0);opacity:1}
+.save-toast.success{background:var(--accent);color:#0a0e1a}
+.save-toast.error{background:var(--red);color:#fff}
+
+.timestamp{font-size:.72rem;color:var(--muted);text-align:center;margin-top:8px}
+
+/* ALERTS */
+.alerts-panel{margin:12px 0 20px;border-radius:var(--radius);border:1px solid rgba(239,68,68,0.15);background:rgba(239,68,68,0.04);overflow:hidden}
+.alerts-header{display:flex;align-items:center;justify-content:space-between;padding:12px 18px;cursor:pointer;user-select:none}
+.alerts-header h3{font-size:.85rem;font-weight:700;display:flex;align-items:center;gap:8px}
+.alerts-toggle{font-size:.7rem;color:var(--muted);border:none;background:none;cursor:pointer;font-weight:600;padding:4px 8px;border-radius:6px}
+.alerts-body{padding:0 18px 14px;display:none;max-height:280px;overflow-y:auto}
+.alerts-body.open{display:block}
+.alert-item{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:10px;margin-bottom:6px;font-size:.78rem;border:1px solid var(--border)}
+.alert-danger{background:rgba(239,68,68,0.06);border-color:rgba(239,68,68,0.15)}
+.alert-warning{background:rgba(245,158,11,0.06);border-color:rgba(245,158,11,0.15)}
+.alert-info{background:rgba(59,130,246,0.06);border-color:rgba(59,130,246,0.15)}
+
+/* KPI FLIP */
+.kpi-flip{perspective:800px;cursor:pointer}
+.kpi-flip-inner{position:relative;width:100%;transition:transform .5s;transform-style:preserve-3d}
+.kpi-flip.flipped .kpi-flip-inner{transform:rotateY(180deg)}
+.kpi-front,.kpi-back{backface-visibility:hidden;border-radius:var(--radius);border:1px solid var(--border);overflow:hidden}
+.kpi-front{position:relative;background:var(--card2);padding:18px 14px;text-align:center;transition:all .3s}
+.kpi-flip:hover .kpi-front{border-color:var(--border2);transform:translateY(-2px)}
+.kpi-front::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:var(--radius) var(--radius) 0 0}
+.kpi-back{position:absolute;top:0;left:0;width:100%;height:100%;background:var(--card2);padding:14px 12px;transform:rotateY(180deg);display:flex;flex-direction:column;justify-content:center;gap:4px}
+.kpi-back-title{font-size:.68rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px}
+.kpi-back-desc{font-size:.7rem;color:var(--muted);line-height:1.5}
+.kpi-back-hint{font-size:.55rem;color:rgba(255,255,255,0.15);text-align:center;margin-top:4px}
+
+/* SHIFT TABS */
+.shift-bar{display:flex;gap:4px;justify-content:center;margin:16px 0 8px;background:var(--card2);border-radius:12px;padding:4px;max-width:420px;margin-left:auto;margin-right:auto}
+.shift-tab{flex:1;padding:9px 16px;border:none;background:transparent;color:var(--muted);font-size:.82rem;font-weight:700;cursor:pointer;border-radius:10px;transition:all var(--transition);white-space:nowrap}
+.shift-tab.active{background:var(--accent);color:#0a0e1a}
+.shift-tab:hover:not(.active){background:var(--card3);color:var(--text)}
+.shift-count{font-size:.65rem;opacity:.7;margin-left:4px}
+.shift-select{padding:4px 8px;border-radius:6px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:.72rem;cursor:pointer;outline:none}
+/* FILTER TABS */
+.filter-tabs{display:flex;gap:4px;background:var(--card2);border-radius:10px;padding:3px}
+.filter-tab{padding:6px 14px;border:none;background:transparent;color:var(--muted);font-size:.75rem;font-weight:700;cursor:pointer;border-radius:8px;transition:all .2s;white-space:nowrap}
+.filter-tab.active{background:var(--accent);color:#0a0e1a}
+.filter-tab:hover:not(.active){background:var(--card3);color:var(--text)}
+
+/* RANKING */
+.rank-item{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)}
+.rank-item:last-child{border:none}
+.rank-pos{font-size:1.1rem;font-weight:900;min-width:28px}
+.rank-name{flex:1;font-size:.82rem;font-weight:600}
+.rank-pct{font-size:.85rem;font-weight:800}
+
+/* HARD/SOFT CHART */
+.hs-bar{display:flex;height:32px;border-radius:8px;overflow:hidden;margin-bottom:8px}
+.hs-hard{background:var(--blue)}
+.hs-soft{background:var(--purple)}
+.hs-legend{display:flex;gap:16px;justify-content:center}
+.hs-legend span{font-size:.75rem;font-weight:600;display:flex;align-items:center;gap:6px}
+.hs-dot{width:10px;height:10px;border-radius:50%}
+
+@media(max-width:700px){#extra-panels{grid-template-columns:1fr !important}}
+
+@media(max-width:600px){.hdr{padding:0 14px}.wrap{padding:60px 14px 30px}}
+</style>
+</head>
+<body>
+<script>(function(){var t=localStorage.getItem('pdi_theme');if(t)document.body.setAttribute('data-theme',t);})()</script>
+
+<!-- AUTH -->
+<div id="auth-screen" style="display:none">
+  <div class="auth-overlay">
+    <div class="auth-box">
+      <h2>TDI — Coordenador</h2>
+      <p class="auth-sub">Acesso restrito a coordenadores</p>
+      <div class="auth-tabs">
+        <button class="auth-tab active" onclick="showTab('login')">Entrar</button>
+        <button class="auth-tab" onclick="showTab('register')">Registrar</button>
+      </div>
+      <div class="auth-form" id="tab-login">
+        <input type="text" id="login-name" placeholder="Seu nome" autocomplete="off">
+        <input type="password" id="login-pass" placeholder="Senha">
+        <button class="auth-btn" onclick="doLogin()">Entrar</button>
+      </div>
+      <div class="auth-form" id="tab-register" style="display:none">
+        <input type="text" id="reg-invite" placeholder="Codigo de convite" autocomplete="off">
+        <input type="text" id="reg-name" placeholder="Seu nome" autocomplete="off">
+        <input type="password" id="reg-pass" placeholder="Senha (min 6 chars)">
+        <input type="password" id="reg-pass2" placeholder="Confirmar senha">
+        <button class="auth-btn" onclick="doRegister()">Registrar</button>
+      </div>
+      <p class="auth-error" id="auth-error"></p>
+    </div>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboard-wrapper" style="display:none">
+  <header class="hdr">
+    <div class="hdr-left">
+      <span class="hdr-brand">📋 TDI</span>
+      <span class="hdr-title">Equipe — Coordenador</span>
+    </div>
+    <div class="hdr-right">
+      <div class="mc-themes"><button class="mc-dot active" data-theme="dark" title="Dark"><span class="di di-dark"></span></button><button class="mc-dot" data-theme="light" title="Light"><span class="di di-light"></span></button></div><span class="hdr-user">Coord: <strong id="coord-name"></strong></span>
+      <button class="btn" onclick="goToCoordinator()">📊 Painel Curso</button>
+      
+      <button class="btn logout-btn" onclick="logout()">Sair</button>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <div class="hero">
+      <h1>📋 TDI da Equipe</h1>
+      <p>Acompanhe e edite as trilhas de desenvolvimento de todos os operadores.</p>
+      <div class="hero-actions">
+        <button class="btn btn-primary" onclick="refreshData()" id="refreshBtn">🔄 Atualizar dados</button>
+        
+      </div>
+    </div>
+
+      <div class="shift-bar" id="shiftBar">
+        <button class="shift-tab active" data-shift="all" onclick="setShift('all')">Todos</button>
+        <button class="shift-tab" data-shift="1" onclick="setShift('1')">Turno 1</button>
+        <button class="shift-tab" data-shift="2" onclick="setShift('2')">Turno 2</button>
+        <button class="shift-tab" data-shift="3" onclick="setShift('3')">Turno 3</button>
+      </div>
+
+    <div id="loading" style="display:none">Carregando dados...</div>
+    <div id="error-msg" style="display:none"></div>
+    <div id="emptyState" style="display:none">Nenhum aluno com TDI preenchido ainda.</div>
+
+    <div id="dashboard" style="display:none">
+      <!-- ALERTS -->
+      <div class="alerts-panel" id="alerts-panel" style="display:none">
+        <div class="alerts-header" onclick="document.getElementById('alerts-body').classList.toggle('open');this.querySelector('.alerts-toggle').textContent=document.getElementById('alerts-body').classList.contains('open')?'Ocultar':'Expandir'">
+          <h3>⚠️ Alertas <span class="badge" id="alert-count">0</span></h3>
+          <button class="alerts-toggle">Expandir</button>
+        </div>
+        <div class="alerts-body" id="alerts-body"></div>
+      </div>
+
+      <!-- KPIs com flip -->
+      <div class="kpi-row" id="kpiGrid"></div>
+
+      <!-- EXTRA: Hard/Soft + Ranking -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:24px" id="extra-panels">
+        <div class="panel"><h3>📊 Distribuição Hard vs Soft</h3><div id="hard-soft-chart"></div></div>
+        <div class="panel"><h3>🏆 Top Progresso</h3><div id="ranking-list"></div></div>
+      </div>
+
+      <!-- TOP THEMES -->
+      <div class="panel" id="top-themes-panel">
+        <h3>📚 Temas mais comuns na equipe</h3>
+        <div id="top-themes-bars"></div>
+      </div>
+
+      <!-- FILTER + SEARCH -->
+      <div class="sec"><h2>Alunos <span class="badge" id="countBadge">0</span></h2></div>
+      <div style="display:flex;gap:8px;align-items:center;margin-bottom:12px;flex-wrap:wrap">
+        <div class="filter-tabs">
+          <button class="filter-tab active" data-filter="all" onclick="setFilter('all')">Todos</button>
+          <button class="filter-tab" data-filter="com-tdi" onclick="setFilter('com-tdi')">Com TDI</button>
+          <button class="filter-tab" data-filter="sem-tdi" onclick="setFilter('sem-tdi')">Sem TDI</button>
+          <button class="filter-tab" data-filter="vencidos" onclick="setFilter('vencidos')">⚠️ Vencidos</button>
+        </div>
+        <input type="text" id="search-input" placeholder="🔍 Buscar aluno..." oninput="renderTable()" style="padding:8px 14px;border-radius:10px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:.82rem;outline:none;flex:1;min-width:180px;max-width:300px">
+      </div>
+      <div class="tbl-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th data-col="name" onclick="sortTable('name')">Nome <span class="sort-arrow">▲</span></th>
+              <th data-col="shift" onclick="sortTable('shift')">Turno <span class="sort-arrow">▲</span></th>
+              <th data-col="themes" onclick="sortTable('themes')">Temas <span class="sort-arrow">▲</span></th>
+              <th data-col="progress" onclick="sortTable('progress')">Progresso <span class="sort-arrow">▲</span></th>
+              <th data-col="concluidos" onclick="sortTable('concluidos')">Concluidos <span class="sort-arrow">▲</span></th>
+              <th data-col="lastUpdate" onclick="sortTable('lastUpdate')">Atualizado <span class="sort-arrow">▲</span></th>
+              <th data-col="hasTdi" onclick="sortTable('hasTdi')">Status <span class="sort-arrow">▲</span></th>
+            </tr>
+          </thead>
+          <tbody id="tableBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="timestamp" id="lastUpdate"></div>
+  </div>
+</div>
+
+<div class="save-toast" id="save-toast"></div>
+
+<script>
+// ══════════════════════════════════════════
+// AUTH (reusa credenciais do coordenador-v2)
+// ══════════════════════════════════════════
+var INVITE_CODE = 'Analise-Progresso-PDI-N1-Coordenadores';
+var CRED_KEY = 'pdi_coord_credentials';
+var SESSION_KEY = 'pdi_coord_session';
+
+async function sha256(text) {
+  var enc = new TextEncoder().encode(text);
+  var buf = await crypto.subtle.digest('SHA-256', enc);
+  return Array.from(new Uint8Array(buf)).map(function(b){return b.toString(16).padStart(2,'0')}).join('');
+}
+function getCredentials(){try{return JSON.parse(localStorage.getItem(CRED_KEY)||'[]')}catch(e){return[]}}
+function saveCredentials(c){localStorage.setItem(CRED_KEY,JSON.stringify(c))}
+function showAuthError(m){var e=document.getElementById('auth-error');e.textContent=m;e.style.display='block';setTimeout(function(){e.style.display='none'},4000)}
+function showTab(t){document.getElementById('tab-login').style.display=t==='login'?'flex':'none';document.getElementById('tab-register').style.display=t==='register'?'flex':'none';document.getElementById('auth-error').style.display='none';var tabs=document.querySelectorAll('.auth-tab');tabs[0].classList.toggle('active',t==='login');tabs[1].classList.toggle('active',t==='register')}
+async function doLogin(){var n=document.getElementById('login-name').value.trim(),p=document.getElementById('login-pass').value;if(!n||!p){showAuthError('Preencha nome e senha');return}var h=await sha256(p),c=getCredentials(),f=c.find(function(x){return x.name===n&&x.hash===h});if(!f){showAuthError('Nome ou senha incorretos');return}localStorage.setItem(SESSION_KEY,n);enterDashboard(n)}
+async function doRegister(){var inv=document.getElementById('reg-invite').value.trim(),n=document.getElementById('reg-name').value.trim(),p=document.getElementById('reg-pass').value,p2=document.getElementById('reg-pass2').value;if(inv!==INVITE_CODE){showAuthError('Codigo de convite invalido');return}if(!n||n.length<2){showAuthError('Informe seu nome');return}if(p.length<6){showAuthError('Senha minimo 6 caracteres');return}if(p!==p2){showAuthError('Senhas nao conferem');return}var c=getCredentials();if(c.find(function(x){return x.name===n})){showAuthError('Nome ja registrado');return}var h=await sha256(p);c.push({name:n,hash:h,createdAt:new Date().toISOString()});saveCredentials(c);localStorage.setItem(SESSION_KEY,n);enterDashboard(n)}
+function logout(){localStorage.removeItem(SESSION_KEY);location.reload()}
+document.addEventListener('keydown',function(e){if(e.key!=='Enter')return;var a=document.activeElement;if(!a)return;if(a.id==='login-name'||a.id==='login-pass'){e.preventDefault();doLogin()}if(a.id==='reg-invite'||a.id==='reg-name'||a.id==='reg-pass'||a.id==='reg-pass2'){e.preventDefault();doRegister()}});
+
+// ══════════════════════════════════════════
+// JSONP
+// ══════════════════════════════════════════
+function fetchJsonp(url,cb){var cn='_jp_'+Math.random().toString(36).substr(2,8),sc=document.createElement('script'),done=false;var to=setTimeout(function(){if(done)return;done=true;delete window[cn];if(sc.parentNode)sc.parentNode.removeChild(sc);cb(new Error('Timeout (15s)'))},15000);window[cn]=function(d){if(done)return;done=true;clearTimeout(to);delete window[cn];if(sc.parentNode)sc.parentNode.removeChild(sc);cb(null,d)};sc.onerror=function(){if(done)return;done=true;clearTimeout(to);delete window[cn];if(sc.parentNode)sc.parentNode.removeChild(sc);cb(new Error('Erro ao carregar API'))};sc.src=url+(url.indexOf('?')>=0?'&':'?')+'callback='+cn;document.head.appendChild(sc)}
+
+// ══════════════════════════════════════════
+// DATA
+// ══════════════════════════════════════════
+var API_URL='https://script.google.com/a/macros/picpay.com/s/AKfycbyGSJXeR6PvMqkyQrS8kvyZvJMTaOZbyC8NrPh9PL0DhKIezY84AgRZ7qJ9Fl4qkFzx/exec';
+var allUsers=[];
+var sortCol='name',sortAsc=true;
+var expandedRows=new Set();
+var editingUser=null;
+
+document.addEventListener('DOMContentLoaded',function(){
+  var s=localStorage.getItem(SESSION_KEY);
+  if(s){var c=getCredentials();if(c.find(function(x){return x.name===s})){enterDashboard(s);return}localStorage.removeItem(SESSION_KEY)}
+  document.getElementById('auth-screen').style.display='flex';document.getElementById('dashboard-wrapper').style.display='none';
+});
+
+function enterDashboard(name){
+  document.getElementById('auth-screen').style.display='none';
+  document.getElementById('dashboard-wrapper').style.display='block';
+  document.getElementById('coord-name').textContent=name;
+  fetchData();
+}
+
+function fetchData(){
+  var ld=document.getElementById('loading'),er=document.getElementById('error-msg'),db=document.getElementById('dashboard'),em=document.getElementById('emptyState');
+  ld.style.display='block';er.style.display='none';db.style.display='none';em.style.display='none';
+  fetchJsonp(API_URL,function(err,data){
+    ld.style.display='none';
+    if(err){er.textContent='⚠️ '+err.message;er.style.display='block';return}
+    allUsers=data.users||[];
+    if(!allUsers.length){em.style.display='block'}else{db.style.display='block';renderDashboard()}
+    document.getElementById('lastUpdate').textContent='🕐 '+new Date().toLocaleString('pt-BR');
+  });
+}
+
+function refreshData(){fetchData()}
+
+// ──────── Helpers ────────
+function getUserTdi(user){
+  // TDI pode estar em user.tdi (campo separado no Apps Script)
+  // ou embutido no progress como campo especial
+  return user.tdi || null;
+}
+
+function getTdiThemes(user){
+  var tdi=getUserTdi(user);
+  return tdi && tdi.themes ? tdi.themes : [];
+}
+
+function getTdiAvgProgress(user){
+  var th=getTdiThemes(user);
+  if(!th.length) return 0;
+  return Math.round(th.reduce(function(s,t){return s+(t.progress||0)},0)/th.length);
+}
+
+function getTdiConcluidos(user){
+  return getTdiThemes(user).filter(function(t){return t.status==='concluido'||t.progress===100}).length;
+}
+
+function getTdiLastUpdate(user){
+  var tdi=getUserTdi(user);
+  return tdi ? tdi.lastUpdatedAt : null;
+}
+
+function hasTdi(user){return getTdiThemes(user).length>0}
+
+function formatDate(iso){
+  if(!iso)return '—';var d=new Date(iso);if(isNaN(d))return '—';
+  var days=Math.floor((Date.now()-d.getTime())/86400000);
+  if(days===0)return 'Hoje';if(days===1)return 'Ontem';if(days<7)return 'Ha '+days+' dias';
+  return d.toLocaleDateString('pt-BR');
+}
+
+function esc(s){var d=document.createElement('div');d.textContent=s||'';return d.innerHTML}
+function shortenUrl(u){try{var x=new URL(u);return x.hostname+(x.pathname.length>15?x.pathname.substr(0,15)+'...':x.pathname)}catch(e){return u.length>30?u.substr(0,30)+'...':u}}
+
+// ──────── Render ────────
+// ── SHIFT (Turnos) — compartilha localStorage com coordenador-v2 ──
+var SHIFT_KEY='ccn1_shift_assignments';
+var currentShiftTdi='all';
+function getShiftAssignments(){try{return JSON.parse(localStorage.getItem(SHIFT_KEY)||'{}')}catch(e){return{}}}
+function saveShiftAssignments(a){localStorage.setItem(SHIFT_KEY,JSON.stringify(a))}
+function getUserShift(u){var a=getShiftAssignments();return a[u.email]||a[u.id]||a[u.name]||'0'}
+function setShift(s){currentShiftTdi=s;document.querySelectorAll('.shift-tab').forEach(function(t){t.classList.toggle('active',t.dataset.shift===s)});renderDashboard()}
+
+var currentFilter='all';
+
+function setFilter(f){currentFilter=f;document.querySelectorAll('.filter-tab').forEach(function(t){t.classList.toggle('active',t.dataset.filter===f)});renderTable()}
+
+function getShiftUsers(){if(currentShiftTdi==='all')return allUsers;return allUsers.filter(function(u){return getUserShift(u)===currentShiftTdi})}
+function getFilteredUsers(){var search=(document.getElementById('search-input')||{}).value||'';search=search.toLowerCase().trim();var users=allUsers;if(currentShiftTdi!=='all')users=users.filter(function(u){return getUserShift(u)===currentShiftTdi});if(currentFilter==='com-tdi')users=users.filter(hasTdi);else if(currentFilter==='sem-tdi')users=users.filter(function(u){return!hasTdi(u)});else if(currentFilter==='vencidos')users=users.filter(function(u){return hasOverdue(u)});if(search)users=users.filter(function(u){return(u.name||'').toLowerCase().indexOf(search)>=0});return users}
+
+function hasOverdue(user){var now=new Date().toISOString().slice(0,10);return getTdiThemes(user).some(function(t){return t.deadline&&t.deadline<now&&t.progress<100})}
+
+function renderDashboard(){renderKPIs();renderAlerts();renderTable();renderTopThemes();renderHardSoft();renderRanking()}
+
+function renderKPIs(){
+  var su=getShiftUsers();var n=su.length,withTdi=su.filter(hasTdi).length,withoutTdi=n-withTdi;
+  var totalThemes=0,totalProgress=0,totalConcluidos=0,themeCount=0,overdueCount=0;
+  var now=new Date().toISOString().slice(0,10);
+  su.forEach(function(u){var th=getTdiThemes(u);totalThemes+=th.length;th.forEach(function(t){totalProgress+=(t.progress||0);themeCount++;if(t.status==='concluido'||t.progress===100)totalConcluidos++;if(t.deadline&&t.deadline<now&&t.progress<100)overdueCount++})});
+  var avgTemas=n?Math.round(totalThemes/n*10)/10:0;
+  var avgProg=themeCount?Math.round(totalProgress/themeCount):0;
+  var colors=['var(--accent)','var(--red)','var(--yellow)','var(--blue)','var(--purple)','var(--orange)'];
+  var kpis=[
+    {icon:'👥',val:withTdi,lbl:'Alunos com TDI',color:'c-green',desc:'Alunos que preencheram pelo menos 1 tema na trilha de desenvolvimento.'},
+    {icon:'👻',val:withoutTdi,lbl:'Sem TDI',color:'c-red',desc:'Alunos sem nenhum tema cadastrado. Precisam de acompanhamento.'},
+    {icon:'📚',val:avgTemas,lbl:'Média temas/aluno',color:'c-yellow',desc:'Quantidade média de temas por aluno. Ideal: 3-5 temas.'},
+    {icon:'📈',val:avgProg+'%',lbl:'Progresso médio',color:'c-blue',desc:'Média de progresso de todos os temas de todos os alunos.'},
+    {icon:'🏆',val:totalConcluidos,lbl:'Temas concluídos',color:'c-purple',desc:'Total de temas com 100% de progresso na equipe.'},
+    {icon:'⏰',val:overdueCount,lbl:'Prazos vencidos',color:'c-red',desc:'Temas com data prevista já passada e progresso < 100%.'}
+  ];
+  var html='';kpis.forEach(function(k,i){
+    html+='<div class="kpi-flip" onclick="this.classList.toggle(\'flipped\')"><div class="kpi-flip-inner">';
+    html+='<div class="kpi-front" style="--top-color:'+colors[i]+'"><div style="position:absolute;top:0;left:0;right:0;height:3px;border-radius:var(--radius) var(--radius) 0 0;background:'+colors[i]+'"></div><div class="kpi-icon">'+k.icon+'</div><div class="kpi-val '+k.color+'">'+k.val+'</div><div class="kpi-lbl">'+k.lbl+'</div></div>';
+    html+='<div class="kpi-back" style="border-top:3px solid '+colors[i]+'"><div class="kpi-back-title">'+k.icon+' '+k.lbl+'</div><div class="kpi-back-desc">'+k.desc+'</div><div class="kpi-back-hint">clique pra voltar</div></div>';
+    html+='</div></div>';
+  });
+  document.getElementById('kpiGrid').innerHTML=html;
+}
+
+function renderAlerts(){
+  var alerts=[];var now=new Date().toISOString().slice(0,10);
+  getShiftUsers().forEach(function(u){
+    if(!hasTdi(u))alerts.push({type:'warning',icon:'👻',msg:esc(u.name)+' não tem TDI preenchido',action:'Editar'});
+    getTdiThemes(u).forEach(function(t){
+      if(t.deadline&&t.deadline<now&&t.progress<100)alerts.push({type:'danger',icon:'⏰',msg:esc(u.name)+' — "'+esc(t.name)+'" venceu em '+new Date(t.deadline+'T00:00:00').toLocaleDateString('pt-BR'),action:'Verificar'});
+    });
+  });
+  var panel=document.getElementById('alerts-panel');
+  if(!alerts.length){panel.style.display='none';return}
+  panel.style.display='block';
+  document.getElementById('alert-count').textContent=alerts.length;
+  var html='';alerts.forEach(function(a){html+='<div class="alert-item alert-'+a.type+'"><span>'+a.icon+'</span><span style="flex:1">'+a.msg+'</span></div>'});
+  document.getElementById('alerts-body').innerHTML=html;
+}
+
+function renderHardSoft(){
+  var hard=0,soft=0;
+  getShiftUsers().forEach(function(u){getTdiThemes(u).forEach(function(t){if(t.type==='hard')hard++;else soft++})});
+  var total=hard+soft;if(!total){document.getElementById('hard-soft-chart').innerHTML='<span style="color:var(--muted);font-size:.82rem">Sem dados</span>';return}
+  var hPct=Math.round(hard/total*100),sPct=100-hPct;
+  document.getElementById('hard-soft-chart').innerHTML=
+    '<div class="hs-bar"><div class="hs-hard" style="width:'+hPct+'%;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:800;color:#fff">'+hPct+'%</div><div class="hs-soft" style="width:'+sPct+'%;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:800;color:#fff">'+sPct+'%</div></div>'+
+    '<div class="hs-legend"><span><span class="hs-dot" style="background:var(--blue)"></span> Hard Skill ('+hard+')</span><span><span class="hs-dot" style="background:var(--purple)"></span> Soft Skill ('+soft+')</span></div>';
+}
+
+function renderRanking(){
+  var ranked=getShiftUsers().filter(hasTdi).map(function(u){return{name:u.name,avg:getTdiAvgProgress(u)}}).sort(function(a,b){return b.avg-a.avg}).slice(0,5);
+  if(!ranked.length){document.getElementById('ranking-list').innerHTML='<span style="color:var(--muted);font-size:.82rem">Sem dados</span>';return}
+  var medals=['🥇','🥈','🥉','4º','5º'];
+  var html='';ranked.forEach(function(r,i){
+    var color=r.avg>=70?'var(--accent)':r.avg>=30?'var(--yellow)':'var(--red)';
+    html+='<div class="rank-item"><span class="rank-pos">'+medals[i]+'</span><span class="rank-name">'+esc(r.name)+'</span><span class="rank-pct" style="color:'+color+'">'+r.avg+'%</span></div>';
+  });
+  document.getElementById('ranking-list').innerHTML=html;
+}
+
+function renderTopThemes(){
+  var counts={};
+  getShiftUsers().forEach(function(u){getTdiThemes(u).forEach(function(t){var name=t.name||'Sem nome';if(!counts[name])counts[name]={count:0,totalProg:0};counts[name].count++;counts[name].totalProg+=(t.progress||0)})});
+  var sorted=Object.entries(counts).sort(function(a,b){return b[1].count-a[1].count}).slice(0,8);
+  var max=sorted.length?sorted[0][1].count:1;
+  var html='';
+  sorted.forEach(function(item){var name=item[0],data=item[1];var pct=Math.round(data.count/max*100);var avgP=data.count?Math.round(data.totalProg/data.count):0;var color=avgP>=70?'var(--accent)':avgP>=30?'var(--yellow)':'var(--red)';
+    html+='<div class="bar-row"><div class="bar-label">'+esc(name)+' <span style="color:var(--muted);font-size:.65rem">('+data.count+' alunos, média '+avgP+'%)</span></div><div class="bar-track"><div class="bar-fill" style="width:'+pct+'%;background:'+color+'"></div></div><div class="bar-pct" style="color:'+color+'">'+data.count+'</div></div>';
+  });
+  document.getElementById('top-themes-bars').innerHTML=html||'<span style="color:var(--muted);font-size:.82rem">Nenhum tema cadastrado ainda</span>';
+}
+
+function renderTable(){
+  var sorted=getFilteredUsers().slice().sort(function(a,b){
+    var va,vb;
+    switch(sortCol){
+      case 'name':va=(a.name||'').toLowerCase();vb=(b.name||'').toLowerCase();return sortAsc?va.localeCompare(vb):vb.localeCompare(va);
+      case 'themes':va=getTdiThemes(a).length;vb=getTdiThemes(b).length;break;
+      case 'progress':va=getTdiAvgProgress(a);vb=getTdiAvgProgress(b);break;
+      case 'concluidos':va=getTdiConcluidos(a);vb=getTdiConcluidos(b);break;
+      case 'lastUpdate':va=getTdiLastUpdate(a)||'';vb=getTdiLastUpdate(b)||'';return sortAsc?va.localeCompare(vb):vb.localeCompare(va);
+      case 'shift':va=getUserShift(a);vb=getUserShift(b);return sortAsc?va.localeCompare(vb):vb.localeCompare(va);
+      case 'hasTdi':va=hasTdi(a)?0:1;vb=hasTdi(b)?0:1;break;
+      default:return 0;
+    }
+    return sortAsc?va-vb:vb-va;
+  });
+
+  document.querySelectorAll('th').forEach(function(th){var c=th.dataset.col,ar=th.querySelector('.sort-arrow');if(!ar)return;if(c===sortCol){th.classList.add('sorted');ar.textContent=sortAsc?'▲':'▼'}else{th.classList.remove('sorted');ar.textContent='▲'}});
+
+  var tbody=document.getElementById('tableBody');tbody.innerHTML='';
+  sorted.forEach(function(user,idx){
+    var uid=user.id||user.email||user.name||String(idx);
+    var themes=getTdiThemes(user);
+    var avgProg=getTdiAvgProgress(user);
+    var concl=getTdiConcluidos(user);
+    var lastUp=getTdiLastUpdate(user);
+    var has=hasTdi(user);
+    var isExpanded=expandedRows.has(uid);
+    var barCls=avgProg>=70?'pf-green':avgProg>=30?'pf-yellow':'pf-red';
+
+    var tr=document.createElement('tr');
+    tr.className='data-row'+(isExpanded?' expanded':'');
+    tr.onclick=function(){toggleDetails(uid)};
+    tr.innerHTML=
+      '<td><div class="user-name"><span class="expand-icon '+(isExpanded?'open':'')+'">▶</span>'+esc(user.name||'Sem nome')+'</div></td>'+
+      '<td><select class="shift-select" data-uid="'+uid+'" onclick="event.stopPropagation()"><option value="0"'+(getUserShift(user)==='0'?' selected':'')+'>—</option><option value="1"'+(getUserShift(user)==='1'?' selected':'')+'>T1</option><option value="2"'+(getUserShift(user)==='2'?' selected':'')+'>T2</option><option value="3"'+(getUserShift(user)==='3'?' selected':'')+'>T3</option></select></td>'+
+      '<td>'+themes.length+'</td>'+
+      '<td><div class="progress-mini"><div class="progress-mini-fill '+barCls+'" style="width:'+avgProg+'%"></div></div> <span style="font-size:.75rem;color:var(--muted)">'+avgProg+'%</span></td>'+
+      '<td>'+concl+'/'+themes.length+'</td>'+
+      '<td>'+formatDate(lastUp)+'</td>'+
+      '<td><span class="status-badge '+(has?'status-has-tdi':'status-no-tdi')+'">'+(has?'Preenchido':'Sem TDI')+'</span></td>';
+    tbody.appendChild(tr);
+
+    // Detail row
+    var dtr=document.createElement('tr');dtr.className='detail-row'+(isExpanded?' visible':'');dtr.id='detail-'+uid;
+    var dhtml='<td colspan="7"><div class="detail-content">';
+    if(themes.length){
+      dhtml+='<div class="detail-themes">';
+      themes.forEach(function(t){
+        var bCls=t.progress>=70?'pf-green':t.progress>=30?'pf-yellow':'pf-red';
+        var tCls=t.type==='soft'?'dt-type-soft':'dt-type-hard';
+        var statusTxt={nao_iniciado:'Não iniciado',em_andamento:'Em andamento',concluido:'Concluído'};
+        dhtml+='<div class="dt-card"><div class="dt-card-header"><span class="dt-card-name"><span class="dt-card-type '+tCls+'">'+(t.type==='soft'?'Soft':'Hard')+'</span> '+esc(t.name)+'</span><button onclick="event.stopPropagation();openEditPanel(\''+uid.toString().replace(/'/g,"\\'")+'\');" style="padding:4px 12px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;font-size:.7rem;font-weight:700;transition:all .2s">Editar</button></div>'+
+          '<div class="dt-bar"><div class="dt-bar-fill '+bCls+'" style="width:'+t.progress+'%"></div></div>'+
+          '<div class="dt-meta"><span>'+(statusTxt[t.status]||t.status)+(t.deadline?' &nbsp;&middot;&nbsp; <span style="color:var(--yellow);font-weight:700">Prazo: '+new Date(t.deadline+'T00:00:00').toLocaleDateString('pt-BR')+'</span>':'')+'</span><span style="font-weight:800">'+t.progress+'%</span></div>'+
+          '' +
+          (t.notes?'<div class="dt-notes">'+esc(t.notes)+'</div>':'')+
+          (t.resources&&t.resources.length?'<div class="dt-resources">'+t.resources.map(function(r){return '<a class="dt-res-tag" href="'+esc(r)+'" target="_blank">'+shortenUrl(r)+'</a>'}).join('')+'</div>':'')+
+          '</div>';
+      });
+      dhtml+='</div>';
+    } else {
+      dhtml+='<div style="color:var(--muted);padding:12px;text-align:center">Este aluno ainda nao preencheu o TDI.</div>';
+    }
+    // Edit button
+    dhtml+='<div style="display:flex;gap:8px;margin-top:8px"><button class="btn btn-primary" onclick="event.stopPropagation();openEditPanel(\''+uid.toString().replace(/'/g,"\\'")+'\')" style="font-size:.78rem">Editar TDI deste aluno</button></div>';
+    // Edit panel (rendered when editing)
+    if(editingUser===uid){
+      dhtml+=renderEditPanel(user);
+    }
+    dhtml+='</div></td>';
+    dtr.innerHTML=dhtml;
+    tbody.appendChild(dtr);
+  });
+  // Shift change delegation
+  tbody.querySelectorAll('.shift-select').forEach(function(sel){sel.onchange=function(){var uid=sel.dataset.uid;handleShiftChange(sel,uid)}});
+  document.getElementById('countBadge').textContent=sorted.length;
+}
+
+function handleShiftChange(sel,uid){var user=findUserByUid(uid);if(!user)return;var a=getShiftAssignments();var key=user.email||user.id||user.name;if(sel.value==='0')delete a[key];else a[key]=sel.value;saveShiftAssignments(a);if(currentShiftTdi!=='all')renderDashboard()}
+
+function toggleDetails(uid){if(expandedRows.has(uid))expandedRows.delete(uid);else expandedRows.add(uid);renderTable()}
+function sortTable(col){if(sortCol===col)sortAsc=!sortAsc;else{sortCol=col;sortAsc=true}renderTable()}
+
+// ──────── Edit Panel ────────
+function openEditPanel(uid){
+  editingUser=uid;
+  if(!expandedRows.has(uid))expandedRows.add(uid);
+  renderTable();
+}
+
+function renderEditPanel(user){
+  var themes=getTdiThemes(user);
+  var html='<div class="edit-panel"><h4>Editar TDI — '+esc(user.name)+'</h4>';
+  html+='<div class="ep-themes">';
+  themes.forEach(function(t,i){
+    html+='<div class="ep-theme" data-idx="'+i+'">'+
+      '<div class="ep-row"><input type="text" value="'+esc(t.name).replace(/"/g,'&quot;')+'" data-field="name" placeholder="Nome do tema">'+
+      '<select data-field="type"><option value="hard"'+(t.type==='hard'?' selected':'')+'>Hard Skill</option><option value="soft"'+(t.type==='soft'?' selected':'')+'>Soft Skill</option></select></div>'+
+      '<div class="ep-slider"><span>Progresso:</span><input type="number" min="0" max="100" step="5" value="'+(t.progress||0)+'" data-field="progress"><span class="ep-slider-val">%</span></div>'+
+      '<div class="ep-row" style="margin-top:6px"><select data-field="status"><option value="nao_iniciado"'+(t.status==='nao_iniciado'?' selected':'')+'>Não iniciado</option><option value="em_andamento"'+(t.status==='em_andamento'?' selected':'')+'>Em andamento</option><option value="concluido"'+(t.status==='concluido'?' selected':'')+'>Concluído</option></select>'+
+      '<button class="ep-del-btn" onclick="event.stopPropagation();removeEditTheme('+i+')">Remover</button></div>'+
+      '<div class="ep-row" style="margin-top:6px"><input type="date" data-field="deadline" value="'+(t.deadline||'')+'"><span style="font-size:.75rem;color:var(--yellow);font-weight:600;align-self:center">Data prevista</span></div>'+
+      '<textarea data-field="notes" placeholder="Notas..." style="width:100%;margin-top:6px">'+(t.notes||'')+'</textarea>'+
+      '<textarea data-field="resources" placeholder="Links (um por linha)" style="width:100%;margin-top:4px">'+(t.resources||[]).join('\n')+'</textarea>'+
+      '</div>';
+  });
+  html+='</div>';
+  html+='<button class="ep-add-btn" onclick="event.stopPropagation();addEditTheme()">+ Adicionar tema</button>';
+  html+='<div class="ep-actions" style="margin-top:12px"><button class="btn" onclick="event.stopPropagation();cancelEdit()">Cancelar</button><button class="btn btn-primary" onclick="event.stopPropagation();saveEditTdi()">Salvar TDI</button></div>';
+  html+='</div>';
+  return html;
+}
+
+function addEditTheme(){
+  var user=findUserByUid(editingUser);
+  if(!user)return;
+  // Salvar estado atual do DOM antes de re-render
+  saveCurrentEditState(user);
+  if(!user.tdi)user.tdi={user:user.name,email:user.email||'',lastUpdatedBy:'coordenador',lastUpdatedAt:new Date().toISOString(),themes:[]};
+  user.tdi.themes.push({id:'tdi_'+Date.now().toString(36),name:'',type:'hard',progress:0,status:'nao_iniciado',notes:'',resources:[]});
+  renderTable();
+  // Scroll e focus no novo tema
+  setTimeout(function(){var els=document.querySelectorAll('.ep-theme');if(els.length){var last=els[els.length-1];last.scrollIntoView({behavior:'smooth',block:'center'});var inp=last.querySelector('[data-field="name"]');if(inp)inp.focus()}},100);
+}
+
+function saveCurrentEditState(user){
+  var epThemes=document.querySelectorAll('.ep-theme');
+  if(!epThemes.length)return;
+  if(!user.tdi)user.tdi={user:user.name,email:user.email||'',lastUpdatedBy:'coordenador',lastUpdatedAt:new Date().toISOString(),themes:[]};
+  var themes=[];
+  epThemes.forEach(function(el){
+    var name=el.querySelector('[data-field="name"]');
+    var type=el.querySelector('[data-field="type"]');
+    var progress=el.querySelector('[data-field="progress"]');
+    var status=el.querySelector('[data-field="status"]');
+    var notes=el.querySelector('[data-field="notes"]');
+    var deadline=el.querySelector('[data-field="deadline"]');
+    var res=el.querySelector('[data-field="resources"]');
+    themes.push({
+      id:'tdi_'+Date.now().toString(36)+'_'+Math.random().toString(36).substr(2,3),
+      name:name?name.value.trim():'',
+      type:type?type.value:'hard',
+      progress:progress?parseInt(progress.value)||0:0,
+      status:status?status.value:'nao_iniciado',
+      notes:notes?notes.value.trim():'',deadline:deadline?deadline.value:'',
+      resources:res?(res.value.trim()?res.value.trim().split('\n').map(function(r){return r.trim()}).filter(Boolean):[]):[],
+      updatedAt:new Date().toISOString()
+    });
+  });
+  user.tdi.themes=themes;
+}
+
+function removeEditTheme(idx){
+  var user=findUserByUid(editingUser);
+  if(!user||!user.tdi)return;
+  saveCurrentEditState(user);
+  user.tdi.themes.splice(idx,1);
+  renderTable();
+}
+
+function cancelEdit(){editingUser=null;renderTable()}
+
+function saveEditTdi(){
+  var user=findUserByUid(editingUser);
+  if(!user)return;
+  // Ler dados do DOM
+  var epThemes=document.querySelectorAll('.ep-theme');
+  var themes=[];
+  epThemes.forEach(function(el,i){
+    var name=el.querySelector('[data-field="name"]').value.trim();
+    var type=el.querySelector('[data-field="type"]').value;
+    var progress=parseInt(el.querySelector('[data-field="progress"]').value)||0;
+    var status=el.querySelector('[data-field="status"]').value;
+    var notes=el.querySelector('[data-field="notes"]').value.trim();
+    var deadline=el.querySelector('[data-field="deadline"]');deadline=deadline?deadline.value:'';
+    var resRaw=el.querySelector('[data-field="resources"]').value.trim();
+    var resources=resRaw?resRaw.split('\n').map(function(r){return r.trim()}).filter(Boolean):[];
+    if(progress===100)status='concluido';
+    else if(status==='concluido'){status='em_andamento';}
+    themes.push({id:'tdi_'+i+'_'+Date.now().toString(36),name:name||'Sem nome',type:type,progress:progress,status:status,notes:notes,deadline:deadline,resources:resources,updatedAt:new Date().toISOString()});
+  });
+  if(!user.tdi)user.tdi={};
+  user.tdi.user=user.name;
+  user.tdi.email=user.email||'';
+  user.tdi.themes=themes;
+  user.tdi.lastUpdatedBy='coordenador:'+localStorage.getItem(SESSION_KEY);
+  user.tdi.lastUpdatedAt=new Date().toISOString();
+  // Sync to API via JSONP (GET com script tag — carrega cookies Google)
+  var params='action=saveTdi&name='+encodeURIComponent(user.name)+'&email='+encodeURIComponent(user.email||'')+'&tdi='+encodeURIComponent(JSON.stringify(user.tdi))+'&_='+Date.now();
+  var sc=document.createElement('script');sc.src=API_URL+'?'+params;sc.onerror=function(){if(sc.parentNode)sc.parentNode.removeChild(sc)};sc.onload=function(){if(sc.parentNode)sc.parentNode.removeChild(sc)};document.head.appendChild(sc);
+  editingUser=null;
+  showToast('TDI de '+user.name+' salvo!','success');
+  renderDashboard();
+}
+
+function findUserByUid(uid){
+  return allUsers.find(function(u,i){var key=u.id||u.email||u.name||String(i);return key===uid||String(key)===String(uid)})||null;
+}
+
+// ──────── Export CSV ────────
+function exportCSV(){
+  if(!allUsers.length)return;
+  var headers=['Nome','Email','Tem TDI','Qtd Temas','Progresso Medio %','Temas Concluidos','Ultima Atualizacao','Temas (detalhado)'];
+  var rows=allUsers.map(function(u){
+    var th=getTdiThemes(u);
+    var detail=th.map(function(t){return t.name+' ('+t.progress+'%, '+(t.status||'?')+')'}).join(' | ');
+    return[u.name||'',u.email||'',hasTdi(u)?'Sim':'Nao',th.length,getTdiAvgProgress(u),getTdiConcluidos(u),getTdiLastUpdate(u)||'',detail];
+  });
+  var csv='\uFEFF'+headers.map(function(h){return '"'+h+'"'}).join(';')+'\n';
+  rows.forEach(function(r){csv+=r.map(function(v){return '"'+String(v).replace(/"/g,'""')+'"'}).join(';')+'\n'});
+  var blob=new Blob([csv],{type:'text/csv;charset=utf-8'});var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='tdi-equipe-'+new Date().toISOString().slice(0,10)+'.csv';a.click();URL.revokeObjectURL(a.href);
+}
+
+// ──────── Navigation ────────
+function goToCoordinator(){window.location.href='coordenador-v2.html'}
+
+function showToast(msg,type){var t=document.getElementById('save-toast');t.textContent=(type==='success'?'✅ ':'⚠️ ')+msg;t.className='save-toast '+type+' show';setTimeout(function(){t.classList.remove('show')},2500)}
+(function(){var t=localStorage.getItem('pdi_theme')||'dark';document.body.setAttribute('data-theme',t);document.querySelectorAll('.mc-dot').forEach(function(b){b.classList.toggle('active',b.dataset.theme===t);b.addEventListener('click',function(){var th=b.dataset.theme;document.body.setAttribute('data-theme',th);localStorage.setItem('pdi_theme',th);document.querySelectorAll('.mc-dot').forEach(function(d){d.classList.toggle('active',d.dataset.theme===th)})})})})();
+</script>
+</body>
+</html>

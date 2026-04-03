@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>📋 Meu TDI — Trilha de Desenvolvimento Individual</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📋</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0a0e1a;--bg2:#0d1220;--bg3:#111827;--card:rgba(255,255,255,0.04);--card2:rgba(255,255,255,0.06);--card3:rgba(255,255,255,0.08);--text:#f0f0f5;--muted:#8b8fa3;--accent:#21C25E;--accent2:#1db854;--accent-dim:rgba(33,194,94,0.12);--border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.12);--yellow:#f59e0b;--red:#ef4444;--blue:#3b82f6;--purple:#a855f7;--cyan:#06b6d4;--pink:#ec4899;--orange:#f97316;--radius:14px;--transition:.2s ease}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh;-webkit-font-smoothing:antialiased}
+::selection{background:var(--accent);color:#0a0e1a}
+::-webkit-scrollbar{width:5px;height:5px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.08);border-radius:3px}
+a{color:var(--accent);text-decoration:none}
+body[data-theme="light"]{--bg:#f5f7fa;--bg2:#edf0f4;--bg3:#e2e6ec;--card:rgba(0,0,0,0.03);--card2:rgba(0,0,0,0.05);--card3:rgba(0,0,0,0.07);--text:#1a1a2e;--muted:#6b7280;--border:rgba(0,0,0,0.08);--border2:rgba(0,0,0,0.12)}
+body[data-theme="light"] .hdr{background:rgba(245,247,250,0.92)}
+body[data-theme="light"] .onboard{background:#f5f7fa}
+body[data-theme="light"] .onboard-box{background:#fff;border-color:rgba(0,0,0,0.1)}
+body[data-theme="light"] .onboard-box input{background:#f5f7fa;border-color:rgba(0,0,0,0.1);color:#1a1a2e}
+.mc-themes{display:flex;gap:3px;align-items:center}
+.mc-dot{width:16px;height:16px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:all var(--transition);padding:0;background:none;display:flex;align-items:center;justify-content:center}
+.mc-dot.active{border-color:var(--accent)}
+.mc-dot .di{width:10px;height:10px;border-radius:50%}
+.di-dark{background:#0a0e1a;border:1px solid #555}.di-light{background:#fff;border:1px solid #ccc}
+
+/* HEADER */
+.hdr{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:52px;background:rgba(10,14,26,0.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+.hdr-left{display:flex;align-items:center;gap:12px}
+.hdr-brand{font-weight:800;font-size:.9rem;color:var(--muted)}
+.hdr-title{font-weight:700;font-size:.85rem;color:var(--yellow)}
+.hdr-right{display:flex;align-items:center;gap:10px}
+.hdr-user{font-size:.82rem;color:var(--muted)}
+.hdr-user strong{color:var(--text)}
+.btn{padding:7px 16px;border-radius:10px;border:1px solid var(--border);background:transparent;color:var(--muted);font-weight:700;cursor:pointer;font-size:.78rem;transition:all var(--transition);display:inline-flex;align-items:center;gap:6px}
+.btn:hover{border-color:var(--accent);color:var(--text);transform:translateY(-1px)}
+.btn-primary{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#0a0e1a;border-color:var(--accent)}
+.btn-primary:hover{box-shadow:0 4px 16px rgba(33,194,94,0.3)}
+.btn-danger{border-color:rgba(239,68,68,0.3);color:var(--red)}
+.btn-danger:hover{border-color:var(--red);background:rgba(239,68,68,0.08)}
+
+/* ONBOARDING */
+.onboard{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+.onboard-box{background:rgba(17,24,39,0.95);border:1px solid rgba(33,194,94,0.15);border-radius:24px;padding:48px 40px;max-width:460px;width:100%;text-align:center;backdrop-filter:blur(20px)}
+.onboard-box h2{font-size:1.5rem;margin-bottom:8px;background:linear-gradient(135deg,var(--accent),var(--yellow));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.onboard-box p{color:var(--muted);font-size:.88rem;margin-bottom:24px;line-height:1.6}
+.onboard-box input{width:100%;padding:14px 18px;border-radius:12px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:.95rem;outline:none;margin-bottom:12px;transition:border-color var(--transition)}
+.onboard-box input:focus{border-color:var(--accent)}
+
+/* LAYOUT */
+.wrap{max-width:900px;margin:0 auto;padding:68px 24px 40px}
+
+/* HERO */
+.hero{text-align:center;padding:20px 0 8px}
+.hero h1{font-size:1.6rem;font-weight:900;margin-bottom:4px;background:linear-gradient(135deg,var(--accent),var(--yellow));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero p{color:var(--muted);font-size:.86rem;margin-bottom:16px}
+
+/* KPI ROW */
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:24px}
+@media(max-width:700px){.kpi-row{grid-template-columns:repeat(2,1fr)}}
+.kpi{background:var(--card2);border:1px solid var(--border);border-radius:var(--radius);padding:16px;text-align:center}
+.kpi-val{font-size:1.5rem;font-weight:900}
+.kpi-lbl{font-size:.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-top:2px}
+
+/* THEME CARDS */
+.themes{display:flex;flex-direction:column;gap:12px;margin-bottom:24px}
+.theme-card{background:var(--card2);border:1px solid var(--border);border-radius:var(--radius);padding:20px;transition:all .3s;position:relative}
+.theme-card:hover{border-color:var(--border2)}
+.theme-card.editing{border-color:var(--accent);box-shadow:0 0 20px rgba(33,194,94,0.08)}
+.theme-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.theme-name{font-size:1rem;font-weight:700;display:flex;align-items:center;gap:8px}
+.theme-type{font-size:.65rem;padding:3px 10px;border-radius:20px;font-weight:700;text-transform:uppercase;letter-spacing:.5px}
+.type-hard{background:rgba(59,130,246,0.12);color:var(--blue)}
+.type-soft{background:rgba(168,85,247,0.12);color:var(--purple)}
+.theme-actions{display:flex;gap:6px}
+.theme-actions button{background:none;border:1px solid var(--border);color:var(--muted);padding:4px 10px;border-radius:8px;cursor:pointer;font-size:.7rem;font-weight:600;transition:all .2s}
+.theme-actions button:hover{border-color:var(--accent);color:var(--accent)}
+.theme-actions .del-btn:hover{border-color:var(--red);color:var(--red)}
+
+/* PROGRESS BAR - removida, usando apenas o slider */
+.progress-container{margin-bottom:10px}
+.progress-label{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
+.progress-label span{font-size:.75rem;color:var(--muted);font-weight:600}
+.progress-pct{font-size:.85rem;font-weight:800}
+
+/* STATUS */
+.status-row{display:flex;gap:8px;align-items:center;margin-bottom:10px;flex-wrap:wrap}
+.status-chip{font-size:.72rem;padding:4px 12px;border-radius:20px;font-weight:700;cursor:pointer;border:1px solid var(--border);background:transparent;color:var(--muted);transition:all .2s}
+.status-chip.active{color:#0a0e1a}
+.status-chip[data-val="nao_iniciado"].active{background:var(--muted);border-color:var(--muted)}
+.status-chip[data-val="em_andamento"].active{background:var(--yellow);border-color:var(--yellow)}
+.status-chip[data-val="concluido"].active{background:var(--accent);border-color:var(--accent)}
+
+/* NOTES */
+.theme-notes{font-size:.82rem;color:var(--muted);line-height:1.5;margin-top:6px}
+.theme-notes strong{color:var(--text);font-size:.72rem;text-transform:uppercase;letter-spacing:.5px}
+
+/* RESOURCES */
+.resources{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.resource-tag{font-size:.7rem;padding:3px 10px;border-radius:8px;background:rgba(59,130,246,0.08);color:var(--blue);border:1px solid rgba(59,130,246,0.15);max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.resource-tag a{color:var(--blue)}
+
+/* EDIT FORM */
+.edit-form{display:none;margin-top:16px;padding-top:16px;border-top:1px solid var(--border)}
+.theme-card.editing .edit-form{display:block}
+.theme-card.editing .theme-view{display:none}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+@media(max-width:600px){.form-row{grid-template-columns:1fr}}
+.form-group{display:flex;flex-direction:column;gap:4px}
+.form-group label{font-size:.7rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+.form-group input,.form-group textarea,.form-group select{padding:10px 14px;border-radius:10px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:.88rem;outline:none;font-family:inherit;transition:border-color .2s}
+.form-group input:focus,.form-group textarea:focus,.form-group select:focus{border-color:var(--accent)}
+.form-group textarea{resize:vertical;min-height:70px}
+.form-group select{cursor:pointer;-webkit-appearance:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%238b8fa3' d='M6 8L1 3h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center}
+.form-group select option{background:var(--bg2);color:var(--text)}
+.slider-row{display:flex;align-items:center;gap:12px}
+.slider-row input[type=number]{width:70px;padding:8px 12px;border-radius:10px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:.9rem;font-weight:700;outline:none;text-align:center;font-family:inherit}
+.slider-row input[type=number]{width:70px;padding:8px 12px;border-radius:10px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:.9rem;font-weight:700;outline:none;text-align:center;font-family:inherit}
+.slider-val{font-size:.9rem;font-weight:800;min-width:42px;text-align:right}
+.form-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:12px}
+
+/* ADD THEME */
+.add-theme{display:flex;align-items:center;justify-content:center;padding:24px;border:2px dashed var(--border);border-radius:var(--radius);cursor:pointer;transition:all .3s;color:var(--muted);font-weight:700;font-size:.88rem;gap:8px}
+.add-theme:hover{border-color:var(--accent);color:var(--accent);background:rgba(33,194,94,0.03)}
+
+/* SAVE STATUS */
+.save-toast{position:fixed;bottom:24px;right:24px;padding:12px 20px;border-radius:12px;font-size:.82rem;font-weight:700;z-index:200;transform:translateY(80px);opacity:0;transition:all .3s ease}
+.save-toast.show{transform:translateY(0);opacity:1}
+.save-toast.success{background:var(--accent);color:#0a0e1a}
+.save-toast.error{background:var(--red);color:#fff}
+
+/* TIMESTAMP */
+.timestamp{font-size:.72rem;color:var(--muted);text-align:center;margin-top:16px}
+
+/* RESPONSIVE */
+@media(max-width:600px){
+  .hdr{padding:0 14px}
+  .wrap{padding:60px 14px 30px}
+  .hero h1{font-size:1.3rem}
+}
+</style>
+</head>
+<body>
+<script>(function(){var t=localStorage.getItem('pdi_theme');if(t)document.body.setAttribute('data-theme',t);})()</script>
+
+<!-- ONBOARDING (se nao tem pdi_user) -->
+<div id="onboard-screen" style="display:none">
+  <div class="onboard">
+    <div class="onboard-box">
+      <h2>Bem-vindo ao TDI</h2>
+      <p>Trilha de Desenvolvimento Individual<br>Informe seu nome pra comecar a montar sua trilha.</p>
+      <input type="text" id="onboard-name" placeholder="Seu nome completo" autocomplete="off">
+      <input type="email" id="onboard-email" placeholder="Email @picpay.com (opcional)" autocomplete="off">
+      <button class="btn btn-primary" style="width:100%;padding:14px;font-size:1rem;margin-top:8px" onclick="doOnboard()">Comecar minha trilha</button>
+      <p id="onboard-error" style="color:var(--red);font-size:.82rem;margin-top:12px;display:none"></p>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN APP -->
+<div id="app-wrapper" style="display:none">
+  <header class="hdr">
+    <div class="hdr-left">
+      <span class="hdr-brand">📋 TDI</span>
+      <span class="hdr-title">Trilha de Desenvolvimento</span>
+    </div>
+    <div class="hdr-right">
+      <div class="mc-themes"><button class="mc-dot active" data-theme="dark" title="Dark"><span class="di di-dark"></span></button><button class="mc-dot" data-theme="light" title="Light"><span class="di di-light"></span></button></div><span class="hdr-user">Ola, <strong id="user-name"></strong></span>
+      <button class="btn" onclick="goToCourse()" title="Voltar pro curso">🎓 Curso</button>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <div class="hero">
+      <h1>Minha Trilha de Desenvolvimento</h1>
+      <p>Organize seus temas de estudo, acompanhe progresso e compartilhe com seu coordenador.</p>
+    </div>
+
+    <!-- KPIs -->
+    <div class="kpi-row">
+      <div class="kpi"><div class="kpi-val c-green" id="kpi-total">0</div><div class="kpi-lbl">Temas</div></div>
+      <div class="kpi"><div class="kpi-val c-yellow" id="kpi-andamento">0</div><div class="kpi-lbl">Em andamento</div></div>
+      <div class="kpi"><div class="kpi-val c-blue" id="kpi-concluido">0</div><div class="kpi-lbl">Concluidos</div></div>
+      <div class="kpi"><div class="kpi-val c-purple" id="kpi-media">0%</div><div class="kpi-lbl">Progresso medio</div></div>
+    </div>
+
+    <!-- THEME CARDS -->
+    <div class="themes" id="themes-container"></div>
+
+    <!-- ADD THEME -->
+    <div class="add-theme" onclick="addTheme()">+ Adicionar novo tema</div>
+
+    <div class="timestamp" id="last-save"></div>
+  </div>
+</div>
+
+<!-- SAVE TOAST -->
+<div class="save-toast" id="save-toast"></div>
+
+<script>
+// ══════════════════════════════════════════
+// TDI — Trilha de Desenvolvimento Individual
+// Offline-first + sync Google Apps Script
+// ══════════════════════════════════════════
+
+var TDI_KEY = 'pdi_tdi_data';
+var USER_KEY = 'pdi_user';
+var EMAIL_KEY = 'pdi_user_email';
+var API_URL = 'https://script.google.com/a/macros/picpay.com/s/AKfycbyGSJXeR6PvMqkyQrS8kvyZvJMTaOZbyC8NrPh9PL0DhKIezY84AgRZ7qJ9Fl4qkFzx/exec';
+
+// Temas padrao (pre-populados na primeira vez)
+var DEFAULT_THEMES = [
+  {id: genId(), name: 'Comunicação / Oratória', type: 'soft', progress: 0, status: 'nao_iniciado', notes: '', resources: []}
+];
+
+var tdiData = null;
+var editingId = null;
+
+function genId() { return 'tdi_' + Date.now().toString(36) + '_' + Math.random().toString(36).substr(2, 5); }
+
+// ──────── Init ────────
+document.addEventListener('DOMContentLoaded', function() {
+  var user = localStorage.getItem(USER_KEY);
+  if (!user) {
+    document.getElementById('onboard-screen').style.display = 'block';
+    document.getElementById('app-wrapper').style.display = 'none';
+    return;
+  }
+  enterApp(user);
+});
+
+function doOnboard() {
+  var name = document.getElementById('onboard-name').value.trim();
+  var email = document.getElementById('onboard-email').value.trim();
+  var errEl = document.getElementById('onboard-error');
+  if (!name || name.length < 2) {
+    errEl.textContent = 'Informe seu nome (minimo 2 caracteres)';
+    errEl.style.display = 'block';
+    return;
+  }
+  localStorage.setItem(USER_KEY, name);
+  if (email) localStorage.setItem(EMAIL_KEY, email);
+  enterApp(name);
+}
+
+function enterApp(user) {
+  document.getElementById('onboard-screen').style.display = 'none';
+  document.getElementById('app-wrapper').style.display = 'block';
+  document.getElementById('user-name').textContent = user;
+  loadData();
+  render();
+}
+
+// ──────── Data ────────
+function loadData() {
+  var raw = localStorage.getItem(TDI_KEY);
+  if (raw) {
+    try { tdiData = JSON.parse(raw); } catch(e) { tdiData = null; }
+  }
+  if (!tdiData || !tdiData.themes) {
+    tdiData = {
+      user: localStorage.getItem(USER_KEY) || '',
+      email: localStorage.getItem(EMAIL_KEY) || '',
+      lastUpdatedBy: 'aluno',
+      lastUpdatedAt: new Date().toISOString(),
+      themes: DEFAULT_THEMES.map(function(t) { return Object.assign({}, t, {id: genId()}); })
+    };
+    saveData();
+  }
+  // Buscar versao mais recente da API (coordenador pode ter editado)
+  fetchTdiFromApi();
+}
+
+function fetchTdiFromApi() {
+  var user = localStorage.getItem(USER_KEY);
+  if (!user || !API_URL) return;
+  var cbName = '_tdi_' + Math.random().toString(36).substr(2, 8);
+  var script = document.createElement('script');
+  var done = false;
+  var timeout = setTimeout(function() { if (done) return; done = true; delete window[cbName]; if (script.parentNode) script.parentNode.removeChild(script); }, 10000);
+  window[cbName] = function(data) {
+    if (done) return; done = true; clearTimeout(timeout); delete window[cbName]; if (script.parentNode) script.parentNode.removeChild(script);
+    if (!data || !data.users) return;
+    var me = data.users.find(function(u) { return u.name === user; });
+    if (!me || !me.tdi || !me.tdi.themes || !me.tdi.themes.length) return;
+    // Se a API tem versao mais recente que o local, usar a da API
+    var apiDate = me.tdi.lastUpdatedAt || '';
+    var localDate = tdiData.lastUpdatedAt || '';
+    if (apiDate > localDate) {
+      tdiData = me.tdi;
+      localStorage.setItem(TDI_KEY, JSON.stringify(tdiData));
+      render();
+      showToast('TDI atualizado pelo coordenador', 'success');
+    }
+  };
+  script.onerror = function() { if (done) return; done = true; clearTimeout(timeout); delete window[cbName]; if (script.parentNode) script.parentNode.removeChild(script); };
+  script.src = API_URL + '?callback=' + cbName;
+  document.head.appendChild(script);
+}
+
+function saveData() {
+  tdiData.user = localStorage.getItem(USER_KEY) || tdiData.user;
+  tdiData.email = localStorage.getItem(EMAIL_KEY) || tdiData.email;
+  tdiData.lastUpdatedBy = 'aluno';
+  tdiData.lastUpdatedAt = new Date().toISOString();
+  localStorage.setItem(TDI_KEY, JSON.stringify(tdiData));
+  syncToApi();
+  showToast('Salvo com sucesso!', 'success');
+  updateLastSave();
+}
+
+function syncToApi() {
+  if (!API_URL) return;
+  var user = tdiData.user;
+  if (!user) return;
+  // Sync via JSONP (script tag) — carrega cookies Google automaticamente
+  // Envia como GET com action=saveTdi + dados URL-encoded
+  var params = 'action=saveTdi&name=' + encodeURIComponent(user) +
+    '&email=' + encodeURIComponent(tdiData.email || '') +
+    '&tdi=' + encodeURIComponent(JSON.stringify(tdiData)) +
+    '&_=' + Date.now();
+  var s = document.createElement('script');
+  s.src = API_URL + '?' + params;
+  s.onerror = function() { if (s.parentNode) s.parentNode.removeChild(s); };
+  s.onload = function() { if (s.parentNode) s.parentNode.removeChild(s); };
+  document.head.appendChild(s);
+}
+
+// ──────── Render ────────
+function render() {
+  renderKPIs();
+  renderThemes();
+  updateLastSave();
+}
+
+function renderKPIs() {
+  var themes = tdiData.themes || [];
+  var total = themes.length;
+  var andamento = themes.filter(function(t) { return t.status === 'em_andamento'; }).length;
+  var concluido = themes.filter(function(t) { return t.status === 'concluido'; }).length;
+  var avgProgress = total ? Math.round(themes.reduce(function(s, t) { return s + (t.progress || 0); }, 0) / total) : 0;
+  document.getElementById('kpi-total').textContent = total;
+  document.getElementById('kpi-andamento').textContent = andamento;
+  document.getElementById('kpi-concluido').textContent = concluido;
+  document.getElementById('kpi-media').textContent = avgProgress + '%';
+}
+
+function renderThemes() {
+  var container = document.getElementById('themes-container');
+  var themes = tdiData.themes || [];
+  if (!themes.length) {
+    container.innerHTML = '<div style="text-align:center;padding:40px;color:var(--muted)">Nenhum tema ainda. Clique em "+ Adicionar novo tema" abaixo.</div>';
+    return;
+  }
+  container.innerHTML = themes.map(function(t, idx) {
+    var isEditing = editingId === t.id;
+    var barCls = t.progress >= 70 ? 'pf-green' : t.progress >= 30 ? 'pf-yellow' : 'pf-red';
+    var typeLabel = t.type === 'soft' ? 'Soft Skill' : 'Hard Skill';
+    var typeCls = t.type === 'soft' ? 'type-soft' : 'type-hard';
+    var statusLabels = {nao_iniciado: 'Não iniciado', em_andamento: 'Em andamento', concluido: 'Concluído'};
+
+    return '<div class="theme-card' + (isEditing ? ' editing' : '') + '" data-id="' + t.id + '">' +
+      // VIEW MODE
+      '<div class="theme-view">' +
+        '<div class="theme-header">' +
+          '<div class="theme-name"><span class="theme-type ' + typeCls + '">' + typeLabel + '</span> ' + esc(t.name) + '</div>' +
+          '<div class="theme-actions">' +
+            '<button onclick="startEdit(\'' + t.id + '\')" title="Editar">Editar</button>' +
+            '' +
+          '</div>' +
+        '</div>' +
+        '<div class="progress-container">' +
+          '<div class="progress-label"><span>' + (statusLabels[t.status] || t.status) + (t.deadline ? ' &nbsp;·&nbsp; <span style="color:var(--yellow);font-weight:700">Prazo: ' + new Date(t.deadline+'T00:00:00').toLocaleDateString('pt-BR') + '</span>' : '') + '</span><span class="progress-pct" style="color:' + (t.progress >= 70 ? 'var(--accent)' : t.progress >= 30 ? 'var(--yellow)' : 'var(--muted)') + '">' + t.progress + '%</span></div>' +
+        '</div>' +
+        '' +
+        (t.notes ? '<div class="theme-notes"><strong>Notas:</strong> ' + esc(t.notes) + '</div>' : '') +
+        (t.resources && t.resources.length ? '<div class="resources">' + t.resources.map(function(r) { return '<span class="resource-tag"><a href="' + esc(r) + '" target="_blank" rel="noopener">' + shortenUrl(r) + '</a></span>'; }).join('') + '</div>' : '') +
+      '</div>' +
+      // EDIT FORM
+      '<div class="edit-form">' +
+        '<div class="form-row">' +
+          '<div class="form-group"><label>Nome do tema</label><input type="text" id="ef-name-' + t.id + '" value="' + escAttr(t.name) + '"></div>' +
+          '<div class="form-group"><label>Tipo</label><select id="ef-type-' + t.id + '"><option value="hard"' + (t.type==='hard'?' selected':'') + '>Hard Skill</option><option value="soft"' + (t.type==='soft'?' selected':'') + '>Soft Skill</option></select></div>' +
+        '</div>' +
+        '<div class="form-group"><label>Progresso (%)</label><div class="slider-row"><input type="number" min="0" max="100" step="5" value="' + t.progress + '" id="ef-prog-' + t.id + '"><span class="slider-val">%</span></div></div>' +
+        '<div class="form-group" style="margin-top:8px"><label>Status</label><div class="status-row">' +
+          '<button class="status-chip' + (t.status==='nao_iniciado'?' active':'') + '" data-val="nao_iniciado" onclick="setEditStatus(\'' + t.id + '\',\'nao_iniciado\',this)">Não iniciado</button>' +
+          '<button class="status-chip' + (t.status==='em_andamento'?' active':'') + '" data-val="em_andamento" onclick="setEditStatus(\'' + t.id + '\',\'em_andamento\',this)">Em andamento</button>' +
+          '<button class="status-chip' + (t.status==='concluido'?' active':'') + '" data-val="concluido" onclick="setEditStatus(\'' + t.id + '\',\'concluido\',this)">Concluído</button>' +
+        '</div></div>' +
+        '' +
+        '<div class="form-group" style="margin-top:8px"><label>Notas / Observacoes</label><textarea id="ef-notes-' + t.id + '" placeholder="Ex: Focando em AWS esta semana...">' + esc(t.notes || '') + '</textarea></div>' +
+        '<div class="form-group" style="margin-top:8px"><label>Links de recurso (um por linha)</label><textarea id="ef-res-' + t.id + '" placeholder="https://learn.aws.com&#10;https://university.dynatrace.com">' + (t.resources || []).join('\n') + '</textarea></div>' +
+        '<div class="form-actions">' +
+          '<button class="btn" onclick="cancelEdit()">Cancelar</button>' +
+          '<button class="btn btn-primary" onclick="saveEdit(\'' + t.id + '\')">Salvar</button>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+}
+
+// ──────── Theme CRUD ────────
+function addTheme() {
+  var newTheme = {
+    id: genId(),
+    name: 'Novo tema',
+    type: 'hard',
+    progress: 0,
+    status: 'nao_iniciado',
+    notes: '',
+    resources: [],
+    updatedAt: new Date().toISOString()
+  };
+  tdiData.themes.push(newTheme);
+  editingId = newTheme.id;
+  render();
+  // Scroll to new card
+  setTimeout(function() {
+    var card = document.querySelector('[data-id="' + newTheme.id + '"]');
+    if (card) card.scrollIntoView({behavior: 'smooth', block: 'center'});
+    var nameInput = document.getElementById('ef-name-' + newTheme.id);
+    if (nameInput) { nameInput.select(); nameInput.focus(); }
+  }, 100);
+}
+
+function startEdit(id) {
+  editingId = id;
+  render();
+  setTimeout(function() {
+    var nameInput = document.getElementById('ef-name-' + id);
+    if (nameInput) nameInput.focus();
+  }, 50);
+}
+
+function cancelEdit() {
+  // Se era tema novo sem nome real, remover
+  if (editingId) {
+    var t = tdiData.themes.find(function(t) { return t.id === editingId; });
+    if (t && t.name === 'Novo tema' && t.progress === 0) {
+      tdiData.themes = tdiData.themes.filter(function(t) { return t.id !== editingId; });
+    }
+  }
+  editingId = null;
+  render();
+}
+
+function saveEdit(id) {
+  var t = tdiData.themes.find(function(t) { return t.id === id; });
+  if (!t) return;
+  var nameVal = document.getElementById('ef-name-' + id).value.trim();
+  if (!nameVal) { showToast('Nome do tema e obrigatorio', 'error'); return; }
+  t.name = nameVal;
+  t.type = document.getElementById('ef-type-' + id).value;
+  t.progress = parseInt(document.getElementById('ef-prog-' + id).value) || 0;
+  t.notes = document.getElementById('ef-notes-' + id).value.trim();
+  // deadline so editavel pelo coordenador
+  var resRaw = document.getElementById('ef-res-' + id).value.trim();
+  t.resources = resRaw ? resRaw.split('\n').map(function(r) { return r.trim(); }).filter(Boolean) : [];
+  // Status via chip (lido do DOM data attribute)
+  var activeChip = document.querySelector('[data-id="' + id + '"] .status-chip.active');
+  if (activeChip) t.status = activeChip.dataset.val;
+  // Concluido SOMENTE se progresso = 100%
+  if (t.progress === 100) t.status = 'concluido';
+  else if (t.status === 'concluido') { t.status = 'em_andamento'; showToast('Concluido so com 100%', 'error'); }
+  else if (t.progress > 0 && t.status === 'nao_iniciado') t.status = 'em_andamento';
+  t.updatedAt = new Date().toISOString();
+  editingId = null;
+  saveData();
+  render();
+}
+
+function setEditStatus(id, val, btn) {
+  var card = btn.closest('.theme-card');
+  card.querySelectorAll('.status-chip').forEach(function(c) { c.classList.remove('active'); });
+  btn.classList.add('active');
+}
+
+function deleteTheme(id) {
+  var t = tdiData.themes.find(function(t) { return t.id === id; });
+  if (!t) return;
+  if (!confirm('Remover o tema "' + t.name + '"?')) return;
+  tdiData.themes = tdiData.themes.filter(function(t) { return t.id !== id; });
+  if (editingId === id) editingId = null;
+  saveData();
+  render();
+}
+
+// ──────── Navigation ────────
+function goToCourse() {
+  // Tenta navegar pro index do curso (mesmo folder no nitro-link)
+  window.location.href = 'index.html';
+}
+
+// ──────── Util ────────
+function esc(s) { var d = document.createElement('div'); d.textContent = s || ''; return d.innerHTML; }
+function escAttr(s) { return (s || '').replace(/"/g, '&quot;').replace(/</g, '&lt;'); }
+function shortenUrl(url) {
+  try { var u = new URL(url); return u.hostname + (u.pathname.length > 20 ? u.pathname.substr(0, 20) + '...' : u.pathname); }
+  catch(e) { return url.length > 40 ? url.substr(0, 40) + '...' : url; }
+}
+
+function showToast(msg, type) {
+  var t = document.getElementById('save-toast');
+  t.textContent = (type === 'success' ? '✅ ' : '⚠️ ') + msg;
+  t.className = 'save-toast ' + type + ' show';
+  setTimeout(function() { t.classList.remove('show'); }, 2500);
+}
+
+function updateLastSave() {
+  var el = document.getElementById('last-save');
+  if (tdiData && tdiData.lastUpdatedAt) {
+    var d = new Date(tdiData.lastUpdatedAt);
+    var who = tdiData.lastUpdatedBy === 'aluno' ? 'voce' : tdiData.lastUpdatedBy;
+    el.textContent = 'Ultima atualizacao: ' + d.toLocaleString('pt-BR') + ' por ' + who;
+  }
+}
+(function(){var t=localStorage.getItem('pdi_theme')||'dark';document.body.setAttribute('data-theme',t);document.querySelectorAll('.mc-dot').forEach(function(b){b.classList.toggle('active',b.dataset.theme===t);b.addEventListener('click',function(){var th=b.dataset.theme;document.body.setAttribute('data-theme',th);localStorage.setItem('pdi_theme',th);document.querySelectorAll('.mc-dot').forEach(function(d){d.classList.toggle('active',d.dataset.theme===th)})})})})();
+</script>
+</body>
+</html>

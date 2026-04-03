@@ -1,0 +1,1025 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>📊 Painel do Coordenador — Jornada Obrigatória N1 PicPay</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0a0e1a;--bg2:#0d1220;--bg3:#111827;--card:rgba(255,255,255,0.04);--card2:rgba(255,255,255,0.06);--card3:rgba(255,255,255,0.08);--text:#f0f0f5;--muted:#8b8fa3;--accent:#21C25E;--accent2:#1db854;--accent-dim:rgba(33,194,94,0.12);--border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.12);--yellow:#f59e0b;--red:#ef4444;--blue:#3b82f6;--purple:#a855f7;--cyan:#06b6d4;--pink:#ec4899;--orange:#f97316;--teal:#14b8a6;--lime:#84cc16;--rose:#fb7185;--radius:14px;--transition:.2s ease}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh;-webkit-font-smoothing:antialiased}
+::selection{background:var(--accent);color:#0a0e1a}
+::-webkit-scrollbar{width:5px;height:5px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.08);border-radius:3px}::-webkit-scrollbar-thumb:hover{background:rgba(255,255,255,0.15)}
+a{color:var(--accent);text-decoration:none}
+body[data-theme="light"]{--bg:#f5f7fa;--bg2:#edf0f4;--bg3:#e2e6ec;--card:rgba(0,0,0,0.03);--card2:rgba(0,0,0,0.05);--card3:rgba(0,0,0,0.07);--text:#1a1a2e;--muted:#6b7280;--border:rgba(0,0,0,0.08);--border2:rgba(0,0,0,0.12)}
+body[data-theme="picpay"]{--bg:#052e16;--bg2:#03200f;--bg3:#04351a;--card:rgba(33,194,94,0.04);--card2:rgba(33,194,94,0.07);--card3:rgba(33,194,94,0.1);--text:#f0fdf4;--muted:#86efac;--border:rgba(33,194,94,0.12);--border2:rgba(33,194,94,0.18)}
+
+/* AUTH */
+.auth-overlay{min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--bg);padding:20px}
+.auth-box{background:rgba(17,24,39,0.95);border:1px solid rgba(33,194,94,0.15);border-radius:24px;padding:48px 40px;max-width:420px;width:100%;text-align:center;backdrop-filter:blur(20px)}
+.auth-box h2{font-size:1.5rem;margin-bottom:4px}
+.auth-sub{color:var(--muted);font-size:.85rem;margin-bottom:28px}
+.auth-tabs{display:flex;gap:4px;margin-bottom:24px;background:rgba(255,255,255,0.04);border-radius:12px;padding:4px}
+.auth-tab{flex:1;padding:10px;border:none;background:transparent;color:var(--muted);font-size:.9rem;font-weight:600;cursor:pointer;border-radius:10px;transition:all var(--transition)}
+.auth-tab.active{background:var(--accent);color:#0a0e1a}
+.auth-form{display:flex;flex-direction:column;gap:12px}
+.auth-form input{width:100%;padding:14px 18px;border-radius:12px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:.95rem;outline:none;transition:border-color var(--transition)}
+.auth-form input:focus{border-color:var(--accent)}
+.auth-btn{width:100%;padding:14px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#0a0e1a;border:none;font-size:1rem;font-weight:700;cursor:pointer;margin-top:8px;transition:all var(--transition)}
+.auth-btn:hover{transform:translateY(-1px);box-shadow:0 4px 20px rgba(33,194,94,0.3)}
+.auth-error{color:#ef4444;font-size:.85rem;margin-top:12px;display:none}
+
+/* HEADER */
+.hdr{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:52px;background:rgba(10,14,26,0.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+body[data-theme="light"] .hdr{background:rgba(245,247,250,0.92)}
+body[data-theme="picpay"] .hdr{background:rgba(5,46,22,0.92)}
+.hdr-left{display:flex;align-items:center;gap:12px}
+.hdr-brand{font-weight:800;font-size:.9rem;color:var(--muted)}
+.hdr-title{font-weight:700;font-size:.85rem;color:var(--yellow)}
+.hdr-right{display:flex;align-items:center;gap:14px}
+.hdr-user{font-size:.82rem;color:var(--muted)}
+.hdr-user strong{color:var(--text)}
+.logout-btn,.hbtn{padding:5px 12px;border-radius:8px;background:transparent;border:1px solid var(--border);color:var(--muted);cursor:pointer;font-size:.75rem;font-weight:600;transition:all var(--transition)}
+.logout-btn:hover{border-color:var(--red);color:var(--red)}
+.mc-themes{display:flex;gap:3px;align-items:center}
+.mc-dot{width:16px;height:16px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:all var(--transition);padding:0;background:none;display:flex;align-items:center;justify-content:center}
+.mc-dot.active{border-color:var(--accent)}
+.mc-dot .di{width:10px;height:10px;border-radius:50%}
+.di-dark{background:#0a0e1a;border:1px solid #555}.di-light{background:#fff;border:1px solid #ccc}.di-pp{background:#21C25E;border:1px solid #1a9e4a}
+
+/* LAYOUT */
+.wrap{max-width:1340px;margin:0 auto;padding:68px 24px 40px}
+
+/* SHIFT TABS */
+.shift-bar{display:flex;gap:4px;justify-content:center;margin:16px 0 8px;background:var(--card2);border-radius:12px;padding:4px;max-width:420px;margin-left:auto;margin-right:auto}
+.shift-tab{flex:1;padding:9px 16px;border:none;background:transparent;color:var(--muted);font-size:.82rem;font-weight:700;cursor:pointer;border-radius:10px;transition:all var(--transition);white-space:nowrap}
+.shift-tab.active{background:var(--accent);color:#0a0e1a}
+.shift-tab:hover:not(.active){background:var(--card3);color:var(--text)}
+.shift-count{font-size:.65rem;opacity:.7;margin-left:4px}
+
+/* HERO */
+.hero{text-align:center;padding:20px 0 12px}
+.hero h1{font-size:1.7rem;font-weight:900;margin-bottom:4px;background:linear-gradient(135deg,var(--accent),var(--yellow));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero p{color:var(--muted);font-size:.88rem;margin-bottom:14px}
+.hero-actions{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.btn{padding:9px 20px;border-radius:10px;border:1px solid var(--border);background:transparent;color:var(--muted);font-weight:700;cursor:pointer;font-size:.82rem;transition:all var(--transition);display:inline-flex;align-items:center;gap:6px}
+.btn:hover{border-color:var(--accent);color:var(--text);transform:translateY(-1px)}
+.btn-primary{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#0a0e1a;border-color:var(--accent)}
+.btn-primary:hover{box-shadow:0 4px 16px rgba(33,194,94,0.3)}
+.btn.loading{opacity:.5;pointer-events:none}
+.spin{display:inline-block}.btn.loading .spin{animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.timestamp{font-size:.72rem;color:var(--muted);margin-top:6px}
+
+/* ALERTS PANEL */
+.alerts-panel{margin:12px 0 20px;border-radius:var(--radius);border:1px solid rgba(239,68,68,0.15);background:rgba(239,68,68,0.04);overflow:hidden;transition:all .3s}
+.alerts-header{display:flex;align-items:center;justify-content:space-between;padding:12px 18px;cursor:pointer;user-select:none}
+.alerts-header h3{font-size:.85rem;font-weight:700;display:flex;align-items:center;gap:8px}
+.alerts-toggle{font-size:.7rem;color:var(--muted);border:none;background:none;cursor:pointer;font-weight:600;padding:4px 8px;border-radius:6px}
+.alerts-toggle:hover{background:var(--card2)}
+.alerts-body{padding:0 18px 14px;display:none;max-height:280px;overflow-y:auto}
+.alerts-body.open{display:block}
+.alert-card{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;border-radius:10px;margin-bottom:6px;font-size:.8rem;border:1px solid var(--border)}
+.alert-card.alert-danger{background:rgba(239,68,68,0.06);border-color:rgba(239,68,68,0.15)}
+.alert-card.alert-warning{background:rgba(245,158,11,0.06);border-color:rgba(245,158,11,0.15)}
+.alert-card.alert-info{background:rgba(59,130,246,0.06);border-color:rgba(59,130,246,0.15)}
+.alert-icon{font-size:1.1rem;flex-shrink:0;margin-top:1px}
+.alert-content{flex:1;min-width:0}
+.alert-content strong{display:block;font-size:.78rem;margin-bottom:2px}
+.alert-content span{color:var(--muted);font-size:.73rem}
+.alert-action{color:var(--accent);font-size:.7rem;font-weight:600;white-space:nowrap;flex-shrink:0}
+
+/* KPI GRID - 12 cards, 3 rows */
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:16px 0 24px}
+@media(max-width:1000px){.kpi-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:500px){.kpi-grid{grid-template-columns:1fr}}
+/* Flip card wrapper */
+.kpi-flip{perspective:800px;cursor:pointer}
+.kpi-flip-inner{position:relative;width:100%;transition:transform .5s;transform-style:preserve-3d}
+.kpi-flip.flipped .kpi-flip-inner{transform:rotateY(180deg)}
+.kpi-front,.kpi-back{backface-visibility:hidden;border-radius:var(--radius);border:1px solid var(--border);overflow:hidden}
+.kpi-front{position:relative;background:var(--card2);padding:16px 14px;text-align:center;transition:border-color .3s}
+.kpi-flip:hover .kpi-front{border-color:var(--border2);transform:translateY(-2px)}
+.kpi-flip.flipped:hover .kpi-front{transform:none}
+.kpi-front::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:var(--radius) var(--radius) 0 0}
+.kpi-back{position:absolute;top:0;left:0;width:100%;height:100%;background:var(--card2);padding:14px 12px;transform:rotateY(180deg);display:flex;flex-direction:column;justify-content:center;gap:6px}
+.kpi-back-title{font-size:.7rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px}
+.kpi-back-desc{font-size:.72rem;color:var(--muted);line-height:1.5}
+.kpi-back-hint{font-size:.58rem;color:rgba(255,255,255,0.2);text-align:center;margin-top:4px}
+.kpi-icon{font-size:1.4rem;margin-bottom:2px}
+.kpi-val{font-size:1.6rem;font-weight:900;line-height:1.1}
+.kpi-lbl{font-size:.62rem;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-top:3px}
+.kpi-trend{font-size:.62rem;font-weight:700;margin-top:4px}
+/* Panel info button */
+.panel-info-btn{float:right;background:none;border:1px solid var(--border);color:var(--muted);font-size:.65rem;font-weight:700;padding:2px 8px;border-radius:8px;cursor:pointer;transition:all .2s;margin-left:8px}
+.panel-info-btn:hover{border-color:var(--accent);color:var(--accent)}
+.panel-desc{font-size:.72rem;color:var(--muted);line-height:1.5;margin-bottom:12px;padding:10px 12px;background:rgba(33,194,94,0.04);border-left:3px solid var(--accent);border-radius:0 8px 8px 0;display:none}
+.panel-desc.visible{display:block}
+.trend-up{color:var(--accent)}.trend-down{color:var(--red)}.trend-neutral{color:var(--muted)}
+.c-green{color:var(--accent)}.c-blue{color:var(--blue)}.c-yellow{color:var(--yellow)}.c-purple{color:var(--purple)}.c-cyan{color:var(--cyan)}.c-pink{color:var(--pink)}.c-red{color:var(--red)}.c-orange{color:var(--orange)}.c-teal{color:var(--teal)}.c-lime{color:var(--lime)}.c-rose{color:var(--rose)}
+
+/* SECTIONS */
+.sec{margin:28px 0 12px;display:flex;align-items:center;gap:10px}
+.sec h2{font-size:1rem;font-weight:800}
+.sec .badge{font-size:.68rem;color:var(--muted);font-weight:600;background:var(--card2);padding:2px 10px;border-radius:12px}
+
+/* GRID LAYOUTS */
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:24px}
+@media(max-width:900px){.grid-2{grid-template-columns:1fr}}
+.panel{background:var(--card2);border:1px solid var(--border);border-radius:var(--radius);padding:18px;overflow:hidden}
+.panel h3{font-size:.82rem;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:6px}
+
+/* FUNNEL CHART */
+.funnel-bar{margin-bottom:8px;transition:all .4s}
+.funnel-track{height:36px;border-radius:8px;display:flex;align-items:center;padding:0 14px;font-size:.78rem;font-weight:700;color:#fff;position:relative;transition:width .6s ease;min-width:60px}
+.funnel-label{display:flex;justify-content:space-between;align-items:center;margin-bottom:3px}
+.funnel-label span:first-child{font-size:.72rem;color:var(--muted);font-weight:600}
+.funnel-label span:last-child{font-size:.72rem;font-weight:800}
+
+/* RADAR/SVG */
+/* ═══ Shift Compare Cards ═══ */
+.shift-compare{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media(max-width:900px){.shift-compare{grid-template-columns:1fr}}
+.shift-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px;position:relative;overflow:hidden;transition:all .3s}
+.shift-card:hover{border-color:rgba(255,255,255,0.12);transform:translateY(-2px)}
+.shift-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:14px 14px 0 0}
+.shift-card:nth-child(1)::before{background:var(--blue)}
+.shift-card:nth-child(2)::before{background:var(--accent)}
+.shift-card:nth-child(3)::before{background:var(--purple)}
+.sc-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.sc-title{font-weight:800;font-size:.95rem}
+.sc-count{font-size:.72rem;color:var(--muted);background:var(--card2);padding:2px 10px;border-radius:8px}
+.sc-stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.sc-stat{text-align:center;padding:10px 6px;background:rgba(255,255,255,0.02);border-radius:10px;border:1px solid rgba(255,255,255,0.04)}
+.sc-stat-val{font-size:1.2rem;font-weight:800;line-height:1.2}
+.sc-stat-lbl{font-size:.6rem;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-top:2px}
+.sc-bar-section{margin-top:14px}
+.sc-bar-title{font-size:.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+.sc-progress-track{height:8px;background:rgba(255,255,255,0.04);border-radius:6px;overflow:hidden}
+.sc-progress-fill{height:100%;border-radius:6px;transition:width .6s}
+
+/* HEATMAP (activity) */
+/* ═══ Bottleneck Map ═══ */
+.bottleneck-grid{display:grid;grid-template-columns:repeat(13,1fr);gap:4px;margin-bottom:12px}
+.bn-col{text-align:center}
+.bn-header{font-size:.6rem;font-weight:700;color:var(--muted);margin-bottom:6px;white-space:nowrap}
+.bn-bar{width:100%;border-radius:4px;transition:height .4s;min-height:4px;position:relative;cursor:default}
+.bn-bar:hover{opacity:.85}
+.bn-bar-tip{position:absolute;bottom:100%;left:50%;transform:translateX(-50%);background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:3px 8px;border-radius:6px;font-size:.6rem;white-space:nowrap;display:none;z-index:5;pointer-events:none}
+.bn-bar:hover .bn-bar-tip{display:block}
+.bn-legend{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-top:8px}
+.bn-legend-item{display:flex;align-items:center;gap:5px;font-size:.65rem;color:var(--muted)}
+.bn-legend-dot{width:8px;height:8px;border-radius:2px}
+
+/* ═══ Progress Distribution ═══ */
+.progress-dist{display:flex;gap:8px;align-items:stretch;padding:8px 0}
+.pd-segment{flex:1;text-align:center;padding:16px 8px;border-radius:12px;position:relative;transition:all .3s;cursor:default;border:1px solid rgba(255,255,255,0.04)}
+.pd-segment:hover{transform:translateY(-3px);border-color:rgba(255,255,255,0.1)}
+.pd-icon{font-size:1.6rem;margin-bottom:4px}
+.pd-count{font-size:1.5rem;font-weight:900;line-height:1.1}
+.pd-pct{font-size:.72rem;font-weight:600;margin-top:2px}
+.pd-label{font-size:.6rem;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-top:6px}
+.pd-bar-outer{width:100%;height:4px;background:rgba(255,255,255,0.04);border-radius:4px;margin-top:8px;overflow:hidden}
+.pd-bar-inner{height:100%;border-radius:4px;transition:width .6s}
+
+/* QUIZ DISTRIBUTION */
+.qdist-bar{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.qdist-label{font-size:.72rem;color:var(--muted);min-width:50px;text-align:right;font-weight:600}
+.qdist-track{flex:1;height:24px;background:rgba(255,255,255,0.04);border-radius:6px;overflow:hidden}
+.qdist-fill{height:100%;border-radius:6px;display:flex;align-items:center;padding-left:8px;font-size:.65rem;font-weight:700;color:#0a0e1a;transition:width .6s;min-width:0}
+.qdist-count{font-size:.72rem;font-weight:700;min-width:24px;text-align:right}
+
+/* TIMELINE */
+/* (removed old timeline styles) */
+
+/* MODULE BARS */
+.bar-row{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.bar-label{font-size:.7rem;color:var(--muted);min-width:110px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bar-track{flex:1;height:20px;background:rgba(255,255,255,0.04);border-radius:5px;overflow:hidden;position:relative}
+.bar-fill{height:100%;border-radius:5px;transition:width .6s;display:flex;align-items:center;justify-content:flex-end;padding-right:6px;font-size:.6rem;font-weight:700;color:#0a0e1a;min-width:0}
+.bar-pct{font-size:.7rem;font-weight:700;min-width:34px;text-align:right}
+
+/* RANKING */
+.rank-item{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,0.04)}
+.rank-item:last-child{border:none}
+.rank-pos{font-size:.72rem;font-weight:800;width:20px;text-align:center}
+.rank-name{flex:1;font-size:.82rem;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rank-val{font-size:.8rem;font-weight:800}
+
+/* COMPARISON PANEL */
+.compare-panel{margin:24px 0;border-radius:var(--radius);border:1px solid var(--border);background:var(--card2);padding:18px;display:none}
+.compare-panel.visible{display:block}
+.compare-panel h3{font-size:.85rem;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:6px}
+.compare-grid{display:grid;gap:14px}
+.compare-student{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px}
+.compare-student h4{font-size:.82rem;font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.compare-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:10px}
+.compare-stat{text-align:center;padding:8px;background:var(--card2);border-radius:8px}
+.compare-stat .val{font-size:1.1rem;font-weight:800}
+.compare-stat .lbl{font-size:.6rem;color:var(--muted);text-transform:uppercase}
+.compare-modules{display:flex;gap:3px;flex-wrap:wrap}
+.compare-dot{width:20px;height:20px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:.55rem;font-weight:700}
+
+/* STUDENT TABLE */
+.tbl-controls{display:flex;gap:10px;margin-bottom:10px;flex-wrap:wrap;align-items:center}
+.tbl-search{padding:8px 14px;border-radius:10px;border:1px solid var(--border);background:var(--card);color:var(--text);font-size:.82rem;outline:none;min-width:220px;transition:border-color var(--transition)}
+.tbl-search:focus{border-color:var(--accent)}
+.tbl-wrap{overflow-x:auto;margin-bottom:24px;border-radius:var(--radius);border:1px solid var(--border);background:var(--card)}
+table.main-tbl{width:100%;border-collapse:collapse}
+.main-tbl th{text-align:left;padding:9px 12px;font-size:.64rem;color:var(--accent);text-transform:uppercase;letter-spacing:.7px;border-bottom:2px solid var(--border);cursor:pointer;user-select:none;white-space:nowrap;transition:color var(--transition)}
+.main-tbl th:hover{color:var(--text)}
+.main-tbl th.sorted{color:var(--text)}
+.main-tbl td{padding:8px 12px;font-size:.82rem;border-bottom:1px solid rgba(255,255,255,0.04)}
+tr.data-row{cursor:pointer;transition:background .15s}
+tr.data-row:hover{background:rgba(255,255,255,0.02)}
+tr.data-row.expanded{background:rgba(33,194,94,0.04)}
+.expand-icon{font-size:.55rem;margin-right:4px;transition:transform var(--transition);display:inline-block;color:var(--muted)}
+.expand-icon.open{transform:rotate(90deg);color:var(--accent)}
+.user-name{font-weight:600;white-space:nowrap}
+.progress-mini{width:72px;height:5px;background:rgba(255,255,255,0.06);border-radius:4px;display:inline-block;vertical-align:middle}
+.progress-mini-fill{height:100%;border-radius:4px;transition:width .4s}
+.pf-green{background:var(--accent)}.pf-yellow{background:var(--yellow)}.pf-red{background:var(--red)}
+.quiz-score{font-weight:700;font-size:.78rem}
+.qs-high{color:var(--accent)}.qs-mid{color:var(--yellow)}.qs-low{color:var(--red)}
+.status-badge{font-size:.7rem;font-weight:600;padding:2px 8px;border-radius:6px}
+.status-active{background:rgba(33,194,94,0.1);color:var(--accent)}
+.status-inactive{background:rgba(245,158,11,0.1);color:var(--yellow)}
+.status-absent{background:rgba(239,68,68,0.1);color:var(--red)}
+tr.detail-row{display:none}tr.detail-row.visible{display:table-row}
+.detail-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:6px;padding:10px 6px}
+.detail-card{text-align:center;padding:8px 4px;border-radius:8px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.04);transition:all var(--transition)}
+.detail-card.completed{border-color:rgba(33,194,94,0.2);background:rgba(33,194,94,0.06)}
+.detail-card.partial{border-color:rgba(245,158,11,0.2);background:rgba(245,158,11,0.06)}
+.detail-card .mod-num{font-size:.55rem;color:var(--muted);font-weight:600}
+.detail-card .mod-icon{font-size:1rem;margin:1px 0}
+.detail-card .mod-score{font-size:.65rem;font-weight:700;margin-top:1px}
+
+/* SPARKLINE (tiny module dots) */
+.sparkline{display:inline-flex;gap:2px;vertical-align:middle}
+.spark-dot{width:8px;height:8px;border-radius:2px}
+.spark-done{background:var(--accent)}.spark-partial{background:var(--yellow)}.spark-none{background:rgba(255,255,255,0.08)}
+
+/* SHIFT SELECT in table */
+.shift-select{padding:3px 6px;border-radius:6px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:.7rem;cursor:pointer;outline:none}
+.shift-select:focus{border-color:var(--accent)}
+
+/* COMPARE CHECKBOX */
+.cmp-check{width:14px;height:14px;cursor:pointer;accent-color:var(--accent)}
+
+/* STATES */
+.loading-state{text-align:center;padding:60px 20px}
+.loader{width:40px;height:40px;border:4px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 16px}
+.error-state{text-align:center;padding:40px;color:var(--red);background:rgba(239,68,68,0.06);border-radius:var(--radius);display:none}
+.empty-state{text-align:center;padding:60px;color:var(--muted);display:none}
+.empty-state .icon{font-size:3rem;margin-bottom:12px}
+
+/* HEATMAP TABLE */
+.heatmap-wrap{overflow-x:auto;margin-bottom:24px;border-radius:var(--radius);border:1px solid var(--border);background:var(--card)}
+.heatmap{width:100%;border-collapse:collapse}
+.heatmap th{padding:7px 5px;font-size:.58rem;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;border-bottom:1px solid var(--border);text-align:center;white-space:nowrap}
+.heatmap th:first-child{text-align:left;padding-left:12px;min-width:100px}
+.heatmap td{padding:4px;text-align:center;font-size:.68rem;font-weight:700;border-bottom:1px solid rgba(255,255,255,0.03)}
+.heatmap td:first-child{text-align:left;padding-left:12px;font-weight:600;font-size:.75rem;color:var(--text)}
+.heatmap .cell{display:inline-flex;align-items:center;justify-content:center;width:32px;height:24px;border-radius:5px;font-size:.65rem;font-weight:700}
+.cell-perfect{background:rgba(33,194,94,0.2);color:#21C25E}
+.cell-partial{background:rgba(245,158,11,0.15);color:#f59e0b}
+.cell-visited{background:rgba(255,255,255,0.04);color:rgba(255,255,255,0.2)}
+.cell-none{background:transparent;color:rgba(255,255,255,0.06)}
+.heatmap tr:hover td{background:rgba(255,255,255,0.02)}
+
+/* PRINT */
+@media print{.hdr,.hero-actions,.shift-bar,.alerts-panel,.tbl-controls,.btn,.logout-btn,.mc-themes,.compare-panel{display:none!important}.wrap{padding-top:10px}body{background:#fff;color:#000}.kpi,.panel{border:1px solid #ddd;background:#f9f9f9}}
+
+/* FOOTER */
+.footer{text-align:center;padding:24px;color:var(--muted);font-size:.72rem;border-top:1px solid var(--border);margin-top:32px}
+
+/* ANIMATE FADE-IN */
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.fade-up{animation:fadeUp .4s ease forwards}
+.fade-up-d1{animation-delay:.05s;opacity:0}.fade-up-d2{animation-delay:.1s;opacity:0}.fade-up-d3{animation-delay:.15s;opacity:0}
+</style>
+</head>
+<body>
+<script>(function(){var t=localStorage.getItem('pdi_theme');if(t)document.body.setAttribute('data-theme',t);})()</script>
+
+<!-- AUTH SCREEN -->
+<div id="auth-screen" class="auth-overlay" style="display:none">
+  <div class="auth-box">
+    <div style="font-size:3rem;margin-bottom:12px">📊</div>
+    <h2>Painel do Coordenador</h2>
+    <p class="auth-sub">Acesso restrito — Coordenadores N1</p>
+    <div class="auth-tabs">
+      <button class="auth-tab active" onclick="showTab('login')">Entrar</button>
+      <button class="auth-tab" onclick="showTab('register')">Criar Conta</button>
+    </div>
+    <div id="tab-login" class="auth-form">
+      <input type="text" id="login-name" placeholder="Seu nome" autocomplete="username">
+      <input type="password" id="login-pass" placeholder="Senha" autocomplete="current-password">
+      <button class="auth-btn" onclick="doLogin()">Entrar →</button>
+    </div>
+    <div id="tab-register" class="auth-form" style="display:none">
+      <input type="text" id="reg-invite" placeholder="Código de convite">
+      <input type="text" id="reg-name" placeholder="Seu nome completo" autocomplete="name">
+      <input type="password" id="reg-pass" placeholder="Criar senha (min. 6 caracteres)" autocomplete="new-password">
+      <input type="password" id="reg-pass2" placeholder="Confirmar senha" autocomplete="new-password">
+      <button class="auth-btn" onclick="doRegister()">Criar Conta →</button>
+    </div>
+    <div id="auth-error" class="auth-error"></div>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboard-wrapper" style="display:none">
+<header class="hdr">
+  <div class="hdr-left">
+    <span class="hdr-brand">🎓 Jornada N1</span>
+    <span class="hdr-title">📊 Painel do Coordenador</span>
+  </div>
+  <div class="hdr-right">
+    <div class="mc-themes">
+      <button class="mc-dot active" data-theme="dark" title="Dark"><span class="di di-dark"></span></button>
+      <button class="mc-dot" data-theme="light" title="Light"><span class="di di-light"></span></button>
+    </div>
+    <span class="hdr-user">👤 <strong id="coord-name"></strong></span>
+    <button class="hbtn" onclick="window.location.href='tdi-coordenador.html'" title="TDI da Equipe" style="border-color:rgba(168,85,247,0.3);color:var(--purple)">📋 TDI</button>
+    <button class="logout-btn" onclick="logout()">Sair</button>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="hero">
+    <h1>📊 Painel do Coordenador</h1>
+    <p>Acompanhamento avançado — Jornada Obrigatória N1 PicPay</p>
+    <div class="hero-actions">
+      <button class="btn btn-primary" onclick="refreshData()" id="refreshBtn"><span class="spin">🔄</span> Atualizar</button>
+      <button class="btn" onclick="exportCSV()">📥 CSV</button>
+      <button class="btn" onclick="copyReport()">📋 Copiar Relatório</button>
+      <button class="btn" onclick="window.location.href='tdi-coordenador.html'" style="border-color:rgba(168,85,247,0.3);color:var(--purple)">📋 TDI da Equipe →</button>
+      <button class="btn" onclick="window.print()">🖨️ Imprimir</button>
+    </div>
+    <div class="timestamp" id="lastUpdate"></div>
+  </div>
+
+  <!-- SHIFT TABS -->
+  <div class="shift-bar" id="shiftBar">
+    <button class="shift-tab active" data-shift="all" onclick="setShift('all')">Todos</button>
+    <button class="shift-tab" data-shift="1" onclick="setShift('1')">Turno 1</button>
+    <button class="shift-tab" data-shift="2" onclick="setShift('2')">Turno 2</button>
+    <button class="shift-tab" data-shift="3" onclick="setShift('3')">Turno 3</button>
+  </div>
+
+  <!-- LOADING -->
+  <div id="loading" class="loading-state"><div class="loader"></div><p style="color:var(--muted);font-size:.85rem">Carregando dados dos alunos...</p></div>
+  <div id="error-msg" class="error-state"></div>
+
+  <!-- MAIN DASHBOARD -->
+  <div id="dashboard" style="display:none">
+
+    <!-- ALERTS -->
+    <div class="alerts-panel" id="alertsPanel" style="display:none">
+      <div class="alerts-header" onclick="toggleAlerts()">
+        <h3>🔔 Alertas <span class="badge" id="alertCount">0</span></h3>
+        <button class="alerts-toggle" id="alertsToggleBtn">▼ Expandir</button>
+      </div>
+      <div class="alerts-body" id="alertsBody"></div>
+    </div>
+
+    <!-- 12 KPIs -->
+    <div class="kpi-grid" id="kpiGrid"></div>
+
+    <!-- FUNNEL + QUIZ DIST -->
+    <div class="grid-2 fade-up fade-up-d1">
+      <div class="panel">
+        <h3>📊 Funil de Conclusão <button class="panel-info-btn" onclick="togglePanelDesc(this)">?</button></h3>
+        <div class="panel-desc">Mostra a jornada dos alunos no curso: quantos entraram, quantos chegaram na metade, quantos estão quase lá e quantos se formaram (13/13). Ideal pra identificar onde o abandono acontece.</div>
+        <div id="funnelChart"></div>
+      </div>
+      <div class="panel">
+        <h3>🧠 Distribuição de Quiz <button class="panel-info-btn" onclick="togglePanelDesc(this)">?</button></h3>
+        <div class="panel-desc">Agrupa os alunos por faixa de nota média nos quizzes (0-20% até 81-100%). Ajuda a identificar se a turma está com dificuldade geral ou se é pontual em alguns alunos.</div>
+        <div id="quizDist"></div>
+      </div>
+    </div>
+
+    <!-- SHIFT COMPARE + BOTTLENECK -->
+    <div class="grid-2 fade-up fade-up-d2">
+      <div class="panel">
+        <h3>📊 Comparativo por Turno <button class="panel-info-btn" onclick="togglePanelDesc(this)">?</button></h3>
+        <div class="panel-desc">Compara os 3 turnos lado a lado: ativos, módulos por aluno, média de quiz e formados. Use pra identificar qual turno precisa de mais atenção e direcionar reforço.</div>
+        <div class="shift-compare" id="shiftCompare"></div>
+      </div>
+      <div class="panel">
+        <h3>🚧 Onde Alunos Travam <button class="panel-info-btn" onclick="togglePanelDesc(this)">?</button></h3>
+        <div class="panel-desc">Mostra em qual módulo os alunos estão parados (visitaram mas não passaram no quiz). Barras vermelhas = módulo crítico onde muitos travam. Use pra planejar reforço ou revisão de conteúdo.</div>
+        <div id="bottleneckMap"></div>
+      </div>
+    </div>
+
+    <!-- PROGRESS DISTRIBUTION -->
+    <div class="panel fade-up fade-up-d3" style="margin-bottom:24px">
+      <h3>📈 Distribuição de Progresso <button class="panel-info-btn" onclick="togglePanelDesc(this)">?</button></h3>
+      <div class="panel-desc">Divide a turma em 5 faixas: quem nem começou, quem tá começando (1-3 módulos), progredindo (4-7), avançado (8-12) e formado (13/13). Passe o mouse sobre cada faixa pra ver os nomes dos alunos.</div>
+      <div id="progressDist"></div>
+    </div>
+
+    <!-- HEATMAP TABLE -->
+    <div class="sec"><h2>🗺️ Mapa de Progresso <button class="panel-info-btn" onclick="togglePanelDesc(this)">?</button></h2><span class="badge" id="heatmapBadge">aluno × módulo</span></div>
+    <div class="panel-desc">Tabela completa: cada linha é um aluno, cada coluna um módulo. Verde = quiz perfeito (5/5), amarelo = tentou mas errou, olho = visitou sem fazer quiz, traço = nem acessou. Ordenado por progresso.</div>
+    <div class="heatmap-wrap"><table class="heatmap" id="heatmapTable"></table></div>
+
+    <!-- RANKING + MODULE BARS -->
+    <div class="grid-2">
+      <div class="panel">
+        <h3>🏆 Top Performers <button class="panel-info-btn" onclick="togglePanelDesc(this)">?</button></h3>
+        <div class="panel-desc">Ranking dos 10 melhores alunos por módulos concluídos e nota média de quiz. Use pra reconhecer os destaques e compartilhar com a turma como motivação.</div>
+        <div id="rankingList"></div>
+      </div>
+      <div class="panel">
+        <h3>📊 Conclusão por Módulo <button class="panel-info-btn" onclick="togglePanelDesc(this)">?</button></h3>
+        <div class="panel-desc">Porcentagem de alunos que completaram cada módulo com quiz perfeito (5/5). Módulos com barra vermelha (<40%) precisam de atenção: pode ser conteúdo difícil ou desinteresse.</div>
+        <div id="moduleBars"></div>
+      </div>
+    </div>
+
+    <!-- COMPARISON -->
+    <div class="compare-panel" id="comparePanel">
+      <h3>⚖️ Comparação de Alunos <button class="btn" onclick="clearCompare()" style="margin-left:auto;padding:4px 10px;font-size:.7rem">✕ Limpar</button></h3>
+      <div class="compare-grid" id="compareGrid"></div>
+    </div>
+
+    <!-- STUDENT TABLE -->
+    <div class="sec"><h2>👥 Alunos</h2><span class="badge" id="countBadge">0</span></div>
+    <div class="tbl-controls">
+      <input type="text" class="tbl-search" id="tableSearch" placeholder="🔍 Buscar aluno..." oninput="renderTable()">
+      <button class="btn" onclick="bulkAssignShift()" style="font-size:.75rem;padding:6px 12px">🏷️ Atribuir Turno (selecionados)</button>
+    </div>
+    <div class="tbl-wrap">
+      <table class="main-tbl">
+        <thead><tr>
+          <th style="width:28px"><input type="checkbox" class="cmp-check" id="selectAll" onchange="toggleSelectAll(this)"></th>
+          <th data-col="name" onclick="sortTable('name')">Nome</th>
+          <th data-col="shift" onclick="sortTable('shift')">Turno</th>
+          <th data-col="sparkline">Módulos</th>
+          <th data-col="progress" onclick="sortTable('progress')">Progresso</th>
+          <th data-col="modules" onclick="sortTable('modules')">Concluídos</th>
+          <th data-col="quiz" onclick="sortTable('quiz')">Quiz</th>
+          <th data-col="lastAccess" onclick="sortTable('lastAccess')">Último Acesso</th>
+          <th data-col="status" onclick="sortTable('status')">Status</th>
+        </tr></thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="empty-state" id="emptyState" style="display:none">
+    <div class="icon">📡</div>
+    <h3>Nenhum dado encontrado</h3>
+    <p>Aguarde alunos acessarem o curso ou clique em Atualizar Dados.</p>
+  </div>
+
+  <div class="footer">🎓 Jornada Obrigatória N1 — PicPay &nbsp;|&nbsp; Painel do Coordenador</div>
+</div>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════════════
+   AUTH — exact same system as v1
+   ═══════════════════════════════════════════════════════ */
+var INVITE_CODE='Analise-Progresso-PDI-N1-Coordenadores';
+var CRED_KEY='ccn1_coord_creds';
+var SESSION_KEY='ccn1_coord_session';
+
+async function sha256(text){var d=new TextEncoder().encode(text);var b=await crypto.subtle.digest('SHA-256',d);return Array.from(new Uint8Array(b)).map(function(x){return x.toString(16).padStart(2,'0')}).join('')}
+function getCredentials(){try{return JSON.parse(localStorage.getItem(CRED_KEY)||'[]')}catch(e){return[]}}
+function saveCredentials(c){localStorage.setItem(CRED_KEY,JSON.stringify(c))}
+function showAuthError(msg){var el=document.getElementById('auth-error');el.textContent=msg;el.style.display='block';setTimeout(function(){el.style.display='none'},4000)}
+function showTab(tab){document.getElementById('tab-login').style.display=tab==='login'?'flex':'none';document.getElementById('tab-register').style.display=tab==='register'?'flex':'none';document.getElementById('auth-error').style.display='none';var tabs=document.querySelectorAll('.auth-tab');tabs[0].classList.toggle('active',tab==='login');tabs[1].classList.toggle('active',tab==='register')}
+async function doLogin(){var name=document.getElementById('login-name').value.trim(),pass=document.getElementById('login-pass').value;if(!name||!pass){showAuthError('Preencha nome e senha');return}var hash=await sha256(pass),creds=getCredentials(),found=creds.find(function(c){return c.name===name&&c.hash===hash});if(!found){showAuthError('Nome ou senha incorretos');return}localStorage.setItem(SESSION_KEY,name);enterDashboard(name)}
+async function doRegister(){var invite=document.getElementById('reg-invite').value.trim(),name=document.getElementById('reg-name').value.trim(),pass=document.getElementById('reg-pass').value,pass2=document.getElementById('reg-pass2').value;if(invite!==INVITE_CODE){showAuthError('Código de convite inválido');return}if(!name||name.length<2){showAuthError('Informe seu nome');return}if(pass.length<6){showAuthError('Senha: mínimo 6 caracteres');return}if(pass!==pass2){showAuthError('Senhas não conferem');return}var creds=getCredentials();if(creds.find(function(c){return c.name===name})){showAuthError('Nome já registrado');return}var hash=await sha256(pass);creds.push({name:name,hash:hash,createdAt:new Date().toISOString()});saveCredentials(creds);localStorage.setItem(SESSION_KEY,name);enterDashboard(name)}
+function logout(){localStorage.removeItem(SESSION_KEY);location.reload()}
+function enterDashboard(name){document.getElementById('auth-screen').style.display='none';document.getElementById('dashboard-wrapper').style.display='block';document.getElementById('coord-name').textContent=name;fetchData()}
+document.addEventListener('keydown',function(e){if(e.key!=='Enter')return;var a=document.activeElement;if(!a)return;if(a.id==='login-name'||a.id==='login-pass'){e.preventDefault();doLogin();return}if(a.id==='reg-invite'||a.id==='reg-name'||a.id==='reg-pass'||a.id==='reg-pass2'){e.preventDefault();doRegister();return}});
+
+/* ═══════════════════════════════════════════════════════
+   JSONP — exact same as v1
+   ═══════════════════════════════════════════════════════ */
+function fetchJsonp(url,callback){var cb='_jp_'+Math.random().toString(36).substr(2,9),s=document.createElement('script'),done=false;var tm=setTimeout(function(){if(done)return;done=true;delete window[cb];if(s.parentNode)s.parentNode.removeChild(s);callback(new Error('Timeout (15s). Verifique login @picpay.com'))},15000);window[cb]=function(data){if(done)return;done=true;clearTimeout(tm);delete window[cb];if(s.parentNode)s.parentNode.removeChild(s);callback(null,data)};s.onerror=function(){if(done)return;done=true;clearTimeout(tm);delete window[cb];if(s.parentNode)s.parentNode.removeChild(s);callback(new Error('Erro ao carregar API'))};s.src=url+(url.indexOf('?')>=0?'&':'?')+'callback='+cb;document.head.appendChild(s)}
+
+/* ═══════════════════════════════════════════════════════
+   DATA + MODULES
+   ═══════════════════════════════════════════════════════ */
+var API_URL='https://script.google.com/a/macros/picpay.com/s/AKfycbyGSJXeR6PvMqkyQrS8kvyZvJMTaOZbyC8NrPh9PL0DhKIezY84AgRZ7qJ9Fl4qkFzx/exec';
+var MODULES=[
+  {id:1,name:'Redes',icon:'🌐'},{id:2,name:'AWS',icon:'☁️'},{id:3,name:'Containers',icon:'🐳'},
+  {id:4,name:'DevOps',icon:'🔄'},{id:5,name:'SRE',icon:'⚙️'},{id:6,name:'Observabilidade',icon:'📊'},
+  {id:7,name:'Command Center',icon:'🎛️'},{id:8,name:'Bancos de Dados',icon:'🗄️'},{id:9,name:'Segurança',icon:'🔐'},
+  {id:10,name:'Mensageria',icon:'📨'},{id:11,name:'IA',icon:'🤖'},{id:12,name:'Glossário',icon:'📖'},
+  {id:13,name:'Simulado',icon:'🎯'}
+];
+var allUsers=[],sortCol='name',sortAsc=true,expandedRows=new Set(),selectedCompare=new Set(),currentShift='all';
+
+/* ═══ SHIFT MANAGEMENT ═══ */
+var SHIFT_KEY='ccn1_shift_assignments';
+function getShiftAssignments(){try{return JSON.parse(localStorage.getItem(SHIFT_KEY)||'{}')}catch(e){return{}}}
+function saveShiftAssignments(a){localStorage.setItem(SHIFT_KEY,JSON.stringify(a))}
+function getUserShift(u){var a=getShiftAssignments();return a[u.email]||a[u.id]||'0'}
+function setUserShift(u,s){var a=getShiftAssignments();var key=u.email||u.id;if(s==='0')delete a[key];else a[key]=s;saveShiftAssignments(a)}
+function getFilteredUsers(){if(currentShift==='all')return allUsers;return allUsers.filter(function(u){return getUserShift(u)===currentShift})}
+
+function setShift(s){
+  currentShift=s;
+  document.querySelectorAll('.shift-tab').forEach(function(t){t.classList.toggle('active',t.dataset.shift===s)});
+  renderAll();
+}
+
+/* ═══ Init ═══ */
+document.addEventListener('DOMContentLoaded',function(){var session=localStorage.getItem(SESSION_KEY);if(session){var creds=getCredentials();if(creds.find(function(c){return c.name===session})){enterDashboard(session);return}localStorage.removeItem(SESSION_KEY)}document.getElementById('auth-screen').style.display='flex';document.getElementById('dashboard-wrapper').style.display='none'});
+
+/* ═══ Fetch ═══ */
+function fetchData(){var ld=document.getElementById('loading'),er=document.getElementById('error-msg'),db=document.getElementById('dashboard'),em=document.getElementById('emptyState');ld.style.display='block';er.style.display='none';db.style.display='none';em.style.display='none';fetchJsonp(API_URL,function(err,data){ld.style.display='none';if(err){er.textContent='⚠️ '+err.message;er.style.display='block';return}allUsers=data.users||[];if(!allUsers.length){em.style.display='block'}else{db.style.display='block';renderAll()}document.getElementById('lastUpdate').textContent='🕐 '+new Date().toLocaleString('pt-BR')})}
+function refreshData(){var b=document.getElementById('refreshBtn');b.classList.add('loading');fetchData();setTimeout(function(){b.classList.remove('loading')},16000);var lo=document.getElementById('loading');var ob=new MutationObserver(function(ms){ms.forEach(function(m){if(m.attributeName==='style'&&lo.style.display==='none'){b.classList.remove('loading');ob.disconnect()}})});ob.observe(lo,{attributes:true})}
+
+/* ═══ Helpers (same as v1 + enhancements) ═══ */
+function getModData(user,modId){var p=user.progress||{};return p[modId]||p['mod'+modId]||p[String(modId)]||null}
+function countCompleted(u){var c=0;MODULES.forEach(function(m){var d=getModData(u,m.id);if(d&&d.quizDone&&d.quizScore===d.quizTotal)c++});return c}
+function getProgressPct(u){return Math.round(countCompleted(u)/13*100)}
+function getUserQuizAvg(u){var ts=0,c=0;MODULES.forEach(function(m){var d=getModData(u,m.id);if(d&&d.quizTotal>0&&(d.quizDone||d.quizScore>0)){ts+=d.quizScore/d.quizTotal*100;c++}});return c?Math.round(ts/c):0}
+function getLastActivity(u){var latest=null;var p=u.progress||{};Object.values(p).forEach(function(m){if(m.lastVisit&&(!latest||m.lastVisit>latest))latest=m.lastVisit;if(m.completedAt&&(!latest||m.completedAt>latest))latest=m.completedAt});return latest}
+function getStatus(u){var l=getLastActivity(u);if(!l)return'absent';var d=(Date.now()-new Date(l).getTime())/86400000;return d<=7?'active':d<=30?'inactive':'absent'}
+function getStatusLabel(s){return s==='active'?{text:'🟢 Ativo',cls:'status-active'}:s==='inactive'?{text:'🟡 Inativo',cls:'status-inactive'}:{text:'🔴 Ausente',cls:'status-absent'}}
+function formatDate(iso){if(!iso)return'—';var d=new Date(iso);if(isNaN(d))return'—';var days=Math.floor((Date.now()-d.getTime())/86400000);return days===0?'Hoje':days===1?'Ontem':days<7?'Há '+days+' dias':d.toLocaleDateString('pt-BR')}
+function escHtml(s){var d=document.createElement('div');d.textContent=s;return d.innerHTML}
+function shortName(n){return(n||'?').split(' ').slice(0,2).join(' ')}
+function uid(u){return u.email||u.id||u.name}
+
+/* ═══ Render All ═══ */
+function renderAll(){
+  var users=getFilteredUsers();
+  renderAlerts(users);renderKPIs(users);renderFunnel(users);renderQuizDist(users);
+  renderShiftCompare();renderBottleneck(users);renderProgressDist(users);
+  renderHeatmap(users);renderRanking(users);renderModuleBars(users);
+  renderCompare();renderTable();
+  document.getElementById('countBadge').textContent=users.length;
+  document.getElementById('heatmapBadge').textContent=users.length+' alunos × 13 módulos';
+  updateShiftCounts();
+}
+
+function updateShiftCounts(){
+  var counts={all:allUsers.length,'1':0,'2':0,'3':0};
+  allUsers.forEach(function(u){var s=getUserShift(u);if(s!=='0')counts[s]=(counts[s]||0)+1});
+  document.querySelectorAll('.shift-tab').forEach(function(t){
+    var s=t.dataset.shift;var c=counts[s]||0;
+    var existing=t.querySelector('.shift-count');
+    if(existing)existing.textContent='('+c+')';
+    else{var sp=document.createElement('span');sp.className='shift-count';sp.textContent='('+c+')';t.appendChild(sp)}
+  });
+}
+
+/* ═══ ALERTS ═══ */
+function renderAlerts(users){
+  var alerts=[];var now=Date.now();
+  users.forEach(function(u){
+    var la=getLastActivity(u);
+    var daysSince=la?Math.floor((now-new Date(la).getTime())/86400000):9999;
+    if(daysSince>14&&daysSince<9999)alerts.push({type:'danger',icon:'🚨',name:shortName(u.name),msg:'Inativo há '+daysSince+' dias',action:'Enviar lembrete'});
+    if(daysSince===9999)alerts.push({type:'warning',icon:'👻',name:shortName(u.name),msg:'Nunca acessou o curso',action:'Verificar cadastro'});
+    MODULES.forEach(function(m){
+      var d=getModData(u,m.id);
+      if(d&&d.quizTotal>0&&d.quizScore<3&&(d.quizDone||d.quizScore>0))alerts.push({type:'warning',icon:'⚠️',name:shortName(u.name),msg:'Quiz M'+m.id+' ('+m.name+'): '+d.quizScore+'/'+d.quizTotal,action:'Sugerir revisão'});
+      if(d&&d.visited&&!d.quizDone){
+        var vDate=d.lastVisit?new Date(d.lastVisit):null;
+        if(vDate&&(now-vDate.getTime())/86400000>7)alerts.push({type:'info',icon:'📌',name:shortName(u.name),msg:'Parado no M'+m.id+' há 7+ dias',action:'Acompanhar'});
+      }
+    });
+  });
+  alerts.sort(function(a,b){var o={danger:0,warning:1,info:2};return(o[a.type]||3)-(o[b.type]||3)});
+  var panel=document.getElementById('alertsPanel');
+  if(!alerts.length){panel.style.display='none';return}
+  panel.style.display='block';
+  document.getElementById('alertCount').textContent=alerts.length;
+  var html='';alerts.slice(0,30).forEach(function(a){
+    html+='<div class="alert-card alert-'+a.type+'"><span class="alert-icon">'+a.icon+'</span><div class="alert-content"><strong>'+escHtml(a.name)+'</strong><span>'+escHtml(a.msg)+'</span></div><span class="alert-action">'+a.action+'</span></div>';
+  });
+  document.getElementById('alertsBody').innerHTML=html;
+}
+var alertsOpen=false;
+function toggleAlerts(){alertsOpen=!alertsOpen;document.getElementById('alertsBody').classList.toggle('open',alertsOpen);document.getElementById('alertsToggleBtn').textContent=alertsOpen?'▲ Recolher':'▼ Expandir'}
+
+/* ═══ 12 KPIs (flip cards) ═══ */
+function renderKPIs(users){
+  var n=users.length;
+  var active=users.filter(function(u){return getStatus(u)==='active'}).length;
+  var totalComp=users.reduce(function(s,u){return s+countCompleted(u)},0);
+  var avgComp=n?Math.round(totalComp/n/13*100):0;
+  var ts=0,tc=0;users.forEach(function(u){MODULES.forEach(function(m){var d=getModData(u,m.id);if(d&&d.quizTotal>0&&(d.quizDone||d.quizScore>0)){ts+=d.quizScore/d.quizTotal*100;tc++}})});
+  var avgQ=tc?Math.round(ts/tc):0;
+  var avgMod=n?(totalComp/n).toFixed(1):'0';
+  var perfect=users.filter(function(u){return countCompleted(u)===13}).length;
+  var absent=users.filter(function(u){return getStatus(u)==='absent'}).length;
+  var weeklyEng=users.filter(function(u){var l=getLastActivity(u);return l&&(Date.now()-new Date(l).getTime())/86400000<=7}).length;
+  var hardest='—',lowestPct=101;
+  MODULES.forEach(function(mod){var done=0;users.forEach(function(u){var d=getModData(u,mod.id);if(d&&d.quizDone&&d.quizScore===d.quizTotal)done++});var pct=n?done/n*100:0;if(pct<lowestPct){lowestPct=pct;hardest='M'+mod.id+' '+mod.name}});
+  var best='—',bestScore=-1;
+  users.forEach(function(u){var c=countCompleted(u);var q=getUserQuizAvg(u);var score=c*100+q;if(score>bestScore){bestScore=score;best=shortName(u.name)}});
+  var avgDays='—';
+  var completedUsers=users.filter(function(u){return countCompleted(u)===13});
+  if(completedUsers.length){var totalDays=0;completedUsers.forEach(function(u){var first=null,last=null;MODULES.forEach(function(m){var d=getModData(u,m.id);if(d&&d.completedAt){if(!first||d.completedAt<first)first=d.completedAt;if(!last||d.completedAt>last)last=d.completedAt}});if(first&&last)totalDays+=(new Date(last)-new Date(first))/86400000});avgDays=Math.round(totalDays/completedUsers.length)+'d'}
+  // Ghost count: never accessed OR accessed only M1 and stopped
+  var ghosts=users.filter(function(u){
+    var la=getLastActivity(u);if(!la)return true;
+    var c=countCompleted(u);var visited=0;MODULES.forEach(function(m){var d=getModData(u,m.id);if(d&&d.visited)visited++});
+    return c===0&&visited<=1;
+  }).length;
+
+  // Total de tentativas de quiz (todas)
+  var totalAttempts=0;
+  users.forEach(function(u){MODULES.forEach(function(m){var d=getModData(u,m.id);if(d&&d.quizAttempts)totalAttempts+=d.quizAttempts})});
+  var avgAttempts=n?Math.round(totalAttempts/n*10)/10:0;
+
+  var colors=['var(--accent)','var(--blue)','var(--yellow)','var(--purple)','var(--cyan)','var(--pink)','var(--red)','var(--teal)','var(--orange)','var(--lime)','var(--rose)','rgba(168,85,247,0.8)'];
+  var kpis=[
+    {icon:'👥',val:n,lbl:'Total Alunos',color:'c-green',trend:simTrend(5),desc:'Numero total de alunos cadastrados no curso, incluindo inativos e ausentes. Acompanhe se novos alunos estao sendo adicionados.'},
+    {icon:'🟢',val:active,lbl:'Ativos (7d)',color:'c-blue',trend:simTrend(8),desc:'Alunos que acessaram pelo menos um modulo nos ultimos 7 dias. Se esse numero cai, e sinal de desengajamento.'},
+    {icon:'🎯',val:avgComp+'%',lbl:'Taxa Conclusao',color:'c-yellow',trend:simTrend(3),desc:'Porcentagem media de modulos concluidos por aluno (com quiz 5/5). Meta ideal: acima de 60% indica turma engajada.'},
+    {icon:'🧠',val:avgQ+'%',lbl:'Quiz Medio',color:'c-purple',trend:simTrend(2),desc:'Nota media dos quizzes de todos os alunos que tentaram. Abaixo de 70% pode indicar conteudo dificil ou falta de estudo.'},
+    {icon:'📚',val:avgMod,lbl:'Modulos/Aluno',color:'c-cyan',trend:simTrend(4),desc:'Media de modulos concluidos por aluno. De 13 possiveis, esse numero mostra o ritmo geral da turma.'},
+    {icon:'🏆',val:perfect,lbl:'Alunos 100%',color:'c-pink',trend:simTrend(12),desc:'Quantos alunos completaram TODOS os 13 modulos com quiz perfeito (5/5). Esses sao os formados — celebre!'},
+    {icon:'😴',val:absent,lbl:'Ausentes (30d+)',color:'c-red',trend:simTrend(-3),desc:'Alunos que nao acessam o curso ha mais de 30 dias. Precisam de intervencao direta: mensagem, ligacao ou reuniao.'},
+    {icon:'📈',val:weeklyEng,lbl:'Engajamento 7d',color:'c-teal',trend:simTrend(6),desc:'Total de alunos com qualquer atividade na ultima semana. Compara com Total Alunos pra ver a taxa de engajamento.'},
+    {icon:'🔥',val:hardest.length>16?hardest.slice(0,16)+'…':hardest,lbl:'Modulo Mais Dificil',color:'c-orange',trend:'',desc:'Modulo com menor taxa de conclusao. Se muitos alunos travam aqui, considere reforcar o conteudo ou fazer uma aula ao vivo sobre o tema.'},
+    {icon:'⭐',val:best,lbl:'Melhor Aluno',color:'c-lime',trend:'',desc:'Aluno com mais modulos concluidos e maior nota media. Pode ser monitor da turma ou exemplo de dedicacao.'},
+    {icon:'⏱️',val:avgDays,lbl:'Tempo Medio',color:'c-rose',trend:'',desc:'Media de dias entre o primeiro e ultimo modulo concluido (so alunos formados). Ajuda a estimar quanto tempo a turma leva pra terminar.'},
+    {icon:'👻',val:ghosts,lbl:'Fantasmas',color:'c-purple',trend:'',desc:'Alunos que nunca acessaram o curso OU so visitaram o M1 e pararam. Precisam de contato urgente — podem ter problema de acesso ou desistencia precoce.'}
+  ];
+  var html='';kpis.forEach(function(k,i){
+    var topColor=colors[i]||'var(--accent)';
+    html+='<div class="kpi-flip" onclick="this.classList.toggle(\'flipped\')">';
+    html+='<div class="kpi-flip-inner">';
+    html+='<div class="kpi-front" style="--top-color:'+topColor+'"><div style="position:absolute;top:0;left:0;right:0;height:3px;border-radius:var(--radius) var(--radius) 0 0;background:'+topColor+'"></div><div class="kpi-icon">'+k.icon+'</div><div class="kpi-val '+k.color+'">'+k.val+'</div><div class="kpi-lbl">'+k.lbl+'</div>'+(k.trend?'<div class="kpi-trend '+k.trend.cls+'">'+k.trend.text+'</div>':'')+'</div>';
+    html+='<div class="kpi-back" style="border-top:3px solid '+topColor+'"><div class="kpi-back-title">'+k.icon+' '+k.lbl+'</div><div class="kpi-back-desc">'+k.desc+'</div><div class="kpi-back-hint">clique pra voltar</div></div>';
+    html+='</div></div>';
+  });
+  document.getElementById('kpiGrid').innerHTML=html;
+}
+function simTrend(seed){var v=Math.abs(seed*7%17)-5;var cls=v>0?'trend-up':v<0?'trend-down':'trend-neutral';return{text:(v>0?'↑':'↓')+' '+Math.abs(v)+'%',cls:cls}}
+/* ═══ Panel info toggle ═══ */
+function togglePanelDesc(btn){var desc=btn.closest('.panel,.sec').querySelector?btn.closest('.panel')?btn.closest('.panel').querySelector('.panel-desc'):null:null;if(!desc){desc=btn.parentElement.parentElement.querySelector('.panel-desc')||btn.closest('.sec').nextElementSibling;if(desc&&!desc.classList.contains('panel-desc')){desc=null}};if(!desc){var parent=btn.closest('h2,h3');if(parent){desc=parent.parentElement.nextElementSibling;if(!desc||!desc.classList.contains('panel-desc'))desc=parent.closest('.sec')?parent.closest('.sec').nextElementSibling:null}};if(desc&&desc.classList.contains('panel-desc')){desc.classList.toggle('visible');btn.textContent=desc.classList.contains('visible')?'✕':'?'}}
+
+/* ═══ FUNNEL ═══ */
+function renderFunnel(users){
+  var n=users.length;if(!n){document.getElementById('funnelChart').innerHTML='';return}
+  var started=users.filter(function(u){return MODULES.some(function(m){var d=getModData(u,m.id);return d&&d.visited})}).length;
+  var halfway=users.filter(function(u){return countCompleted(u)>=7}).length;
+  var almost=users.filter(function(u){return countCompleted(u)>=12}).length;
+  var graduated=users.filter(function(u){return countCompleted(u)===13}).length;
+  var steps=[
+    {label:'Total Alunos',val:n,color:'var(--blue)'},
+    {label:'Iniciaram (1+ módulo)',val:started,color:'var(--cyan)'},
+    {label:'Metade (7+ módulos)',val:halfway,color:'var(--yellow)'},
+    {label:'Quase lá (12+)',val:almost,color:'var(--orange)'},
+    {label:'Formados (13/13)',val:graduated,color:'var(--accent)'}
+  ];
+  var html='';steps.forEach(function(s,i){
+    var pct=n?Math.round(s.val/n*100):0;
+    var widthPct=n?Math.max(8,Math.round(s.val/n*100)):8;
+    html+='<div class="funnel-bar"><div class="funnel-label"><span>'+s.label+'</span><span style="color:'+s.color+'">'+s.val+' ('+pct+'%)</span></div><div class="funnel-track" style="width:'+widthPct+'%;background:'+s.color+'">'+s.val+'</div></div>';
+  });
+  document.getElementById('funnelChart').innerHTML=html;
+}
+
+/* ═══ QUIZ DISTRIBUTION ═══ */
+function renderQuizDist(users){
+  var ranges=[{label:'0-20%',min:0,max:20},{label:'21-40%',min:21,max:40},{label:'41-60%',min:41,max:60},{label:'61-80%',min:61,max:80},{label:'81-100%',min:81,max:100}];
+  var buckets=[0,0,0,0,0];
+  users.forEach(function(u){var q=getUserQuizAvg(u);if(q<=20)buckets[0]++;else if(q<=40)buckets[1]++;else if(q<=60)buckets[2]++;else if(q<=80)buckets[3]++;else buckets[4]++});
+  var max=Math.max.apply(null,buckets)||1;
+  var colors=['var(--red)','var(--orange)','var(--yellow)','var(--blue)','var(--accent)'];
+  var html='';ranges.forEach(function(r,i){
+    var pct=Math.round(buckets[i]/max*100);
+    html+='<div class="qdist-bar"><div class="qdist-label">'+r.label+'</div><div class="qdist-track"><div class="qdist-fill" style="width:'+pct+'%;background:'+colors[i]+'">'+buckets[i]+'</div></div><div class="qdist-count" style="color:'+colors[i]+'">'+buckets[i]+'</div></div>';
+  });
+  document.getElementById('quizDist').innerHTML=html;
+}
+
+/* ═══ SHIFT COMPARE (3 cards side-by-side) ═══ */
+function renderShiftCompare(){
+  var el=document.getElementById('shiftCompare');
+  var shifts=['1','2','3'];var colors=['var(--blue)','var(--accent)','var(--purple)'];
+  var html='';
+  shifts.forEach(function(s,idx){
+    var users=allUsers.filter(function(u){return getUserShift(u)===s});
+    var n=users.length;
+    var active=users.filter(function(u){return getStatus(u)==='active'}).length;
+    var comp=n?users.reduce(function(sum,u){return sum+countCompleted(u)},0):0;
+    var avgMod=n?(comp/n).toFixed(1):'0';
+    var avgQ=0,qc=0;users.forEach(function(u){MODULES.forEach(function(m){var d=getModData(u,m.id);if(d&&d.quizTotal>0&&(d.quizDone||d.quizScore>0)){avgQ+=d.quizScore/d.quizTotal*100;qc++}})});
+    avgQ=qc?Math.round(avgQ/qc):0;
+    var perfect=users.filter(function(u){return countCompleted(u)===13}).length;
+    var avgPct=n?Math.round(comp/n/13*100):0;
+    html+='<div class="shift-card">';
+    html+='<div class="sc-header"><span class="sc-title" style="color:'+colors[idx]+'">Turno '+s+'</span><span class="sc-count">'+n+' alunos</span></div>';
+    html+='<div class="sc-stats">';
+    html+='<div class="sc-stat"><div class="sc-stat-val" style="color:'+colors[idx]+'">'+active+'</div><div class="sc-stat-lbl">Ativos</div></div>';
+    html+='<div class="sc-stat"><div class="sc-stat-val" style="color:'+colors[idx]+'">'+avgMod+'</div><div class="sc-stat-lbl">Mod/Aluno</div></div>';
+    html+='<div class="sc-stat"><div class="sc-stat-val" style="color:'+colors[idx]+'">'+avgQ+'%</div><div class="sc-stat-lbl">Quiz Medio</div></div>';
+    html+='<div class="sc-stat"><div class="sc-stat-val" style="color:'+colors[idx]+'">'+perfect+'</div><div class="sc-stat-lbl">Formados</div></div>';
+    html+='</div>';
+    html+='<div class="sc-bar-section"><div class="sc-bar-title">Conclusao geral: '+avgPct+'%</div>';
+    html+='<div class="sc-progress-track"><div class="sc-progress-fill" style="width:'+avgPct+'%;background:'+colors[idx]+'"></div></div></div>';
+    html+='</div>';
+  });
+  el.innerHTML=html;
+}
+
+/* ═══ BOTTLENECK MAP (where students get stuck) ═══ */
+function renderBottleneck(users){
+  var el=document.getElementById('bottleneckMap');
+  if(!users.length){el.innerHTML='<p style="color:var(--muted);font-size:.8rem;text-align:center">Sem dados</p>';return}
+  // Count students stuck per module: visited but NOT completed quiz
+  var stuckCounts=[];var completedCounts=[];var maxStuck=1;
+  MODULES.forEach(function(mod){
+    var stuck=0,done=0;
+    users.forEach(function(u){
+      var d=getModData(u,mod.id);
+      if(d&&d.quizDone&&d.quizScore===d.quizTotal){done++}
+      else if(d&&(d.visited||d.quizScore>0)){stuck++}
+    });
+    stuckCounts.push(stuck);completedCounts.push(done);
+    if(stuck>maxStuck)maxStuck=stuck;
+  });
+  var maxH=80;
+  var html='<div class="bottleneck-grid">';
+  MODULES.forEach(function(mod,i){
+    var stuck=stuckCounts[i],done=completedCounts[i];
+    var stuckH=Math.max(4,Math.round(stuck/maxStuck*maxH));
+    var stuckColor=stuck>=users.length*0.3?'var(--red)':stuck>=users.length*0.15?'var(--yellow)':'var(--muted)';
+    html+='<div class="bn-col">';
+    html+='<div class="bn-header">'+mod.icon+'<br>M'+mod.id+'</div>';
+    html+='<div style="height:'+maxH+'px;display:flex;flex-direction:column;justify-content:flex-end;gap:2px">';
+    if(stuck>0){
+      html+='<div class="bn-bar" style="height:'+stuckH+'px;background:'+stuckColor+';border-radius:4px"><span class="bn-bar-tip">'+stuck+' parado'+(stuck>1?'s':'')+' no M'+mod.id+'</span></div>';
+    }
+    html+='</div>';
+    html+='<div style="font-size:.65rem;font-weight:700;margin-top:4px;color:'+(stuck>0?stuckColor:'var(--muted)')+'">'+stuck+'</div>';
+    html+='</div>';
+  });
+  html+='</div>';
+  html+='<div class="bn-legend">';
+  html+='<span class="bn-legend-item"><span class="bn-legend-dot" style="background:var(--red)"></span> Critico (30%+)</span>';
+  html+='<span class="bn-legend-item"><span class="bn-legend-dot" style="background:var(--yellow)"></span> Atencao (15%+)</span>';
+  html+='<span class="bn-legend-item"><span class="bn-legend-dot" style="background:var(--muted)"></span> Normal</span>';
+  html+='</div>';
+  el.innerHTML=html;
+}
+
+/* ═══ PROGRESS DISTRIBUTION (5 segments) ═══ */
+function renderProgressDist(users){
+  var el=document.getElementById('progressDist');
+  if(!users.length){el.innerHTML='';return}
+  var n=users.length;
+  var ranges=[
+    {label:'Nao Iniciou',icon:'😴',min:0,max:0,color:'var(--red)',bg:'rgba(239,68,68,0.08)'},
+    {label:'Comecando',icon:'🌱',min:1,max:3,color:'var(--yellow)',bg:'rgba(245,158,11,0.08)'},
+    {label:'Progredindo',icon:'📘',min:4,max:7,color:'var(--blue)',bg:'rgba(59,130,246,0.08)'},
+    {label:'Avancado',icon:'🔥',min:8,max:12,color:'var(--purple)',bg:'rgba(168,85,247,0.08)'},
+    {label:'Formado',icon:'🏆',min:13,max:13,color:'var(--accent)',bg:'rgba(33,194,94,0.08)'}
+  ];
+  ranges.forEach(function(r){r.count=0;r.names=[]});
+  users.forEach(function(u){
+    var c=countCompleted(u);
+    ranges.forEach(function(r){
+      if(c>=r.min&&c<=r.max){r.count++;r.names.push(shortName(u.name))}
+    });
+  });
+  var html='<div class="progress-dist">';
+  ranges.forEach(function(r){
+    var pct=n?Math.round(r.count/n*100):0;
+    var tip=r.names.length?r.names.slice(0,5).join(', ')+(r.names.length>5?' +mais '+(r.names.length-5):''):'Nenhum';
+    html+='<div class="pd-segment" style="background:'+r.bg+'" title="'+tip+'">';
+    html+='<div class="pd-icon">'+r.icon+'</div>';
+    html+='<div class="pd-count" style="color:'+r.color+'">'+r.count+'</div>';
+    html+='<div class="pd-pct" style="color:'+r.color+'">'+pct+'%</div>';
+    html+='<div class="pd-label">'+r.label+'</div>';
+    html+='<div class="pd-bar-outer"><div class="pd-bar-inner" style="width:'+pct+'%;background:'+r.color+'"></div></div>';
+    html+='</div>';
+  });
+  html+='</div>';
+  el.innerHTML=html;
+}
+
+/* ═══ HEATMAP ═══ */
+function renderHeatmap(users){
+  var t=document.getElementById('heatmapTable');
+  var h='<thead><tr><th>Aluno</th>';
+  MODULES.forEach(function(m){h+='<th>M'+m.id+'</th>'});
+  h+='<th>Total</th></tr></thead><tbody>';
+  users.slice().sort(function(a,b){return countCompleted(b)-countCompleted(a)}).forEach(function(u){
+    h+='<tr><td>'+escHtml(shortName(u.name))+'</td>';
+    MODULES.forEach(function(m){
+      var d=getModData(u,m.id);
+      if(d&&d.quizDone&&d.quizScore===d.quizTotal)h+='<td><span class="cell cell-perfect">'+d.quizScore+'/'+d.quizTotal+'</span></td>';
+      else if(d&&d.quizScore>0)h+='<td><span class="cell cell-partial">'+d.quizScore+'/'+d.quizTotal+'</span></td>';
+      else if(d&&d.visited)h+='<td><span class="cell cell-visited">👁</span></td>';
+      else h+='<td><span class="cell cell-none">—</span></td>';
+    });
+    h+='<td style="font-weight:800;color:var(--accent)">'+countCompleted(u)+'/13</td></tr>';
+  });
+  h+='</tbody>';t.innerHTML=h;
+}
+
+/* ═══ RANKING ═══ */
+function renderRanking(users){
+  var el=document.getElementById('rankingList');
+  var sorted=users.slice().sort(function(a,b){var da=countCompleted(b)-countCompleted(a);return da!==0?da:getUserQuizAvg(b)-getUserQuizAvg(a)});
+  var medals=['🥇','🥈','🥉'];
+  var h='';sorted.slice(0,10).forEach(function(u,i){
+    var c=countCompleted(u),q=getUserQuizAvg(u);
+    h+='<div class="rank-item"><span class="rank-pos">'+(i<3?medals[i]:(i+1))+'</span><span class="rank-name">'+escHtml(u.name||'?')+'</span><span class="rank-val" style="color:'+(c===13?'var(--accent)':c>0?'var(--yellow)':'var(--muted)')+'">'+c+'/13 · '+q+'%</span></div>';
+  });
+  el.innerHTML=h||'<p style="color:var(--muted);font-size:.85rem">Nenhum dado</p>';
+}
+
+/* ═══ MODULE BARS ═══ */
+function renderModuleBars(users){
+  var el=document.getElementById('moduleBars');if(!users.length){el.innerHTML='';return}
+  var h='';MODULES.forEach(function(mod){
+    var done=0;users.forEach(function(u){var d=getModData(u,mod.id);if(d&&d.quizDone&&d.quizScore===d.quizTotal)done++});
+    var pct=Math.round(done/users.length*100);
+    var color=pct>=70?'var(--accent)':pct>=40?'var(--yellow)':'var(--red)';
+    h+='<div class="bar-row"><div class="bar-label">'+mod.icon+' M'+mod.id+'</div><div class="bar-track"><div class="bar-fill" style="width:'+pct+'%;background:'+color+'">'+(pct>15?pct+'%':'')+'</div></div><div class="bar-pct" style="color:'+color+'">'+pct+'%</div></div>';
+  });el.innerHTML=h;
+}
+
+/* ═══ COMPARISON ═══ */
+function renderCompare(){
+  var panel=document.getElementById('comparePanel');
+  if(selectedCompare.size<2){panel.classList.remove('visible');return}
+  panel.classList.add('visible');
+  var grid=document.getElementById('compareGrid');
+  grid.style.gridTemplateColumns='repeat('+Math.min(selectedCompare.size,3)+',1fr)';
+  var html='';
+  var selected=allUsers.filter(function(u){return selectedCompare.has(uid(u))});
+  selected.slice(0,3).forEach(function(u){
+    var c=countCompleted(u),q=getUserQuizAvg(u),p=getProgressPct(u);
+    html+='<div class="compare-student"><h4>'+escHtml(shortName(u.name))+'</h4>';
+    html+='<div class="compare-stats">';
+    html+='<div class="compare-stat"><div class="val c-green">'+c+'/13</div><div class="lbl">Módulos</div></div>';
+    html+='<div class="compare-stat"><div class="val c-blue">'+q+'%</div><div class="lbl">Quiz</div></div>';
+    html+='<div class="compare-stat"><div class="val c-yellow">'+p+'%</div><div class="lbl">Progresso</div></div>';
+    var st=getStatusLabel(getStatus(u));
+    html+='<div class="compare-stat"><div class="val" style="font-size:.75rem">'+st.text+'</div><div class="lbl">Status</div></div>';
+    html+='</div><div class="compare-modules">';
+    MODULES.forEach(function(m){
+      var d=getModData(u,m.id);
+      var cls,txt;
+      if(d&&d.quizDone&&d.quizScore===d.quizTotal){cls='background:rgba(33,194,94,0.3);color:var(--accent)';txt='✓'}
+      else if(d&&d.quizScore>0){cls='background:rgba(245,158,11,0.2);color:var(--yellow)';txt=d.quizScore+''}
+      else{cls='background:rgba(255,255,255,0.05);color:var(--muted)';txt='—'}
+      html+='<div class="compare-dot" style="'+cls+'" title="M'+m.id+' '+m.name+'">'+txt+'</div>';
+    });
+    html+='</div></div>';
+  });
+  grid.innerHTML=html;
+}
+function clearCompare(){selectedCompare.clear();renderCompare();renderTable()}
+
+/* ═══ TABLE ═══ */
+function renderTable(){
+  var users=getFilteredUsers();
+  var search=(document.getElementById('tableSearch').value||'').toLowerCase().trim();
+  if(search)users=users.filter(function(u){return(u.name||'').toLowerCase().indexOf(search)>=0||(u.email||'').toLowerCase().indexOf(search)>=0});
+  var sorted=users.slice().sort(function(a,b){
+    var va,vb;
+    switch(sortCol){
+      case'name':va=(a.name||'').toLowerCase();vb=(b.name||'').toLowerCase();return sortAsc?va.localeCompare(vb):vb.localeCompare(va);
+      case'shift':va=getUserShift(a);vb=getUserShift(b);return sortAsc?va.localeCompare(vb):vb.localeCompare(va);
+      case'progress':va=getProgressPct(a);vb=getProgressPct(b);break;
+      case'modules':va=countCompleted(a);vb=countCompleted(b);break;
+      case'quiz':va=getUserQuizAvg(a);vb=getUserQuizAvg(b);break;
+      case'lastAccess':va=getLastActivity(a)||'';vb=getLastActivity(b)||'';return sortAsc?va.localeCompare(vb):vb.localeCompare(va);
+      case'status':va=getStatus(a)==='active'?0:getStatus(a)==='inactive'?1:2;vb=getStatus(b)==='active'?0:getStatus(b)==='inactive'?1:2;break;
+      default:return 0}return sortAsc?va-vb:vb-va});
+
+  var tbody=document.getElementById('tableBody');tbody.innerHTML='';
+  sorted.forEach(function(user){
+    var id=uid(user),pct=getProgressPct(user),comp=countCompleted(user),qavg=getUserQuizAvg(user),st=getStatus(user),si=getStatusLabel(st),la=getLastActivity(user),exp=expandedRows.has(id);
+    var bc=pct>=70?'pf-green':pct>=30?'pf-yellow':'pf-red',qc=qavg>=70?'qs-high':qavg>=40?'qs-mid':'qs-low';
+    var checked=selectedCompare.has(id);
+    var userShift=getUserShift(user);
+    var shiftLabel=userShift==='0'?'—':'T'+userShift;
+
+    // Sparkline
+    var sparkHtml='<span class="sparkline">';
+    MODULES.forEach(function(m){var d=getModData(user,m.id);var cls=d&&d.quizDone&&d.quizScore===d.quizTotal?'spark-done':d&&d.quizScore>0?'spark-partial':'spark-none';sparkHtml+='<span class="spark-dot '+cls+'" title="M'+m.id+'"></span>'});
+    sparkHtml+='</span>';
+
+    var tr=document.createElement('tr');tr.className='data-row'+(exp?' expanded':'');
+    tr.innerHTML='<td><input type="checkbox" class="cmp-check" '+(checked?'checked':'')+' onchange="toggleCompare(\''+escHtml(id)+'\',this)" onclick="event.stopPropagation()"></td>'
+      +'<td onclick="toggleDetails(\''+escHtml(id)+'\')"><div class="user-name"><span class="expand-icon '+(exp?'open':'')+'">▶</span>'+escHtml(user.name||'Sem nome')+'</div></td>'
+      +'<td><select class="shift-select" onchange="handleShiftChange(this,\''+escHtml(id)+'\')" onclick="event.stopPropagation()"><option value="0"'+(userShift==='0'?' selected':'')+'>—</option><option value="1"'+(userShift==='1'?' selected':'')+'>T1</option><option value="2"'+(userShift==='2'?' selected':'')+'>T2</option><option value="3"'+(userShift==='3'?' selected':'')+'>T3</option></select></td>'
+      +'<td>'+sparkHtml+'</td>'
+      +'<td><div class="progress-mini"><div class="progress-mini-fill '+bc+'" style="width:'+pct+'%"></div></div> <span style="font-size:.68rem;color:var(--muted)">'+pct+'%</span></td>'
+      +'<td>'+comp+'/13</td>'
+      +'<td><span class="quiz-score '+qc+'">'+qavg+'%</span></td>'
+      +'<td>'+formatDate(la)+'</td>'
+      +'<td><span class="status-badge '+si.cls+'">'+si.text+'</span></td>';
+    tbody.appendChild(tr);
+
+    var dr=document.createElement('tr');dr.className='detail-row'+(exp?' visible':'');dr.id='detail-'+id;
+    var dh='<td colspan="9"><div class="detail-grid">';
+    MODULES.forEach(function(mod){
+      var d=getModData(user,mod.id);var ic,lbl,cls='';
+      if(d&&d.quizDone&&d.quizScore===d.quizTotal){ic='✅';lbl=d.quizScore+'/'+d.quizTotal;cls='completed'}
+      else if(d&&d.quizScore>0){ic='⚠️';lbl=d.quizScore+'/'+d.quizTotal;cls='partial'}
+      else if(d&&d.visited){ic='👁';lbl='Visitou';cls=''}
+      else{ic='—';lbl='';cls=''}
+      var attempts=d&&d.quizAttempts?d.quizAttempts:0;
+      var attHtml=attempts>0?'<div style="font-size:.58rem;color:var(--yellow);font-weight:800;margin-top:2px">🔄 '+attempts+' tentativa'+(attempts>1?'s':'')+'</div>':'';
+      dh+='<div class="detail-card '+cls+'"><div class="mod-num">M'+mod.id+'</div><div class="mod-icon">'+mod.icon+'</div><div class="mod-score">'+ic+' '+lbl+'</div>'+attHtml+'</div>';
+    });
+    dh+='</div></td>';dr.innerHTML=dh;tbody.appendChild(dr);
+  });
+  document.getElementById('countBadge').textContent=sorted.length;
+}
+
+function toggleDetails(id){if(expandedRows.has(id))expandedRows.delete(id);else expandedRows.add(id);renderTable()}
+function sortTable(col){if(sortCol===col)sortAsc=!sortAsc;else{sortCol=col;sortAsc=true}renderTable()}
+
+function handleShiftChange(sel,id){
+  var user=allUsers.find(function(u){return uid(u)===id});
+  if(!user)return;
+  setUserShift(user,sel.value);
+  if(currentShift!=='all')renderAll();
+  else updateShiftCounts();
+}
+
+function toggleCompare(id,cb){
+  if(cb.checked){if(selectedCompare.size>=3){cb.checked=false;return}selectedCompare.add(id)}
+  else selectedCompare.delete(id);
+  renderCompare();
+}
+function toggleSelectAll(cb){
+  var users=getFilteredUsers();
+  if(cb.checked){users.slice(0,3).forEach(function(u){selectedCompare.add(uid(u))})}
+  else selectedCompare.clear();
+  renderCompare();renderTable();
+}
+
+function bulkAssignShift(){
+  if(!selectedCompare.size){alert('Selecione alunos primeiro (checkbox)');return}
+  var shift=prompt('Turno para atribuir (1, 2 ou 3):');
+  if(!shift||!['1','2','3'].includes(shift))return;
+  allUsers.forEach(function(u){if(selectedCompare.has(uid(u)))setUserShift(u,shift)});
+  renderAll();
+}
+
+/* ═══ CSV EXPORT ═══ */
+function exportCSV(){
+  var users=getFilteredUsers();if(!users.length)return;
+  var hd=['Nome','Email','Turno','Progresso %','Módulos','Quiz Médio %','Último Acesso','Status'];
+  MODULES.forEach(function(m){hd.push('M'+m.id+' '+m.name)});
+  var rows=users.map(function(u){
+    var sh=getUserShift(u);
+    var r=[u.name||'',u.email||'',sh==='0'?'':('T'+sh),getProgressPct(u),countCompleted(u)+'/13',getUserQuizAvg(u)+'%',getLastActivity(u)||'',getStatus(u)];
+    MODULES.forEach(function(m){var d=getModData(u,m.id);var att=d&&d.quizAttempts?d.quizAttempts:0;var attSuffix=att>0?' ('+att+'x)':'';if(d&&d.quizDone&&d.quizScore===d.quizTotal)r.push(d.quizScore+'/'+d.quizTotal+' OK'+attSuffix);else if(d&&d.quizScore>0)r.push(d.quizScore+'/'+d.quizTotal+attSuffix);else if(d&&d.visited)r.push('Visitou');else r.push('')});return r});
+  var csv='\uFEFF'+hd.map(function(h){return'"'+h+'"'}).join(';')+'\n';
+  rows.forEach(function(r){csv+=r.map(function(v){return'"'+String(v).replace(/"/g,'""')+'"'}).join(';')+'\n'});
+  var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));
+  a.download='ccn1-coordenador-'+new Date().toISOString().slice(0,10)+'.csv';a.click();
+}
+
+/* ═══ COPY REPORT ═══ */
+function copyReport(){
+  var users=getFilteredUsers();var n=users.length;
+  var active=users.filter(function(u){return getStatus(u)==='active'}).length;
+  var perfect=users.filter(function(u){return countCompleted(u)===13}).length;
+  var avgQ=0,tc=0;users.forEach(function(u){MODULES.forEach(function(m){var d=getModData(u,m.id);if(d&&d.quizTotal>0&&(d.quizDone||d.quizScore>0)){avgQ+=d.quizScore/d.quizTotal*100;tc++}})});
+  avgQ=tc?Math.round(avgQ/tc):0;
+  var totalComp=users.reduce(function(s,u){return s+countCompleted(u)},0);
+  var avgComp=n?Math.round(totalComp/n/13*100):0;
+  var shift=currentShift==='all'?'Todos os turnos':'Turno '+currentShift;
+  var report='📊 RELATÓRIO Jornada Obrigatória N1 PICPAY\n';
+  report+='Data: '+new Date().toLocaleDateString('pt-BR')+'\n';
+  report+='Filtro: '+shift+'\n\n';
+  report+='RESUMO\n';
+  report+='• Total de Alunos: '+n+'\n';
+  report+='• Ativos (7 dias): '+active+'\n';
+  report+='• Taxa de Conclusão: '+avgComp+'%\n';
+  report+='• Quiz Médio: '+avgQ+'%\n';
+  report+='• Formados (13/13): '+perfect+'\n\n';
+  report+='TOP 5 ALUNOS\n';
+  users.slice().sort(function(a,b){return countCompleted(b)-countCompleted(a)}).slice(0,5).forEach(function(u,i){
+    report+=(i+1)+'. '+u.name+' — '+countCompleted(u)+'/13 módulos, Quiz '+getUserQuizAvg(u)+'%\n';
+  });
+  report+='\n---\nGerado pelo Painel do Coordenador';
+  navigator.clipboard.writeText(report).then(function(){alert('Relatório copiado!')}).catch(function(){
+    var ta=document.createElement('textarea');ta.value=report;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);alert('Relatório copiado!')});
+}
+
+/* ═══ THEME ═══ */
+(function(){var t=localStorage.getItem('pdi_theme')||'dark';document.querySelectorAll('.mc-dot').forEach(function(b){b.classList.toggle('active',b.dataset.theme===t);b.addEventListener('click',function(){var th=b.dataset.theme;document.body.setAttribute('data-theme',th);localStorage.setItem('pdi_theme',th);document.querySelectorAll('.mc-dot').forEach(function(d){d.classList.toggle('active',d.dataset.theme===th)})})})})();
+</script>
+</body>
+</html>

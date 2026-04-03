@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎓</text></svg>">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🎓 Curso Command Center N1 — PicPay</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0a0e1a;--bg2:#0d1220;--bg-card:rgba(255,255,255,0.04);--text:#f0f0f5;--muted:#8b8fa3;--accent:#21C25E;--border:rgba(255,255,255,0.07);--blue:#3b82f6;--purple:#a855f7;--orange:#f59e0b;--red:#ef4444;--cyan:#06b6d4;--pink:#ec4899;--indigo:#6366f1;--teal:#14b8a6;--lime:#84cc16;--amber:#f59e0b;--rose:#f43f5e;--sky:#0ea5e9;--violet:#8b5cf6}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased}
+a{text-decoration:none;color:inherit}
+.hero{min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:60px 24px;position:relative;overflow:hidden;background:linear-gradient(180deg,#0a0e1a 0%,#0d1527 50%,#0a0e1a 100%)}
+.hero-glow{position:absolute;border-radius:50%;filter:blur(120px);opacity:.4;pointer-events:none}
+.g1{top:-10%;left:30%;width:500px;height:500px;background:rgba(33,194,94,0.15);animation:fl 8s ease-in-out infinite}
+.g2{bottom:5%;right:20%;width:400px;height:400px;background:rgba(59,130,246,0.1);animation:fl 10s ease-in-out infinite 3s}
+@keyframes fl{0%,100%{transform:translateY(0)}50%{transform:translateY(-30px)}}
+.hero-inner{position:relative;z-index:2;max-width:680px}
+.chip{display:inline-flex;align-items:center;gap:8px;padding:8px 20px;border-radius:40px;background:rgba(33,194,94,0.08);border:1px solid rgba(33,194,94,0.2);font-size:.8rem;font-weight:600;color:var(--accent);margin-bottom:28px;letter-spacing:.5px}
+.chip span:first-child{width:8px;height:8px;border-radius:50%;background:var(--accent);animation:bk 2s infinite}
+.chip span:last-child{width:auto;height:auto;border-radius:0;background:none;animation:none}
+.chip span[data-pt]{width:auto;height:auto;border-radius:0;background:none;animation:none}
+@keyframes bk{0%,100%{opacity:1}50%{opacity:.3}}
+.hero h1{font-size:clamp(2.6rem,7vw,4.2rem);font-weight:900;line-height:1.05;margin-bottom:16px;letter-spacing:-.02em}
+.hero h1 .gr{background:linear-gradient(135deg,var(--accent),var(--blue));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero h2{font-size:1.1rem;font-weight:400;color:var(--muted);margin-bottom:40px;line-height:1.6;max-width:520px;margin-left:auto;margin-right:auto}
+.stats{display:flex;gap:40px;justify-content:center;flex-wrap:wrap;margin-bottom:0}
+.stat{text-align:center}
+.sv{font-size:2.2rem;font-weight:900;background:linear-gradient(135deg,var(--text),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.sl{font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:1.5px;margin-top:2px}
+.cta{display:inline-flex;align-items:center;gap:10px;padding:16px 36px;background:linear-gradient(135deg,var(--accent),#1db854);color:#0a0e1a;border-radius:14px;font-weight:800;font-size:1rem;transition:all .3s;box-shadow:0 4px 24px rgba(33,194,94,0.3)}
+.cta:hover{transform:translateY(-3px);box-shadow:0 8px 40px rgba(33,194,94,0.45)}
+.scroll{position:absolute;bottom:28px;left:50%;transform:translateX(-50%);color:var(--muted);font-size:.78rem;animation:bob 2s infinite}
+@keyframes bob{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(6px)}}
+.ts{padding:80px 24px 100px;background:var(--bg2)}
+.ti{max-width:800px;margin:0 auto}
+.th{text-align:center;margin-bottom:56px}
+.tlab{font-size:.72rem;text-transform:uppercase;letter-spacing:3px;color:var(--accent);font-weight:700;margin-bottom:10px}
+.ttl{font-size:clamp(1.8rem,4vw,2.4rem);font-weight:900;margin-bottom:10px}
+.tdesc{color:var(--muted);font-size:.95rem;max-width:500px;margin:0 auto}
+.tl{position:relative;padding-left:48px}
+.tl::before{content:'';position:absolute;left:18px;top:0;bottom:0;width:2px;background:linear-gradient(180deg,var(--blue),var(--cyan),var(--purple),var(--orange),var(--rose),var(--pink),var(--red),var(--teal),var(--amber),var(--indigo),var(--violet),var(--lime),var(--accent));border-radius:2px}
+.ti-item{position:relative;margin-bottom:14px}
+.dot{position:absolute;left:-35px;top:22px;width:14px;height:14px;border-radius:50%;border:3px solid;background:var(--bg2);z-index:2;transition:transform .3s}
+.ti-item:hover .dot{transform:scale(1.3)}
+.tc{display:flex;align-items:center;gap:18px;background:var(--bg-card);border:1px solid var(--border);border-radius:16px;padding:20px 24px;transition:all .35s;cursor:pointer}
+.tc:hover{transform:translateX(6px);border-color:rgba(255,255,255,0.12);background:rgba(255,255,255,0.06);box-shadow:0 8px 32px rgba(0,0,0,0.2)}
+.tn{font-size:.65rem;font-weight:800;letter-spacing:2px;min-width:24px}
+.ticon{font-size:1.8rem;flex-shrink:0}
+.tinf{flex:1;min-width:0}
+.tname{font-weight:800;font-size:1rem;margin-bottom:3px}
+.td{font-size:.8rem;color:var(--muted);line-height:1.4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tt{font-size:.72rem;color:var(--muted);background:rgba(255,255,255,0.05);padding:4px 10px;border-radius:8px;flex-shrink:0;white-space:nowrap}
+.footer{text-align:center;padding:48px 24px;border-top:1px solid var(--border)}
+.fb{font-weight:900;font-size:1.2rem;margin-bottom:6px;background:linear-gradient(135deg,var(--accent),var(--blue));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.footer p{color:var(--muted);font-size:.8rem}
+
+/* Modal de identificação */
+.modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);z-index:9999;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(8px)}
+.modal-box{background:#111827;border:1px solid rgba(33,194,94,0.2);border-radius:20px;padding:40px;max-width:420px;width:90%;text-align:center}
+.modal-box h2{font-size:1.4rem;margin-bottom:8px}
+.modal-box p{color:var(--muted);font-size:.9rem;margin-bottom:24px}
+.modal-box input{width:100%;padding:14px 18px;border-radius:12px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:1rem;outline:none;margin-bottom:16px}
+.modal-box input:focus{border-color:var(--accent)}
+.modal-box button{width:100%;padding:14px;border-radius:12px;background:var(--accent);color:#0a0e1a;border:none;font-size:1rem;font-weight:700;cursor:pointer}
+.modal-box button:hover{background:#1db854}
+
+/* Progresso geral no hero */
+.progress-hero{margin:20px auto 32px;max-width:400px}
+.progress-user{font-size:.95rem;color:var(--muted);margin-bottom:10px}
+.progress-user strong{color:var(--accent)}
+.progress-bar-outer{height:8px;background:rgba(255,255,255,0.06);border-radius:8px;overflow:hidden}
+.progress-bar-inner{height:100%;background:linear-gradient(90deg,var(--accent),#1db854);border-radius:8px;transition:width .6s}
+.progress-label{font-size:.75rem;color:var(--muted);margin-top:6px;text-align:center}
+
+/* Anel de progresso SVG no card */
+.ring-wrap{position:relative;width:44px;height:44px;flex-shrink:0}
+.ring-wrap svg{transform:rotate(-90deg)}
+.ring-bg{fill:none;stroke:rgba(255,255,255,0.06);stroke-width:4}
+.ring-fill{fill:none;stroke-width:4;stroke-linecap:round;transition:stroke-dashoffset .6s,stroke .3s}
+.ring-text{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:.6rem;font-weight:700;color:var(--muted)}
+
+/* Settings bar — tema + idioma */
+.settings-bar{display:flex;align-items:center;justify-content:center;gap:16px;margin:20px auto 8px}
+.theme-switch{display:flex;align-items:center;gap:8px}
+.theme-btn{background:none;border:2px solid transparent;border-radius:50%;padding:3px;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center}
+.theme-btn.active{border-color:var(--accent)}
+.theme-dot{width:24px;height:24px;border-radius:50%;transition:all .2s}
+.dark-dot{background:#0a0e1a;border:2px solid #333}
+.light-dot{background:#ffffff;border:2px solid #ddd}
+.picpay-dot{background:#21C25E;border:2px solid #1a9e4a}
+.lang-divider{width:1px;height:24px;background:rgba(255,255,255,0.15)}
+.lang-switch{display:flex;gap:4px}
+/* White Mode */
+body[data-theme="light"]{--bg:#f5f5f7;--bg2:#eeeef0;--bg-card:rgba(0,0,0,0.04);--text:#1a1a2e;--muted:#6b7280;--accent:#21C25E;--border:rgba(0,0,0,0.08);--code-bg:#e8e8ec}
+body[data-theme="light"] .hero{background:linear-gradient(180deg,#f5f5f7 0%,#eeeef0 50%,#f5f5f7 100%)}
+body[data-theme="light"] .hero-glow{opacity:.15}
+body[data-theme="light"] .sv{background:linear-gradient(135deg,#1a1a2e,var(--accent));-webkit-background-clip:text}
+body[data-theme="light"] .chip{background:rgba(33,194,94,0.08);border-color:rgba(33,194,94,0.2)}
+body[data-theme="light"] .tc{background:var(--bg-card);border-color:var(--border)}
+body[data-theme="light"] .tc:hover{background:rgba(0,0,0,0.06);border-color:rgba(0,0,0,0.12)}
+body[data-theme="light"] .dot{background:#f5f5f7}
+body[data-theme="light"] .footer{border-color:var(--border)}
+body[data-theme="light"] .dark-dot{border-color:#999}
+body[data-theme="light"] body[data-theme="light"] .lang-divider{background:rgba(0,0,0,0.15)}
+body[data-theme="light"] .modal-box{background:#ffffff;border-color:rgba(33,194,94,0.2)}
+body[data-theme="light"] .modal-box input{background:#f5f5f7;border-color:rgba(0,0,0,0.1);color:#1a1a2e}
+body[data-theme="light"] .progress-bar-outer{background:rgba(0,0,0,0.06)}
+body[data-theme="light"] .ring-bg{stroke:rgba(0,0,0,0.06)}
+
+/* PicPay Mode */
+body[data-theme="picpay"]{--bg:#052e16;--bg2:#04261a;--bg-card:rgba(33,194,94,0.06);--text:#f0fdf4;--muted:#86efac;--accent:#21C25E;--border:rgba(33,194,94,0.15);--code-bg:#022c22}
+body[data-theme="picpay"] .hero{background:linear-gradient(180deg,#052e16 0%,#04261a 50%,#052e16 100%)}
+body[data-theme="picpay"] .hero-glow .g1{background:rgba(33,194,94,0.2)}
+body[data-theme="picpay"] .hero-glow .g2{background:rgba(33,194,94,0.1)}
+body[data-theme="picpay"] .chip{background:rgba(33,194,94,0.15);border-color:rgba(33,194,94,0.3)}
+body[data-theme="picpay"] .tc{background:var(--bg-card);border-color:var(--border)}
+body[data-theme="picpay"] .tc:hover{background:rgba(33,194,94,0.1)}
+body[data-theme="picpay"] .dot{background:#04261a}
+body[data-theme="picpay"] .footer{border-color:var(--border)}
+body[data-theme="picpay"] .modal-box{background:#04261a;border-color:rgba(33,194,94,0.3)}
+body[data-theme="picpay"] .modal-box input{background:#052e16;border-color:rgba(33,194,94,0.2);color:#f0fdf4}
+body[data-theme="picpay"] .progress-bar-outer{background:rgba(33,194,94,0.1)}
+
+@media(max-width:600px){.stats{gap:24px}.sv{font-size:1.6rem}.tl{padding-left:40px}.tl::before{left:14px}.dot{left:-30px}.tc{flex-wrap:wrap;padding:16px 18px;gap:12px}.td{white-space:normal}.ring-wrap{margin-top:4px}.settings-bar{gap:10px}}
+</style>
+</head>
+<body>
+<script>(function(){var t=localStorage.getItem('pdi_theme');if(t)document.body.setAttribute('data-theme',t);})()</script>
+
+<!-- Modal de identificação -->
+<div id="name-modal" class="modal-overlay" style="display:none">
+  <div class="modal-box">
+    <div style="font-size:3rem;margin-bottom:12px">🎓</div>
+    <h2>Bem-vindo à Jornada Obrigatória N1!</h2>
+    <p>Como podemos te chamar? Seu progresso será salvo localmente.</p>
+    <input type="text" id="user-name" placeholder="Seu nome (ex: João Silva)" autofocus>
+    <input type="email" id="user-email" placeholder="Email @picpay.com">
+    <button onclick="saveName()">Começar Trilha →</button>
+  </div>
+</div>
+
+<div class="hero">
+  <div class="hero-glow g1"></div>
+  <div class="hero-glow g2"></div>
+  <div class="hero-inner">
+    <div class="chip"><span></span> <span>Command Center PicPay</span></div>
+    <h1><span>Curso</span> <span class="gr">CC N1</span></h1>
+    <h2>Trilha completa para Analistas do Command Center — do básico de redes até IA e gestão de incidentes em produção.</h2>
+    <div class="stats">
+      <div class="stat"><div class="sv">13</div><div class="sl">Módulos</div></div>
+      <div class="stat"><div class="sv">~6h</div><div class="sl">Duração</div></div>
+      <div class="stat"><div class="sv">71</div><div class="sl">Termos no Glossário</div></div>
+      <div class="stat"><div class="sv">50</div><div class="sl">Questões no Simulado</div></div>
+    </div>
+
+    <!-- Seletor de Tema + Idioma -->
+    <div class="settings-bar">
+      <div class="theme-switch">
+        <button class="theme-btn active" data-theme="dark" title="Dark Mode"><span class="theme-dot dark-dot"></span></button>
+        <button class="theme-btn" data-theme="light" title="White Mode"><span class="theme-dot light-dot"></span></button>
+
+      </div>
+      <div class="lang-divider"></div>
+      
+    </div>
+
+    <div class="progress-hero" id="progress-area">
+      <div class="progress-user" id="user-greeting">Carregando...</div>
+      <div class="progress-bar-outer"><div class="progress-bar-inner" id="progress-fill" style="width:0%"></div></div>
+      <div class="progress-label" id="progress-text">0/13 módulos completos</div>
+    </div>
+    <a href="modulo-1-redes.html" class="cta">Começar Módulo 1 →</a>
+    <a href="tdi.html" class="cta" style="background:linear-gradient(135deg,#a855f7,#ec4899);margin-top:8px;font-size:.85rem">📋 Minha Trilha de Desenvolvimento (TDI)</a>
+  </div>
+  <div class="scroll">↓ Ver trilha completa</div>
+</div>
+
+<div class="ts">
+  <div class="ti">
+    <div class="th">
+      <div class="tlab">Trilha de Aprendizado</div>
+      <div class="ttl">13 Módulos — Do início ao fim</div>
+      <div class="tdesc">Siga na ordem. Cada módulo tem quiz com feedback educativo. O glossário é sua referência rápida.</div>
+    </div>
+
+    <div class="tl">
+      <a href="modulo-1-redes.html" class="ti-item"><div class="dot" style="border-color:var(--blue)"></div><div class="tc"><div class="tn" style="color:var(--blue)">01</div><div class="ticon">🌐</div><div class="tinf"><div class="tname">Fundamentos de Redes</div><div class="td">IP, TCP/UDP, DNS, HTTP, Load Balancer, WAF, Kong, CloudFlare</div></div><div class="ring-wrap" data-mod="1"><svg width="44" height="44" viewBox="0 0 44 44"><circle class="ring-bg" cx="22" cy="22" r="18"/><circle class="ring-fill" cx="22" cy="22" r="18" stroke-dasharray="113.1" stroke-dashoffset="113.1"/></svg><span class="ring-text">0%</span></div></div></a>
+
+      <a href="modulo-2-aws.html" class="ti-item"><div class="dot" style="border-color:var(--cyan)"></div><div class="tc"><div class="tn" style="color:var(--cyan)">02</div><div class="ticon">☁️</div><div class="tinf"><div class="tname">Cloud AWS Essencial</div><div class="td">EC2, EKS, ECS, RDS, S3, AZ, Route 53, ALB/NLB, EMR, Glue, IAM</div></div><div class="ring-wrap" data-mod="2"><svg width="44" height="44" viewBox="0 0 44 44"><circle class="ring-bg" cx="22" cy="22" r="18"/><circle class="ring-fill" cx="22" cy="22" r="18" stroke-dasharray="113.1" stroke-dashoffset="113.1"/></svg><span class="ring-text">0%</span></div></div></a>
+
+      <a href="modulo-3-containers.html" class="ti-item"><div class="dot" style="border-color:var(--purple)"></div><div class="tc"><div class="tn" style="color:var(--purple)">03</div><div class="ticon">🐳</div><div class="tinf"><div class="tname">Containers & Kubernetes</div><div class="td">Docker, Pod, Namespace, Cluster, Deployment, Service, HPA, HPO, kubectl</div></div><div class="ring-wrap" data-mod="3"><svg width="44" height="44" viewBox="0 0 44 44"><circle class="ring-bg" cx="22" cy="22" r="18"/><circle class="ring-fill" cx="22" cy="22" r="18" stroke-dasharray="113.1" stroke-dashoffset="113.1"/></svg><span class="ring-text">0%</span></div></div></a>
+
+      <a href="modulo-4-devops.html" class="ti-item"><div class="dot" style="border-color:var(--orange)"></div><div class="tc"><div class="tn" style="color:var(--orange)">04</div><div class="ticon">🔄</div><div class="tinf"><div class="tname">DevOps & CI/CD</div><div class="td">Git, pipelines, ArgoCD, GitOps, Blue/Green, Canary, Fallback, DRP/DR</div></div><div class="ring-wrap" data-mod="4"><svg width="44" height="44" viewBox="0 0 44 44"><circle class="ring-bg" cx="22" cy="22" r="18"/><circle class="ring-fill" cx="22" cy="22" r="18" stroke-dasharray="113.1" stroke-dashoffset="113.1"/></svg><span class="ring-text">0%</span></div></div></a>
+
+      <a href="modulo-5-sre.html" class="ti-item"><div class="dot" style="border-color:var(--rose)"></div><div class="tc"><div class="tn" style="color:var(--rose)">05</div><div class="ticon">🛡️</div><div class="tinf"><div class="tname">Conceitos SRE</div><div class="td">SLI/SLO/SLA, Error Budget, Toil, 4 Sinais Dourados, Runbooks, Terraform, Microserviços</div></div><div class="ring-wrap" data-mod="5"><svg width="44" height="44" viewBox="0 0 44 44"><circle class="ring-bg" cx="22" cy="22" r="18"/><circle class="ring-fill" cx="22" cy="22" r="18" stroke-dasharray="113.1" stroke-dashoffset="113.1"/></svg><span class="ring-text">0%</span></div></div></a>
+
+      <a href="modulo-6-observabilidade.html" class="ti-item"><div class="dot" style="border-color:var(--pink)"></div><div class="tc"><div class="tn" style="color:var(--pink)">06</div><div class="ticon">📊</div><div class="tinf"><div class="tname">Observabilidade</div><div class="td">Dynatrace, Grafana, New Relic, CloudWatch, CloudTrail, Kafka, RabbitMQ</div></div><div class="ring-wrap" data-mod="6"><svg width="44" height="44" viewBox="0 0 44 44"><circle class="ring-bg" cx="22" cy="22" r="18"/><circle class="ring-fill" cx="22" cy="22" r="18" stroke-dasharray="113.1" stroke-dashoffset="113.1"/></svg><span class="ring-text">0%</span></div></div></a>
+
+      <a href="modulo-7-command-center-ccn1.html" class="ti-item"><div class="dot" style="border-color:var(--red)"></div><div class="tc"><div class="tn" style="color:var(--red)">07</div><div class="ticon">🚨</div><div class="tinf"><div class="tname">Command Center & Incidentes</div><div class="td">Turnos, fluxo de alertas, P1/P2/P3, War Room, Postmortem, MTTD/MTTR</div></div><div class="ring-wrap" data-mod="7"><svg width="44" height="44" viewBox="0 0 44 44"><circle class="ring-bg" cx="22" cy="22" r="18"/><circle class="ring-fill" cx="22" cy="22" r="18" stroke-dasharray="113.1" stroke-dashoffset="113.1"/></svg><span class="ring-text">0%</span></div></div></a>
+
+      <a href="modulo-8-bancos-dados.html" class="ti-item"><div class="dot" style="border-color:var(--teal)"></div><div class="tc"><div class="tn" style="color:var(--teal)">08</div><div class="ticon">🗄️</div><div class="tinf"><div class="tname">Bancos de Dados</div><div class="td">SQL, PostgreSQL, MySQL, MongoDB, Atlas, RDS, Snapshot, CRUD</div></div><div class="ring-wrap" data-mod="8"><svg width="44" height="44" viewBox="0 0 44 44"><circle class="ring-bg" cx="22" cy="22" r="18"/><circle class="ring-fill" cx="22" cy="22" r="18" stroke-dasharray="113.1" stroke-dashoffset="113.1"/></svg><span class="ring-text">0%</span></div></div></a>
+
+      <a href="modulo-9-seguranca.html" class="ti-item"><div class="dot" style="border-color:var(--amber)"></div><div class="tc"><div class="tn" style="color:var(--amber)">09</div><div class="ticon">🔐</div><div class="tinf"><div class="tname">Segurança & Proteção</div><div class="td">SSL/TLS, mTLS, IAM, Secrets, Rate Limiting, Circuit Breaker, Feature Flags</div></div><div class="ring-wrap" data-mod="9"><svg width="44" height="44" viewBox="0 0 44 44"><circle class="ring-bg" cx="22" cy="22" r="18"/><circle class="ring-fill" cx="22" cy="22" r="18" stroke-dasharray="113.1" stroke-dashoffset="113.1"/></svg><span class="ring-text">0%</span></div></div></a>
+
+      <a href="modulo-10-mensageria.html" class="ti-item"><div class="dot" style="border-color:var(--sky)"></div><div class="tc"><div class="tn" style="color:var(--sky)">10</div><div class="ticon">📨</div><div class="tinf"><div class="tname">Mensageria, Filas & Cache</div><div class="td">Kafka, SQS, SNS, RabbitMQ, DLQ, Redis, Idempotência</div></div><div class="ring-wrap" data-mod="10"><svg width="44" height="44" viewBox="0 0 44 44"><circle class="ring-bg" cx="22" cy="22" r="18"/><circle class="ring-fill" cx="22" cy="22" r="18" stroke-dasharray="113.1" stroke-dashoffset="113.1"/></svg><span class="ring-text">0%</span></div></div></a>
+
+      <a href="modulo-11-ia.html" class="ti-item"><div class="dot" style="border-color:var(--violet)"></div><div class="tc"><div class="tn" style="color:var(--violet)">11</div><div class="ticon">🤖</div><div class="tinf"><div class="tname">Inteligência Artificial & IA no PicPay</div><div class="td">HubAI Nitro, Copilots, GitHub Copilot, CX-GPT, ChatGPT, Claude, Gemini</div></div><div class="ring-wrap" data-mod="11"><svg width="44" height="44" viewBox="0 0 44 44"><circle class="ring-bg" cx="22" cy="22" r="18"/><circle class="ring-fill" cx="22" cy="22" r="18" stroke-dasharray="113.1" stroke-dashoffset="113.1"/></svg><span class="ring-text">0%</span></div></div></a>
+
+      <a href="modulo-12-glossario.html" class="ti-item"><div class="dot" style="border-color:var(--lime)"></div><div class="tc"><div class="tn" style="color:var(--lime)">12</div><div class="ticon">📖</div><div class="tinf"><div class="tname">Glossário Técnico</div><div class="td">71 termos pesquisáveis com filtro por categoria — sua referência rápida</div></div><div class="ring-wrap" data-mod="12"><svg width="44" height="44" viewBox="0 0 44 44"><circle class="ring-bg" cx="22" cy="22" r="18"/><circle class="ring-fill" cx="22" cy="22" r="18" stroke-dasharray="113.1" stroke-dashoffset="113.1"/></svg><span class="ring-text">0%</span></div></div></a>
+
+      <a href="modulo-13-simulado.html" class="ti-item"><div class="dot" style="border-color:var(--accent)"></div><div class="tc"><div class="tn" style="color:var(--accent)">13</div><div class="ticon">🏆</div><div class="tinf"><div class="tname">Simulado Final</div><div class="td">50 questões + cenários práticos + badge de resultado</div></div><div class="ring-wrap" data-mod="13"><svg width="44" height="44" viewBox="0 0 44 44"><circle class="ring-bg" cx="22" cy="22" r="18"/><circle class="ring-fill" cx="22" cy="22" r="18" stroke-dasharray="113.1" stroke-dashoffset="113.1"/></svg><span class="ring-text">0%</span></div></div></a>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  <div class="fb">⚡ Command Center Academy — PicPay</div>
+  <p>Baseado na Trilha de Carreira PDI + Guia de Bolso CC N1</p>
+  <p style="margin-top:6px">2026 • Feito com 💚 pelo Time de N1 Command Center</p>
+</div>
+
+<script>
+/* ========== Tema ========== */
+function setTheme(theme) {
+  document.body.setAttribute('data-theme', theme);
+  localStorage.setItem('pdi_theme', theme);
+  document.querySelectorAll('.theme-btn').forEach(function(b) {
+    b.classList.toggle('active', b.dataset.theme === theme);
+  });
+}
+
+document.querySelectorAll('.theme-btn').forEach(function(btn) {
+  btn.addEventListener('click', function() { setTheme(btn.dataset.theme); });
+});
+
+
+/* ========== Modal + Progresso ========== */
+document.addEventListener('DOMContentLoaded', function() {
+  // Aplicar tema salvo
+  var savedTheme = localStorage.getItem('pdi_theme') || 'dark';
+  setTheme(savedTheme);
+
+
+  var user = localStorage.getItem('pdi_user');
+  if (!user) {
+    document.getElementById('name-modal').style.display = 'flex';
+    document.getElementById('user-greeting').textContent = '';
+  } else {
+    document.getElementById('name-modal').style.display = 'none';
+    loadProgress(user);
+  }
+});
+
+function saveName() {
+  var name = document.getElementById('user-name').value.trim();
+  if (!name) return;
+  localStorage.setItem('pdi_user', name);
+  var email = document.getElementById('user-email').value.trim();
+  if (email) localStorage.setItem('pdi_user_email', email);
+  document.getElementById('name-modal').style.display = 'none';
+  loadProgress(name);
+}
+
+function loadProgress(userName) {
+  var p = JSON.parse(localStorage.getItem('pdi_progress') || '{}');
+  var total = 13, done = 0;
+
+  document.getElementById('user-greeting').innerHTML = 'Olá, <strong>' + userName + '</strong>! Seu progresso:';
+
+  document.querySelectorAll('.ring-wrap').forEach(function(ring) {
+    var mod = parseInt(ring.dataset.mod);
+    var data = p[mod] || {};
+    var pct = 0;
+    var color = 'rgba(255,255,255,0.15)';
+
+    if (data.quizDone && data.quizScore === data.quizTotal) { pct = 100; color = '#21C25E'; done++; }
+    else if (data.quizDone) { pct = Math.round(data.quizScore / data.quizTotal * 100); color = '#f59e0b'; }
+    else if (data.visited) { pct = 10; color = 'rgba(255,255,255,0.25)'; }
+
+    var circle = ring.querySelector('.ring-fill');
+    var circumference = 113.1;
+    circle.style.strokeDashoffset = circumference - (circumference * pct / 100);
+    circle.style.stroke = color;
+
+    var txt = ring.querySelector('.ring-text');
+    if (data.quizDone) {
+      txt.textContent = data.quizScore + '/' + data.quizTotal;
+      txt.style.color = data.quizScore === data.quizTotal ? '#21C25E' : '#f59e0b';
+    } else if (data.visited) {
+      txt.textContent = '👁';
+      txt.style.color = 'rgba(255,255,255,0.3)';
+    } else {
+      txt.textContent = '—';
+      txt.style.color = '';
+    }
+  });
+
+  var overallPct = Math.round(done / total * 100);
+  document.getElementById('progress-fill').style.width = overallPct + '%';
+
+  document.getElementById('progress-text').textContent = done + '/' + total + ' módulos completos (' + overallPct + '%)';
+}
+
+document.addEventListener('keypress', function(e) {
+  if (e.key === 'Enter' && document.getElementById('name-modal').style.display !== 'none') saveName();
+});
+</script>
+</body>
+</html>

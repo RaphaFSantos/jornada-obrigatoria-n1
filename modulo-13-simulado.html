@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"/>
+<link href="data:image/svg+xml,&lt;svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22&gt;&lt;text y=%22.9em%22 font-size=%2290%22&gt;🎓&lt;/text&gt;&lt;/svg&gt;" rel="icon"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Módulo 13 — Simulado Final | Jornada Obrigatória N1 PicPay</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Fira+Code:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0a0e1a;--card:rgba(255,255,255,0.06);--text:#f0f0f5;--muted:#8b8fa3;--accent:#21C25E;--accent-dim:rgba(33,194,94,0.15);--code-bg:#1a1f2e;--border:rgba(255,255,255,0.08)}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);line-height:1.7;min-height:100vh}
+code,pre{font-family:'Fira Code',monospace}
+
+/* === STANDARD HEADER === */
+.std-header{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,14,26,0.92);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,0.08);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;height:56px}
+.std-header .sh-title{font-weight:700;font-size:14px;color:#8b8fa3}
+.std-header .sh-module{font-weight:800;font-size:15px;color:#21C25E}
+
+/* === HOME BUTTON === */
+.home-btn{position:fixed!important;bottom:24px!important;right:24px!important;z-index:200!important;width:52px!important;height:52px!important;border-radius:50%!important;background:#21C25E!important;color:#0a0e1a!important;border:none!important;cursor:pointer!important;display:flex!important;align-items:center!important;justify-content:center!important;font-size:1.4rem!important;box-shadow:0 4px 20px rgba(33,194,94,0.4)!important;transition:all .3s!important;text-decoration:none!important}
+.home-btn:hover{transform:scale(1.1)!important;box-shadow:0 6px 30px rgba(33,194,94,0.6)!important}
+
+/* === MAIN === */
+main{max-width:820px;margin:0 auto;padding:100px 20px 60px}
+.hero{text-align:center;margin-bottom:48px}
+.hero .icon{font-size:3.2rem;margin-bottom:12px}
+.hero h1{font-size:2rem;font-weight:700;margin-bottom:8px;background:linear-gradient(135deg,var(--accent),#17a84e);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero .sub{color:var(--muted);font-size:1rem}
+
+/* === NAV FOOTER === */
+.nav-footer{display:flex!important;justify-content:space-between!important;margin-top:60px!important;padding-top:30px!important;border-top:1px solid rgba(255,255,255,0.08)!important;flex-wrap:wrap!important;gap:12px!important}
+.nav-btn{padding:14px 28px!important;border-radius:12px!important;text-decoration:none!important;font-weight:700!important;font-size:.9rem!important;transition:all .3s!important;border:1px solid rgba(255,255,255,0.08)!important;color:#8b8fa3!important;display:inline-flex!important;align-items:center!important;background:transparent!important}
+.nav-btn:hover{border-color:#21C25E!important;color:#21C25E!important;background:rgba(33,194,94,0.12)!important}
+.nav-btn.primary{background:#21C25E!important;color:#0a0e1a!important;border-color:#21C25E!important}
+.nav-btn.primary:hover{background:#1db854!important;transform:translateY(-2px)!important;box-shadow:0 4px 20px rgba(33,194,94,0.3)!important}
+
+/* Temas */
+body[data-theme="light"]{--bg:#f5f5f7;--card:rgba(0,0,0,0.04);--text:#1a1a2e;--muted:#6b7280;--accent:#21C25E;--accent-dim:rgba(33,194,94,0.1);--code-bg:#e8e8ec;--border:rgba(0,0,0,0.08)}
+body[data-theme="light"] .std-header{background:rgba(245,245,247,0.92)!important}
+body[data-theme="light"] .sh-title{color:#6b7280!important}
+body[data-theme="light"] .home-btn{box-shadow:0 4px 20px rgba(33,194,94,0.25)!important}
+body[data-theme="picpay"]{--bg:#052e16;--card:rgba(33,194,94,0.06);--text:#f0fdf4;--muted:#86efac;--accent:#21C25E;--accent-dim:rgba(33,194,94,0.15);--code-bg:#022c22;--border:rgba(33,194,94,0.15)}
+body[data-theme="picpay"] .std-header{background:rgba(5,46,22,0.92)!important}
+/* === GLOBAL FIX v2 === */
+a{color:#21C25E!important;text-decoration:none!important}
+a:hover{color:#1db854!important;text-decoration:underline!important}
+/* === END GLOBAL FIX v2 === */
+
+/* === SIMULADO CSS === */
+.quiz-app{max-width:700px;margin:0 auto}
+.q-counter{text-align:center;color:var(--muted);font-size:.9rem;margin-bottom:20px}
+.q-category{display:inline-block;font-size:.72rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:1px;background:var(--accent-dim);padding:4px 12px;border-radius:12px;margin-bottom:14px}
+.q-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:28px}
+.q-text{font-size:1.05rem;font-weight:600;color:var(--text);margin-bottom:20px;line-height:1.6}
+.q-opts{display:flex;flex-direction:column;gap:10px}
+.q-opt{padding:14px 18px;border-radius:12px;border:1px solid var(--border);background:var(--code-bg);color:var(--muted);cursor:pointer;font-size:.92rem;transition:all .2s}
+.q-opt:hover:not(.disabled){border-color:var(--accent);color:var(--text)}
+.q-opt.correct{background:var(--accent-dim)!important;border-color:var(--accent)!important;color:var(--accent)!important}
+.q-opt.wrong{background:rgba(239,68,68,0.12)!important;border-color:#ef4444!important;color:#ef4444!important}
+.q-opt.disabled{cursor:default;pointer-events:none;opacity:.7}
+.q-fb{margin-top:16px;padding:14px 18px;border-radius:12px;font-size:.9rem;line-height:1.5;display:none}
+.q-fb.show{display:block}
+.q-fb.ok{background:var(--accent-dim);color:var(--accent)}
+.q-fb.nok{background:rgba(239,68,68,0.1);color:#f87171}
+.q-next{display:none;margin-top:20px;width:100%;padding:14px;border-radius:12px;background:var(--accent);color:#0a0e1a;border:none;font-size:1rem;font-weight:700;cursor:pointer}
+.q-next.show{display:block}
+.q-next:hover{background:#1db854}
+.result-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:32px;text-align:center}
+.result-score{font-size:3rem;font-weight:800;margin:16px 0}
+.result-cats{text-align:left;margin:24px 0}
+.cat-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:.9rem}
+.cat-row .label{color:var(--text);font-weight:600}
+.cat-row .val{font-weight:700}
+.cat-row .val.good{color:var(--accent)}
+.cat-row .val.mid{color:#f59e0b}
+.cat-row .val.bad{color:#ef4444}
+.result-btns{display:flex;gap:12px;justify-content:center;margin-top:24px}
+.result-btns button{padding:14px 28px;border-radius:12px;font-weight:700;font-size:.9rem;cursor:pointer;border:none}
+.btn-retry{background:var(--accent);color:#0a0e1a}
+.btn-retry:hover{background:#1db854}
+.btn-back{background:transparent;border:1px solid var(--border)!important;color:var(--muted)}
+.btn-back:hover{border-color:var(--accent)!important;color:var(--text)}
+
+/* Progress bar */
+.q-progress{width:100%;height:6px;background:var(--code-bg);border-radius:3px;margin-bottom:24px;overflow:hidden}
+.q-progress-fill{height:100%;background:var(--accent);border-radius:3px;transition:width .4s ease}
+
+/* Result emoji */
+.result-emoji{font-size:4rem;margin-bottom:8px}
+.result-msg{color:var(--muted);font-size:1rem;margin-bottom:24px}
+
+@media(max-width:600px){
+  main{padding:88px 14px 50px}
+  .hero h1{font-size:1.5rem}
+  .q-card{padding:20px}
+  .result-card{padding:20px}
+  .result-score{font-size:2.4rem}
+  .result-btns{flex-direction:column}
+  .nav-footer{flex-direction:column}
+}
+
+/* === MODULE CONTROLS === */
+.mod-controls{display:flex;align-items:center;gap:10px}
+.mod-controls .mc-themes{display:flex;gap:4px;align-items:center}
+.mod-controls .mc-dot{width:18px;height:18px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:all .2s;padding:0;background:none;display:flex;align-items:center;justify-content:center}
+.mod-controls .mc-dot.active{border-color:var(--accent)}
+.mod-controls .mc-dot .dot-inner{width:12px;height:12px;border-radius:50%}
+.mod-controls .mc-dot .di-dark{background:#0a0e1a;border:1px solid #555}
+.mod-controls .mc-dot .di-light{background:#fff;border:1px solid #ccc}
+.mod-controls .mc-dot .di-pp{background:#21C25E;border:1px solid #1a9e4a}
+body[data-theme="light"] body[data-theme="light"] .mod-controls .di-dark{border-color:#999}
+/* === END MODULE CONTROLS === */
+
+/* Quiz retry banner */
+.quiz-retry-banner{display:none;text-align:center;margin:24px 0;padding:20px;background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.2);border-radius:14px}
+.quiz-retry-banner.show{display:block}
+.quiz-retry-banner .score{font-size:1.4rem;font-weight:800;margin-bottom:8px}
+.quiz-retry-banner .score.perfect{color:#21C25E}
+.quiz-retry-banner .score.retry{color:#f59e0b}
+.quiz-retry-banner .msg{color:var(--muted);font-size:.9rem;margin-bottom:16px}
+.quiz-retry-banner button{padding:12px 28px;border-radius:10px;border:1px solid #f59e0b;background:rgba(245,158,11,0.15);color:#f59e0b;font-weight:700;font-size:.9rem;cursor:pointer;transition:all .2s}
+.quiz-retry-banner button:hover{background:#f59e0b;color:#0a0e1a}
+.quiz-retry-banner.perfect-banner{background:rgba(33,194,94,0.1);border-color:rgba(33,194,94,0.2)}
+.quiz-retry-banner.perfect-banner button{display:none}
+</style>
+</head>
+<body>
+<script>(function(){var t=localStorage.getItem('pdi_theme');if(t)document.body.setAttribute('data-theme',t);})()</script>
+<header class="std-header"><span class="sh-title">🎓 Jornada Obrigatória N1 — PicPay</span><span class="sh-module">13 — Simulado</span><div class="mod-controls"><div class="mc-themes"><button class="mc-dot active" data-theme="dark" title="Dark"><span class="dot-inner di-dark"></span></button><button class="mc-dot" data-theme="light" title="Light"><span class="dot-inner di-light"></span></button></div></div></header>
+<a class="home-btn" href="index.html" title="Voltar ao início">🏠</a>
+<main>
+<div class="hero">
+<div class="icon">🎯</div>
+<h1>Simulado Final</h1>
+<p class="sub">50 questões — 5 de cada módulo. Teste tudo que aprendeu!</p>
+</div>
+<div class="quiz-app" id="app"></div>
+<div class="nav-footer">
+<a class="nav-btn" href="modulo-12-glossario.html">← Anterior: Glossário</a>
+<a class="nav-btn primary" href="index.html">🏠 Voltar ao Início</a>
+</div>
+</main>
+<script>
+const questions=[
+// ── REDES (5) ──
+{cat:"Redes",q:"Qual protocolo garante entrega ordenada?",opts:["UDP","TCP","ICMP","ARP"],correct:1,ok:"TCP usa handshake 3-way e garante ordem + entrega.",nok:"Não foi dessa vez. Releia o conteúdo e tente novamente!"},
+{cat:"Redes",q:"O que o DNS faz?",opts:["Criptografa dados","Traduz nomes para IPs","Distribui tráfego","Bloqueia ataques"],correct:1,ok:"DNS = lista telefônica da internet. Nome → IP.",nok:"Não foi dessa vez. Releia o conteúdo e tente novamente!"},
+{cat:"Redes",q:"Erro HTTP 502 significa?",opts:["Request inválida","Sem permissão","Não encontrado","Proxy não alcançou o backend"],correct:3,ok:"502 Bad Gateway = LB/proxy não conseguiu conectar no serviço backend.",nok:"Não foi dessa vez. Releia o conteúdo e tente novamente!"},
+{cat:"Redes",q:"Qual porta é do PostgreSQL?",opts:["80","443","5432","6379"],correct:2,ok:"5432 é a porta padrão do PostgreSQL.",nok:"Não foi dessa vez. Releia o conteúdo e tente novamente!"},
+{cat:"Redes",q:"Fluxo correto de uma requisição externa?",opts:["Microserviço→Kong→ALB→CloudFlare","Kong→CloudFlare→WAF→ALB","CloudFlare→WAF→ALB→Kong→Microserviço","ALB→CloudFlare→Kong→WAF"],correct:2,ok:"De fora pra dentro: borda → firewall → LB → gateway → serviço.",nok:"Não foi dessa vez. Releia o conteúdo e tente novamente!"},
+
+// ── AWS (5) ──
+{cat:"AWS",q:"Route 53 é um serviço de?",opts:["Compute","DNS","Storage","Monitoring"],correct:1,ok:"Route 53 = DNS gerenciado da AWS.",nok:"Não foi dessa vez. Releia o conteúdo e tente novamente!"},
+{cat:"AWS",q:"ALB opera em qual camada?",opts:["Camada 3","Camada 4","Camada 7","Camada 2"],correct:2,ok:"ALB = Application Load Balancer, camada 7 (HTTP/HTTPS).",nok:"Não foi dessa vez. Releia o conteúdo e tente novamente!"},
+{cat:"AWS",q:"S3 é usado para?",opts:["Compute","DNS","Armazenamento de objetos","Filas"],correct:2,ok:"S3 = Simple Storage Service, armazena qualquer tipo de arquivo.",nok:"Não foi dessa vez. Releia o conteúdo e tente novamente!"},
+{cat:"AWS",q:"IAM controla?",opts:["Custo","Identidade e permissões","Rede","Banco de dados"],correct:1,ok:"IAM = Identity and Access Management.",nok:"Não foi dessa vez. Releia o conteúdo e tente novamente!"},
+{cat:"AWS",q:"EKS é o serviço gerenciado de?",opts:["Banco de dados","Containers/Kubernetes","CDN","DNS"],correct:1,ok:"EKS = Elastic Kubernetes Service.",nok:"Não foi dessa vez. Releia o conteúdo e tente novamente!"},
+
+// ── CONTAINERS (5) ──
+{cat:"Containers",q:"O que é um Pod?",opts:["Cluster","Menor unidade executável no K8s","Serviço de rede","Namespace"],correct:1,ok:"Pod = 1+ containers compartilhando rede e storage.",nok:"Não foi dessa vez. Releia o conteúdo e tente novamente!"},
+{cat:"Containers",q:"kubectl get pods -n production mostra?",opts:["Todos os clusters","Pods do namespace production","Logs","Métricas"],correct:1,ok:"kubectl get pods -n filtra por namespace.",nok:"Não foi dessa vez. Releia o conteúdo e tente novamente!"},
+{cat:"Containers",q:"O que é um Deployment no K8s?",opts:["Um container","Gerencia réplicas de pods com rollout","Um serviço de rede","Um volume"],correct:1,ok:"Deployment garante N réplicas rodando e faz rolling update.",nok:"Não foi dessa vez. Releia o conteúdo e tente novamente!"},
+{cat:"Containers",q:"HPA no Kubernetes faz?",opts:["Backup","Auto-scaling horizontal de pods","Monitoramento","DNS"],correct:1,ok:"HPA escala pods baseado em CPU/memória/custom metrics.",nok:"Não foi dessa vez. Releia o conteúdo e tente novamente!"},
+{cat:"Containers",q:"Diferença entre Docker e Kubernetes?",opts:["Iguais","Docker=criar containers, K8s=orquestrar containers","Docker é mais novo","K8s substitui Docker"],correct:1,ok:"Docker empacota, K8s orquestra em escala.",nok:"Não foi dessa vez. Releia o conteúdo e tente novamente!"},
+
+// ── DEVOPS (5) ──
+{cat:"DevOps",q:"CI/CD significa?",opts:["Computer Intelligence","Continuous Integration/Delivery","Cloud Infrastructure","Code Input/Deploy"],correct:1,ok:"CI integra código frequentemente, CD entrega automaticamente.",nok:"Não foi dessa vez. Releia o conteúdo e tente novamente!"},
+{cat:"DevOps",q:"ArgoCD implementa qual conceito?",opts:["Monitoring","GitOps","Serverless","Microserviços"],correct:1,ok:"ArgoCD sincroniza o estado do cluster com o Git.",nok:"Não foi dessa vez. Releia o conteúdo e tente novamente!"},
+{cat:"DevOps",q:"O que é Blue/Green deployment?",opts:["Deploy direto","Dois ambientes: um ativo, outro standby","Deploy parcial","Rollback automático"],correct:1,ok:"Blue=produção atual, Green=nova versão. Troca instantânea.",nok:"Não foi dessa vez. Releia o conteúdo e tente novamente!"},
+{cat:"DevOps",q:"Terraform é uma ferramenta de?",opts:["Monitoring","CI/CD","Infrastructure as Code","Containers"],correct:2,ok:"Terraform define infra em código (HCL).",nok:"Não foi dessa vez. Releia o conteúdo e tente novamente!"},
+{cat:"DevOps",q:"O que é Canary deployment?",opts:["Deploy pra todos","Envia tráfego gradual para nova versão","Rollback","Deploy manual"],correct:1,ok:"Canary libera pra % pequeno primeiro, validando antes de expandir.",nok:"Não foi dessa vez. Releia o conteúdo e tente novamente!"},
+
+// ── SRE (5) ──
+{cat:"SRE",q:"Error Budget mensal com SLO 99.9%?",opts:["4 minutos","43 minutos","4 horas","43 horas"],correct:1,ok:"0.1% de 30 dias ≈ 43 minutos de downtime permitido.",nok:"Não foi dessa vez. Releia o conteúdo e tente novamente!"},
+{cat:"SRE",q:"Quais são os 4 Sinais Dourados?",opts:["CPU, Mem, Disco, Rede","Latência, Tráfego, Erros, Saturação","Uptime, Down, MTTR, MTBF","SLI, SLO, SLA, EB"],correct:1,ok:"Definidos pelo Google no livro SRE.",nok:"Não foi dessa vez. Releia o conteúdo e tente novamente!"},
+{cat:"SRE",q:"Readiness probe falha. O que acontece?",opts:["Pod reinicia","Pod é removido do load balancer","Cluster para","Nada"],correct:1,ok:"Readiness remove do service — para de receber tráfego.",nok:"Não foi dessa vez. Releia o conteúdo e tente novamente!"},
+{cat:"SRE",q:"O que é Toil?",opts:["Código de infra","Trabalho repetitivo automatizável","Reuniões","Débito técnico"],correct:1,ok:"Toil = manual, repetitivo, sem valor duradouro. Meta: <50%.",nok:"Não foi dessa vez. Releia o conteúdo e tente novamente!"},
+{cat:"SRE",q:"SLO é mais rigoroso que SLA porque?",opts:["SLO é externo","Margem de segurança antes de violar contrato","São iguais","SLO é opcional"],correct:1,ok:"SLO interno > SLA contratual. Buffer de proteção.",nok:"Não foi dessa vez. Releia o conteúdo e tente novamente!"},
+
+// ── OBSERVABILIDADE (5) ──
+{cat:"Observabilidade",q:"Métricas vs Logs vs Traces?",opts:["Iguais","Números, Texto, Caminho","Logs resumidos","Traces = logs"],correct:1,ok:"Os 3 pilares da observabilidade.",nok:"Não foi dessa vez. Releia o conteúdo e tente novamente!"},
+{cat:"Observabilidade",q:"P99 latência = 200ms significa?",opts:["Média é 200ms","99% dos requests < 200ms","Máximo é 200ms","Mínimo é 200ms"],correct:1,ok:"Percentil 99: só 1% demora mais que 200ms.",nok:"Não foi dessa vez. Releia o conteúdo e tente novamente!"},
+{cat:"Observabilidade",q:"Grafana serve para?",opts:["Criar containers","Dashboards de métricas","Gerenciar DNS","Deploy"],correct:1,ok:"Grafana = ferramenta principal de dashboards no PicPay.",nok:"Não foi dessa vez. Releia o conteúdo e tente novamente!"},
+{cat:"Observabilidade",q:"OTLP é o protocolo do?",opts:["Kafka","Kubernetes","OpenTelemetry","Docker"],correct:2,ok:"OTLP = OpenTelemetry Protocol.",nok:"Não foi dessa vez. Releia o conteúdo e tente novamente!"},
+{cat:"Observabilidade",q:"Alerta falso-positivo é?",opts:["Alerta real","Disparou sem problema real","Alerta ignorado","Bug"],correct:1,ok:"Excesso causa alert fatigue — time ignora alertas reais.",nok:"Não foi dessa vez. Releia o conteúdo e tente novamente!"},
+
+// ── COMMAND CENTER (5) ──
+{cat:"Command Center",q:"Primeira ação ao receber alerta crítico?",opts:["Reiniciar pods","Verificar runbook","Escalar gerência","Ignorar"],correct:1,ok:"Runbook primeiro, ação depois.",nok:"Não foi dessa vez. Releia o conteúdo e tente novamente!"},
+{cat:"Command Center",q:"MTTR mede?",opts:["Tempo entre falhas","Tempo para reparar","Custo do incidente","Número de alertas"],correct:1,ok:"MTTR = Mean Time To Repair.",nok:"Não foi dessa vez. Releia o conteúdo e tente novamente!"},
+{cat:"Command Center",q:"Postmortem serve para?",opts:["Punir","Aprender e prevenir","Backup","Monitorar"],correct:1,ok:"Blameless — foco em melhoria, não culpa.",nok:"Não foi dessa vez. Releia o conteúdo e tente novamente!"},
+{cat:"Command Center",q:"Blast Radius é?",opts:["Velocidade","Área de impacto do incidente","Causa raiz","Tempo"],correct:1,ok:"Quantos usuários/serviços afetados.",nok:"Não foi dessa vez. Releia o conteúdo e tente novamente!"},
+{cat:"Command Center",q:"RTO significa?",opts:["Recovery Time Objective","Real Time Operations","Remote Team Operations","Rapid Testing Order"],correct:0,ok:"Tempo máximo aceitável para restaurar o serviço.",nok:"Não foi dessa vez. Releia o conteúdo e tente novamente!"},
+
+// ── BANCOS DE DADOS (5) ──
+{cat:"Bancos de Dados",q:"SQL vs NoSQL?",opts:["SQL mais rápido","SQL=schema fixo, NoSQL=flexível","NoSQL não persiste","Iguais"],correct:1,ok:"SQL é relacional com tabelas. NoSQL é flexível (docs, key-value).",nok:"Não foi dessa vez. Releia o conteúdo e tente novamente!"},
+{cat:"Bancos de Dados",q:"Connection Pool é?",opts:["Backup","Conexões reutilizáveis","Tipo de query","Cache"],correct:1,ok:"Pool evita criar/destruir conexões a cada request.",nok:"Não foi dessa vez. Releia o conteúdo e tente novamente!"},
+{cat:"Bancos de Dados",q:"Redis é usado principalmente como?",opts:["Banco relacional","Cache em memória","CDN","DNS"],correct:1,ok:"Redis = in-memory, ultra rápido pra cache.",nok:"Não foi dessa vez. Releia o conteúdo e tente novamente!"},
+{cat:"Bancos de Dados",q:"O que é replicação?",opts:["Backup manual","Cópia automática em múltiplos nós","Compressão","Índice"],correct:1,ok:"Réplica = alta disponibilidade + leitura distribuída.",nok:"Não foi dessa vez. Releia o conteúdo e tente novamente!"},
+{cat:"Bancos de Dados",q:"DynamoDB é um banco?",opts:["Relacional","NoSQL key-value da AWS","Grafos","Temporal"],correct:1,ok:"DynamoDB = NoSQL serverless, key-value + document.",nok:"Não foi dessa vez. Releia o conteúdo e tente novamente!"},
+
+// ── SEGURANÇA (5) ──
+{cat:"Segurança",q:"Autenticação vs Autorização?",opts:["Iguais","Quem você é vs O que pode fazer","Cripto vs Senhas","AutN mais segura"],correct:1,ok:"Autenticação = identidade. Autorização = permissões.",nok:"Não foi dessa vez. Releia o conteúdo e tente novamente!"},
+{cat:"Segurança",q:"OWASP Top 10 é?",opts:["10 ferramentas","10 vulnerabilidades web mais críticas","Padrão cripto","Certificação"],correct:1,ok:"Lista atualizada das vulnerabilidades mais exploradas.",nok:"Não foi dessa vez. Releia o conteúdo e tente novamente!"},
+{cat:"Segurança",q:"MFA significa?",opts:["Multiple File Access","Multi-Factor Authentication","Main Firewall Agent","Managed Function API"],correct:1,ok:"MFA = 2+ fatores de autenticação (senha + token).",nok:"Não foi dessa vez. Releia o conteúdo e tente novamente!"},
+{cat:"Segurança",q:"SQL Injection é?",opts:["Otimização","Injeção de código SQL malicioso","Tipo de backup","Cache"],correct:1,ok:"Atacante insere SQL nos inputs pra manipular o banco.",nok:"Não foi dessa vez. Releia o conteúdo e tente novamente!"},
+{cat:"Segurança",q:"TLS garante?",opts:["Velocidade","Criptografia em trânsito","Backup","DNS"],correct:1,ok:"TLS criptografa dados entre cliente e servidor (HTTPS).",nok:"Não foi dessa vez. Releia o conteúdo e tente novamente!"},
+
+// ── MENSAGERIA (5) ──
+{cat:"Mensageria",q:"Kafka vs SQS?",opts:["Iguais","Kafka=log distribuído, SQS=fila simples","SQS mais rápido","Kafka é da AWS"],correct:1,ok:"Kafka retém e permite replay. SQS consome e remove.",nok:"Não foi dessa vez. Releia o conteúdo e tente novamente!"},
+{cat:"Mensageria",q:"Lag no Kafka indica?",opts:["Velocidade","Mensagens acumuladas sem consumir","Erro no broker","Tópico deletado"],correct:1,ok:"Lag = diferença entre produção e consumo. Cresce quando consumer é lento.",nok:"Não foi dessa vez. Releia o conteúdo e tente novamente!"},
+{cat:"Mensageria",q:"DLQ serve para?",opts:["Fila principal","Msgs que falharam no processamento","Prioridade","Backup"],correct:1,ok:"Dead Letter Queue = onde vão msgs que falharam N vezes.",nok:"Não foi dessa vez. Releia o conteúdo e tente novamente!"},
+{cat:"Mensageria",q:"At-least-once delivery significa?",opts:["Exatamente 1x","Pode entregar mais de 1x","Nunca entrega","No máximo 1x"],correct:1,ok:"Garante entrega mas pode duplicar. Consumer deve ser idempotente.",nok:"Não foi dessa vez. Releia o conteúdo e tente novamente!"},
+{cat:"Mensageria",q:"Consumer Group distribui?",opts:["Tópicos","Partições entre consumers","Backups","Alertas"],correct:1,ok:"Cada partição vai pra 1 consumer do grupo, escalando paralelo.",nok:"Não foi dessa vez. Releia o conteúdo e tente novamente!"}
+];
+
+let current=0,score=0,answers=[];
+const app=document.getElementById('app');
+const cats=[...new Set(questions.map(q=>q.cat))];
+
+function shuffle(arr){for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]]}return arr}
+shuffle(questions);
+
+function render(){
+  if(current>=questions.length){showResult();return}
+  const q=questions[current];
+  const pct=Math.round((current/questions.length)*100);
+  app.innerHTML=`
+    <div class="q-progress"><div class="q-progress-fill" style="width:${pct}%"></div></div>
+    <div class="q-counter">Questão ${current+1} de ${questions.length}</div>
+    <div class="q-card">
+      <div class="q-category">${q.cat}</div>
+      <div class="q-text">${q.q}</div>
+      <div class="q-opts" id="opts">
+        ${q.opts.map((o,i)=>`<div class="q-opt" data-i="${i}">${o}</div>`).join('')}
+      </div>
+      <div class="q-fb" id="fb"></div>
+      <button class="q-next" id="nextBtn" onclick="nextQ()">
+        ${current<questions.length-1?'Próxima →':'Ver Resultado 🏆'}
+      </button>
+    </div>`;
+  document.querySelectorAll('.q-opt').forEach(opt=>{
+    opt.addEventListener('click',function(){choose(parseInt(this.dataset.i))});
+  });
+}
+
+function choose(idx){
+  const q=questions[current];
+  const opts=document.querySelectorAll('.q-opt');
+  const fb=document.getElementById('fb');
+  const isCorrect=idx===q.correct;
+  if(isCorrect)score++;
+  answers.push({cat:q.cat,correct:isCorrect});
+  opts.forEach((o,i)=>{
+    o.classList.add('disabled');
+    if(i===q.correct)o.classList.add('correct');
+    if(i===idx&&!isCorrect)o.classList.add('wrong');
+  });
+  fb.textContent=isCorrect?('✅ '+q.ok):('❌ '+q.nok);
+  fb.className='q-fb show '+(isCorrect?'ok':'nok');
+  document.getElementById('nextBtn').classList.add('show');
+}
+
+function nextQ(){current++;render()}
+
+function showResult(){
+  // Salvar progresso do simulado
+  var p=JSON.parse(localStorage.getItem('pdi_progress')||'{}');
+  if(!p[13])p[13]={visited:true,quizDone:false,quizScore:0,quizTotal:0};
+  p[13].quizDone=true;
+  p[13].quizScore=score;
+  p[13].quizTotal=questions.length;
+  p[13].completedAt=new Date().toISOString();
+  localStorage.setItem('pdi_progress',JSON.stringify(p));
+  const pct=Math.round((score/questions.length)*100);
+  let emoji='😬',msg='Precisa revisar os módulos!';
+  if(pct>=90){emoji='🏆';msg='Excelente! Você domina o conteúdo!'}
+  else if(pct>=70){emoji='💪';msg='Bom resultado! Revise os pontos fracos.'}
+  else if(pct>=50){emoji='📚';msg='Na média. Vale revisar alguns módulos.'}
+
+  const catScores={};
+  cats.forEach(c=>{catScores[c]={total:0,correct:0}});
+  answers.forEach(a=>{catScores[a.cat].total++;if(a.correct)catScores[a.cat].correct++});
+
+  let catRows='';
+  cats.forEach(c=>{
+    const s=catScores[c];
+    const p=Math.round((s.correct/s.total)*100);
+    const cls=p>=80?'good':p>=50?'mid':'bad';
+    catRows+=`<div class="cat-row"><span class="label">${c}</span><span class="val ${cls}">${s.correct}/${s.total} (${p}%)</span></div>`;
+  });
+
+  app.innerHTML=`
+    <div class="result-card">
+      <div class="result-emoji">${emoji}</div>
+      <div class="result-score" style="color:${pct>=70?'var(--accent)':pct>=50?'#f59e0b':'#ef4444'}">${score}/${questions.length}</div>
+      <div class="result-msg">${pct}% de acerto — ${msg}</div>
+      <div class="result-cats">${catRows}</div>
+      <div class="result-btns">
+        <button class="btn-retry" onclick="retry()">🔄 Tentar de Novo</button>
+        <button class="btn-back" onclick="location.href='index.html'">🏠 Voltar ao Início</button>
+      </div>
+    </div>`;
+}
+
+function retry(){current=0;score=0;answers=[];shuffle(questions);render()}
+
+render();
+</script>
+<script>
+/**
+ * Tracking de Progresso — Jornada Obrigatória N1 PicPay
+ * 
+ * Offline-first: salva no localStorage sempre.
+ * Se pdi_api_url e pdi_user estiverem configurados no localStorage,
+ * sincroniza em background via sendBeacon (fire-and-forget).
+ * 
+ * localStorage keys usadas:
+ *   pdi_progress  - objeto {módulo: {visited, quizDone, quizScore, quizTotal, ...}}
+ *   pdi_api_url   - URL do Google Apps Script (configurado pelo coordenador)
+ *   pdi_user      - nome do aluno (configurado no primeiro acesso)
+ *   pdi_user_email - email do aluno (opcional)
+ */
+(function(){
+  // Detectar módulo pelo título da página
+  var m = document.title.match(/Módulo (\d+)/);
+  if (!m) return;
+  var mod = parseInt(m[1]);
+
+  // Carregar progresso existente do localStorage
+  var p = JSON.parse(localStorage.getItem('pdi_progress') || '{}');
+  if (!p[mod]) p[mod] = {visited: false, quizDone: false, quizScore: 0, quizTotal: 0};
+
+  // Marcar módulo como visitado
+  p[mod].visited = true;
+  p[mod].lastVisit = new Date().toISOString();
+  localStorage.setItem('pdi_progress', JSON.stringify(p));
+
+  // Sync com API em background (não bloqueia)
+  syncToApi(p);
+
+  // Observar conclusão do quiz (MutationObserver no DOM)
+  var quizArea = document.querySelector('.quiz-section');
+  if (quizArea) {
+    var _obs2 = new MutationObserver(function() {
+      checkQuizDone(mod, p, _obs2);
+    });
+    _obs2.observe(quizArea, {subtree: true, attributes: true, attributeFilter: ['class']});
+  }
+
+  /**
+   * Verifica se todas as questões do quiz foram respondidas.
+   * Quando todas estão respondidas, marca quizDone e sincroniza.
+   */
+  var _quizHandled2=false;
+  function checkQuizDone(mod, p, obs) {
+    if(_quizHandled2)return;
+    var qs = document.querySelectorAll('.quiz-question');
+    if (!qs.length) return;
+    var answered = 0, correct = 0;
+    qs.forEach(function(q) {
+      var done = false, wrong = false;
+      q.querySelectorAll('.quiz-opt').forEach(function(o) {
+        if (o.classList.contains('disabled')) done = true;
+        if (o.classList.contains('wrong')) wrong = true;
+      });
+      if (done) { answered++; if (!wrong) correct++; }
+    });
+    if (answered === qs.length) {
+      _quizHandled2=true;if(obs)obs.disconnect();
+      if(!p[mod].quizAttempts)p[mod].quizAttempts=0;p[mod].quizAttempts++;p[mod].quizScore = correct;
+      p[mod].quizTotal = qs.length;
+      p[mod].quizDone = (correct === qs.length);
+      p[mod].completedAt = new Date().toISOString();
+      localStorage.setItem('pdi_progress', JSON.stringify(p));
+      syncToApi(p);
+    }
+  }
+
+  /**
+   * Envia progresso pro Google Apps Script em background.
+   * Usa sendBeacon (sobrevive a navegação de página) com fallback pra fetch keepalive.
+   * Falhas são silenciosas — o localStorage é a fonte de verdade.
+   */
+  function syncToApi(progress) {
+    var url = localStorage.getItem('pdi_api_url');
+    var user = localStorage.getItem('pdi_user');
+    if (!url || !user) return;
+
+    var payload = JSON.stringify({
+      name: user,
+      email: localStorage.getItem('pdi_user_email') || '',
+      progress: progress
+    });
+
+    // sendBeacon: fire-and-forget, sobrevive a navegação entre páginas
+    if (navigator.sendBeacon) {
+      try {
+        navigator.sendBeacon(url, new Blob([payload], {type: 'application/json'}));
+      } catch(e) {
+        // Fallback silencioso
+        fetchFallback(url, payload);
+      }
+    } else {
+      fetchFallback(url, payload);
+    }
+  }
+
+  /**
+   * Fallback com fetch + keepalive pra browsers que não suportam sendBeacon.
+   */
+  function fetchFallback(url, payload) {
+    try {
+      fetch(url, {
+        method: 'POST',
+        body: payload,
+        headers: {'Content-Type': 'application/json'},
+        keepalive: true,
+        mode: 'no-cors' // Apps Script redireciona — no-cors evita erro de CORS
+      }).catch(function(){});
+    } catch(e) {
+      // Silencioso — localStorage tem os dados
+    }
+  }
+})();
+
+</script>
+<script>
+(function(){
+  var API='https://script.google.com/a/macros/picpay.com/s/AKfycbyGSJXeR6PvMqkyQrS8kvyZvJMTaOZbyC8NrPh9PL0DhKIezY84AgRZ7qJ9Fl4qkFzx/exec';
+  var m=document.title.match(/M\u00f3dulo (\d+)/);if(!m)return;
+  var mod=parseInt(m[1]);
+  var p=JSON.parse(localStorage.getItem('pdi_progress')||'{}');
+  if(!p[mod])p[mod]={visited:false,quizDone:false,quizScore:0,quizTotal:0};
+  p[mod].visited=true;
+  p[mod].lastVisit=new Date().toISOString();
+  localStorage.setItem('pdi_progress',JSON.stringify(p));
+  syncApi(p);
+  var qa=document.querySelector('.quiz-section');
+  if(qa){var _obs=new MutationObserver(function(){checkQuiz(mod,p,_obs)});_obs.observe(qa,{subtree:true,attributes:true,attributeFilter:['class']})}
+  var _quizHandled=false;
+  function checkQuiz(mod,p,obs){
+    if(_quizHandled)return;
+    var qs=document.querySelectorAll('.quiz-question');if(!qs.length)return;
+    var ans=0,cor=0;
+    qs.forEach(function(q){var d=false,wrong=false;q.querySelectorAll('.quiz-opt').forEach(function(o){if(o.classList.contains('disabled'))d=true;if(o.classList.contains('wrong'))wrong=true});if(d){ans++;if(!wrong)cor++}});
+    if(ans===qs.length){
+      _quizHandled=true;if(obs)obs.disconnect();
+      p[mod].quizScore=cor;p[mod].quizTotal=qs.length;p[mod].quizDone=(cor===qs.length);
+      p[mod].completedAt=new Date().toISOString();
+      localStorage.setItem('pdi_progress',JSON.stringify(p));
+      syncApi(p);
+      // Show score banner
+      var banner = document.getElementById('quiz-banner');
+      if (banner) {
+        var scoreDisp = document.getElementById('quiz-score-display');
+        var msgEl = document.getElementById('quiz-msg');
+        scoreDisp.textContent = cor + '/' + qs.length;
+        if (cor === qs.length) {
+          banner.className = 'quiz-retry-banner perfect-banner show';
+          scoreDisp.className = 'score perfect';
+          msgEl.textContent = '🎉 Perfeito! Módulo concluído!';
+        } else {
+          banner.className = 'quiz-retry-banner show';
+          scoreDisp.className = 'score retry';
+          msgEl.textContent = 'Você precisa acertar todas pra concluir o módulo. Tente novamente!';
+        }
+      }
+    }
+  }
+  function syncApi(progress){
+    var user=localStorage.getItem('pdi_user');if(!user)return;
+    var s=document.createElement('script');
+    s.src=API+'?action=save&name='+encodeURIComponent(user)+'&progress='+encodeURIComponent(JSON.stringify(progress))+'&_='+Date.now();
+    s.onerror=function(){if(s.parentNode)s.parentNode.removeChild(s)};
+    s.onload=function(){if(s.parentNode)s.parentNode.removeChild(s)};
+    document.head.appendChild(s);
+  }
+})();
+</script>
+<script>
+/* Module theme controls */
+(function(){
+  var savedT = localStorage.getItem('pdi_theme') || 'dark';
+  document.querySelectorAll('.mc-dot').forEach(function(btn){
+    btn.classList.toggle('active', btn.dataset.theme === savedT);
+    btn.addEventListener('click', function(){
+      var t = btn.dataset.theme;
+      document.body.setAttribute('data-theme', t);
+      localStorage.setItem('pdi_theme', t);
+      document.querySelectorAll('.mc-dot').forEach(function(b){ b.classList.toggle('active', b.dataset.theme===t); });
+    });
+  });
+})();
+</script>
+<script>
+function retryQuiz() {
+  // Reset progress for this module then reload
+  var m = document.title.match(/M\u00f3dulo (\d+)/);
+  if (m) {
+    var mod = parseInt(m[1]);
+    var p = JSON.parse(localStorage.getItem('pdi_progress') || '{}');
+    if (p[mod]) { p[mod].quizDone = false; p[mod].quizScore = 0; p[mod].quizTotal = 0; }
+    localStorage.setItem('pdi_progress', JSON.stringify(p));
+  }
+  location.reload();
+}
+</script>
+</body>
+</html>
