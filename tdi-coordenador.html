@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
@@ -643,7 +643,7 @@ function openEditPanel(uid){
 
 function renderEditPanel(user){
   var themes=getTdiThemes(user);
-  var html='<div class="edit-panel"><h4>Editar TDI — '+esc(user.name)+'</h4>';
+  var html='<div class="edit-panel"><h4>Editar TDI — '+esc(user.name)+'</h4>'+(user.email?'<div style="font-size:.75rem;color:var(--muted);margin:-8px 0 12px">'+esc(user.email)+'</div>':'');
   html+='<div class="ep-themes">';
   themes.forEach(function(t,i){
     html+='<div class="ep-theme" data-idx="'+i+'">'+
