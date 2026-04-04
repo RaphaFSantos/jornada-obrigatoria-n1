@@ -917,7 +917,7 @@ function renderTable(){
 
     var tr=document.createElement('tr');tr.className='data-row'+(exp?' expanded':'');
     tr.innerHTML='<td><input type="checkbox" class="cmp-check" '+(checked?'checked':'')+' onchange="toggleCompare(\''+escHtml(id)+'\',this)" onclick="event.stopPropagation()"></td>'
-      +'<td onclick="toggleDetails(\''+escHtml(id)+'\')"><div class="user-name"><span class="expand-icon '+(exp?'open':'')+'">▶</span>'+escHtml(user.name||'Sem nome')+(user.email?'<div style="font-size:.65rem;color:var(--muted);font-weight:400;margin-top:1px">u{1F4E7} '+escHtml(user.email)+'</div>':'')+'</div></td>'
+      +'<td onclick="toggleDetails(\''+escHtml(id)+'\')"><div class="user-name"><span class="expand-icon '+(exp?'open':'')+'">▶</span>'+escHtml(user.name||'Sem nome')+(user.email?'<div style="font-size:.65rem;color:var(--muted);font-weight:400;margin-top:1px">📧 '+escHtml(user.email)+'</div>':'')+'</div></td>'
       +'<td><select class="shift-select" onchange="handleShiftChange(this,\''+escHtml(id)+'\')" onclick="event.stopPropagation()"><option value="0"'+(userShift==='0'?' selected':'')+'>—</option><option value="1"'+(userShift==='1'?' selected':'')+'>T1</option><option value="2"'+(userShift==='2'?' selected':'')+'>T2</option><option value="3"'+(userShift==='3'?' selected':'')+'>T3</option></select></td>'
       +'<td>'+sparkHtml+'</td>'
       +'<td><div class="progress-mini"><div class="progress-mini-fill '+bc+'" style="width:'+pct+'%"></div></div> <span style="font-size:.68rem;color:var(--muted)">'+pct+'%</span></td>'

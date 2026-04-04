@@ -584,7 +584,7 @@ function renderTable(){
     tr.className='data-row'+(isExpanded?' expanded':'');
     tr.onclick=function(){toggleDetails(uid)};
     tr.innerHTML=
-      '<td><div class="user-name"><span class="expand-icon '+(isExpanded?'open':'')+'">▶</span>'+esc(user.name||'Sem nome')+'</div></td>'+
+      '<td><div class="user-name"><span class="expand-icon '+(isExpanded?'open':'')+'">▶</span>'+esc(user.name||'Sem nome')+(user.email?'<div style="font-size:.65rem;color:var(--muted);font-weight:400;margin-top:1px">'+esc(user.email)+'</div>':'')+'</div></td>'+
       '<td><select class="shift-select" data-uid="'+uid+'" onclick="event.stopPropagation()"><option value="0"'+(getUserShift(user)==='0'?' selected':'')+'>—</option><option value="1"'+(getUserShift(user)==='1'?' selected':'')+'>T1</option><option value="2"'+(getUserShift(user)==='2'?' selected':'')+'>T2</option><option value="3"'+(getUserShift(user)==='3'?' selected':'')+'>T3</option></select></td>'+
       '<td>'+themes.length+'</td>'+
       '<td><div class="progress-mini"><div class="progress-mini-fill '+barCls+'" style="width:'+avgProg+'%"></div></div> <span style="font-size:.75rem;color:var(--muted)">'+avgProg+'%</span></td>'+
