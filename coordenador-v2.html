@@ -549,6 +549,40 @@ function getUserQuizAvg(u){var ts=0,c=0;MODULES.forEach(function(m){var d=getMod
 function getLastActivity(u){var latest=null;var p=u.progress||{};Object.values(p).forEach(function(m){if(m.lastVisit&&(!latest||m.lastVisit>latest))latest=m.lastVisit;if(m.completedAt&&(!latest||m.completedAt>latest))latest=m.completedAt});return latest}
 function getStatus(u){var l=getLastActivity(u);if(!l)return'absent';var d=(Date.now()-new Date(l).getTime())/86400000;return d<=7?'active':d<=30?'inactive':'absent'}
 function getStatusLabel(s){return s==='active'?{text:'🟢 Ativo',cls:'status-active'}:s==='inactive'?{text:'🟡 Inativo',cls:'status-inactive'}:{text:'🔴 Ausente',cls:'status-absent'}}
+
+function detectFraud(user){
+  var flags=[];
+  var p=user.progress||{};
+  var completedMods=[];
+  var firstVisits=[];
+  for(var k=1;k<=13;k++){
+    var d=p[k];if(!d)continue;
+    if(d.quizDone)completedMods.push(k);
+    if(d.firstVisit)firstVisits.push(new Date(d.firstVisit).getTime());
+    // Flag: quizDone sem firstVisit (nunca visitou de verdade)
+    if(d.quizDone && !d.firstVisit)flags.push('M'+k+': concluido sem visita real');
+    // Flag: quizDone sem quizAttempts
+    if(d.quizDone && (!d.quizAttempts || d.quizAttempts<1))flags.push('M'+k+': concluido sem tentativa');
+    // Flag: score perfeito na primeira tentativa em todos
+    if(d.quizDone && d.quizScore===d.quizTotal && d.quizAttempts===1 && completedMods.length>5)flags.push('M'+k+': 100% na 1a tentativa');
+  }
+  // Flag: muitos modulos completos em intervalo muito curto
+  if(firstVisits.length>=10){
+    firstVisits.sort();
+    var spanHours=(firstVisits[firstVisits.length-1]-firstVisits[0])/3600000;
+    if(spanHours<1)flags.push('13 modulos visitados em menos de 1h');
+    else if(spanHours<3 && completedMods.length>=10)flags.push(completedMods.length+' modulos completos em '+Math.round(spanHours)+'h');
+  }
+  // Flag: completedAt de todos no mesmo minuto
+  var completedAts=[];
+  for(var k=1;k<=13;k++){var d=p[k];if(d&&d.completedAt)completedAts.push(new Date(d.completedAt).getTime())}
+  if(completedAts.length>=5){
+    completedAts.sort();
+    var spanMin=(completedAts[completedAts.length-1]-completedAts[0])/60000;
+    if(spanMin<2)flags.push(completedAts.length+' quizzes concluidos no mesmo minuto');
+  }
+  return flags;
+}
 function formatDate(iso){if(!iso)return'—';var d=new Date(iso);if(isNaN(d))return'—';var days=Math.floor((Date.now()-d.getTime())/86400000);return days===0?'Hoje':days===1?'Ontem':days<7?'Há '+days+' dias':d.toLocaleDateString('pt-BR')}
 function escHtml(s){var d=document.createElement('div');d.textContent=s;return d.innerHTML}
 function shortName(n){return(n||'?').split(' ').slice(0,2).join(' ')}
@@ -593,6 +627,8 @@ function renderAlerts(users){
         if(vDate&&(now-vDate.getTime())/86400000>7)alerts.push({type:'info',icon:'📌',name:shortName(u.name),msg:'Parado no M'+m.id+' há 7+ dias',action:'Acompanhar'});
       }
     });
+    // Fraude
+    var fl=detectFraud(u);if(fl.length)alerts.push({type:'danger',icon:'🚨',name:shortName(u.name),msg:fl.length+' flag'+(fl.length>1?'s':'')+': '+fl[0],action:'Investigar'});
   });
   alerts.sort(function(a,b){var o={danger:0,warning:1,info:2};return(o[a.type]||3)-(o[b.type]||3)});
   var panel=document.getElementById('alertsPanel');
@@ -924,7 +960,7 @@ function renderTable(){
       +'<td>'+comp+'/13</td>'
       +'<td><span class="quiz-score '+qc+'">'+qavg+'%</span></td>'
       +'<td>'+formatDate(la)+'</td>'
-      +'<td><span class="status-badge '+si.cls+'">'+si.text+'</span></td>';
+      +'<td><span class="status-badge '+si.cls+'">'+si.text+'</span>'+(function(){var fl=detectFraud(user);return fl.length?'<span style="display:inline-block;margin-left:6px;padding:2px 7px;border-radius:6px;font-size:.6rem;font-weight:700;background:rgba(239,68,68,0.15);color:#ef4444;cursor:help" title="'+fl.join('\\n')+'">'+fl.length+' flag'+(fl.length>1?'s':'')+'</span>':''}())+'</td>';
     tbody.appendChild(tr);
 
     var dr=document.createElement('tr');dr.className='detail-row'+(exp?' visible':'');dr.id='detail-'+id;
@@ -939,7 +975,15 @@ function renderTable(){
       var attHtml=attempts>0?'<div style="font-size:.58rem;color:var(--yellow);font-weight:800;margin-top:2px">🔄 '+attempts+' tentativa'+(attempts>1?'s':'')+'</div>':'';
       dh+='<div class="detail-card '+cls+'"><div class="mod-num">M'+mod.id+'</div><div class="mod-icon">'+mod.icon+'</div><div class="mod-score">'+ic+' '+lbl+'</div>'+attHtml+'</div>';
     });
-    dh+='</div></td>';dr.innerHTML=dh;tbody.appendChild(dr);
+    dh+='</div>';
+var fraudFlags=detectFraud(user);
+if(fraudFlags.length){
+  dh+='<div style="margin-top:10px;padding:10px 14px;background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.2);border-radius:8px;font-size:.72rem">';
+  dh+='<strong style="color:#ef4444">Progresso suspeito ('+fraudFlags.length+' flag'+(fraudFlags.length>1?'s':'')+')</strong><ul style="margin:6px 0 0 16px;color:var(--muted)">';
+  fraudFlags.forEach(function(fl){dh+='<li>'+fl+'</li>'});
+  dh+='</ul></div>';
+}
+dh+='</td>';dr.innerHTML=dh;tbody.appendChild(dr);
   });
   document.getElementById('countBadge').textContent=sorted.length;
 }

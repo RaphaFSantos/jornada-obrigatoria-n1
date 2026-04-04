@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 
 <html lang="pt-BR">
 <head>
@@ -534,6 +534,7 @@ document.querySelectorAll('.quiz-question').forEach(q=>{const correct=parseInt(q
 
   // Marcar módulo como visitado
   p[mod].visited = true;
+  if (!p[mod].firstVisit) p[mod].firstVisit = new Date().toISOString();
   p[mod].lastVisit = new Date().toISOString();
   localStorage.setItem('pdi_progress', JSON.stringify(p));
 
