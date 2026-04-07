@@ -791,31 +791,43 @@ function cancelEdit(){editingUser=null;renderTable()}
 function saveEditTdi(){
   var user=findUserByUid(editingUser);
   if(!user)return;
-  // Ler dados do DOM
-  var epThemes=document.querySelectorAll('.ep-theme');
-  var themes=[];
-  epThemes.forEach(function(el,i){
-    var name=el.querySelector('[data-field="name"]').value.trim();
-    var type=el.querySelector('[data-field="type"]').value;
-    var progress=parseInt(el.querySelector('[data-field="progress"]').value)||0;
-    var status=el.querySelector('[data-field="status"]').value;
-    var notes=el.querySelector('[data-field="notes"]').value.trim();
-    var deadline=el.querySelector('[data-field="deadline"]');deadline=deadline?deadline.value:'';
-    var resRaw=el.querySelector('[data-field="resources"]').value.trim();
-    var resources=resRaw?resRaw.split('\n').map(function(r){return r.trim()}).filter(Boolean):[];
-    if(progress===100)status='concluido';
-    else if(status==='concluido'){status='em_andamento';}
-    themes.push({id:'tdi_'+i+'_'+Date.now().toString(36),name:name||'Sem nome',type:type,progress:progress,status:status,notes:notes,deadline:deadline,resources:resources,updatedAt:new Date().toISOString()});
-  });
-  if(!user.tdi)user.tdi={};
+  // Ler campos do painel ep-single (só 1 tema por vez)
+  var body=document.querySelector('.ep-single-body');
+  if(!body){editingUser=null;renderDashboard();return;}
+  var name=body.querySelector('[data-field="name"]').value.trim();
+  var type=body.querySelector('[data-field="type"]').value;
+  var progress=parseInt(body.querySelector('[data-field="progress"]').value)||0;
+  var status=body.querySelector('[data-field="status"]').value;
+  var notesEl=body.querySelector('[data-field="notes"]');
+  var notes=notesEl?notesEl.value.trim():'';
+  var deadlineEl=body.querySelector('[data-field="deadline"]');
+  var deadline=deadlineEl?deadlineEl.value:'';
+  var resEl=body.querySelector('[data-field="resources"]');
+  var resRaw=resEl?resEl.value.trim():'';
+  var resources=resRaw?resRaw.split('\n').map(function(r){return r.trim()}).filter(Boolean):[];
+  if(progress===100)status='concluido';
+  else if(status==='concluido'&&progress<100)status='em_andamento';
+  // Garantir que tdi e themes existem
+  if(!user.tdi)user.tdi={user:user.name,email:user.email||'',themes:[]};
+  if(!user.tdi.themes)user.tdi.themes=[];
+  // Atualizar apenas o tema editado (preserva todos os outros)
+  var idx=editingThemeIdx;
+  if(idx>=user.tdi.themes.length)idx=user.tdi.themes.length-1;
+  if(!user.tdi.themes[idx])user.tdi.themes[idx]={};
+  var t=user.tdi.themes[idx];
+  t.name=name||'Sem nome';
+  t.type=type;
+  t.progress=progress;
+  t.status=status;
+  t.notes=notes;
+  t.deadline=deadline;
+  t.resources=resources;
+  t.updatedAt=new Date().toISOString();
   user.tdi.user=user.name;
   user.tdi.email=user.email||'';
-  user.tdi.themes=themes;
   user.tdi.lastUpdatedBy='coordenador:'+localStorage.getItem(SESSION_KEY);
   user.tdi.lastUpdatedAt=new Date().toISOString();
-  // Sync to API via JSONP (GET com script tag — carrega cookies Google)
-  var params='action=saveTdi&name='+encodeURIComponent(user.name)+'&email='+encodeURIComponent(user.email||'')+'&tdi='+encodeURIComponent(JSON.stringify(user.tdi))+'&_='+Date.now();
-  var sc=document.createElement('script');sc.src=API_URL+'?'+params;sc.onerror=function(){if(sc.parentNode)sc.parentNode.removeChild(sc)};sc.onload=function(){if(sc.parentNode)sc.parentNode.removeChild(sc)};document.head.appendChild(sc);
+  syncTdiToApi(user);
   editingUser=null;
   showToast('TDI de '+user.name+' salvo!','success');
   renderDashboard();
