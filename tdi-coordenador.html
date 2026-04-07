@@ -608,7 +608,7 @@ function renderTable(){
     var dhtml='<td colspan="7"><div class="detail-content">';
     if(themes.length){
       dhtml+='<div class="detail-themes">';
-      themes.forEach(function(t){
+      themes.forEach(function(t,i){
         var bCls=t.progress>=70?'pf-green':t.progress>=30?'pf-yellow':'pf-red';
         var tCls=t.type==='soft'?'dt-type-soft':'dt-type-hard';
         var statusTxt={nao_iniciado:'Não iniciado',em_andamento:'Em andamento',concluido:'Concluído'};
