@@ -123,16 +123,23 @@ td{padding:10px 14px;font-size:.82rem;border-bottom:1px solid var(--border)}
 .dt-resources{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
 .dt-res-tag{font-size:.68rem;padding:4px 10px;border-radius:8px;background:rgba(59,130,246,0.08);color:var(--blue);border:1px solid rgba(59,130,246,0.15);transition:all .2s;text-decoration:none}
 .dt-res-tag:hover{background:rgba(59,130,246,0.15);border-color:var(--blue)}
-/* APPROVE / DISAPPROVE */
-.tdi-approve-bar{display:flex;align-items:center;gap:6px;margin-top:10px;padding-top:10px;border-top:1px solid var(--border)}
-.btn-approve{padding:5px 14px;border-radius:8px;border:1px solid rgba(33,194,94,0.3);background:rgba(33,194,94,0.08);color:var(--accent);cursor:pointer;font-size:.72rem;font-weight:700;transition:all .2s}
-.btn-approve:hover{background:rgba(33,194,94,0.18);border-color:var(--accent)}
-.btn-approve.approved{background:rgba(33,194,94,0.22);border-color:var(--accent);pointer-events:none}
-.btn-disapprove{padding:5px 14px;border-radius:8px;border:1px solid rgba(239,68,68,0.3);background:rgba(239,68,68,0.06);color:var(--red);cursor:pointer;font-size:.72rem;font-weight:700;transition:all .2s}
-.btn-disapprove:hover{background:rgba(239,68,68,0.15);border-color:var(--red)}
-.tdi-approved-badge{font-size:.65rem;padding:2px 9px;border-radius:10px;background:rgba(33,194,94,0.15);color:var(--accent);font-weight:700;border:1px solid rgba(33,194,94,0.25);margin-left:auto}
-.dt-card.tdi-is-approved{border-color:rgba(33,194,94,0.35)}
+/* TDI FLAG / CHECKBOX */
+.tdi-flag-cb{position:absolute;top:12px;right:12px;width:18px;height:18px;accent-color:var(--accent);cursor:pointer;z-index:2}
+.dt-card{position:relative}
+.dt-card.flagged{border-color:rgba(239,68,68,0.45);box-shadow:0 0 0 2px rgba(239,68,68,0.12)}
+.dt-card.flagged::before{background:var(--red)!important}
+.dt-card.tdi-is-approved{border-color:rgba(33,194,94,0.4)}
 .dt-card.tdi-is-approved::before{background:var(--accent)!important}
+.tdi-approved-badge{display:inline-flex;align-items:center;gap:4px;font-size:.62rem;padding:2px 8px;border-radius:10px;background:rgba(33,194,94,0.15);color:var(--accent);font-weight:700;border:1px solid rgba(33,194,94,0.25);margin-left:6px}
+.tdi-bulk-bar{display:none;align-items:center;gap:8px;padding:10px 14px;background:rgba(239,68,68,0.05);border:1px solid rgba(239,68,68,0.18);border-radius:12px;margin-top:10px;flex-wrap:wrap}
+.tdi-bulk-bar.visible{display:flex}
+.tdi-bulk-count{font-size:.8rem;font-weight:700;color:var(--red);flex:1}
+.btn-bulk-approve{padding:6px 16px;border-radius:8px;border:1px solid rgba(33,194,94,0.35);background:rgba(33,194,94,0.1);color:var(--accent);cursor:pointer;font-size:.75rem;font-weight:700;transition:all .2s}
+.btn-bulk-approve:hover{background:rgba(33,194,94,0.2);border-color:var(--accent)}
+.btn-bulk-remove{padding:6px 16px;border-radius:8px;border:1px solid rgba(239,68,68,0.35);background:rgba(239,68,68,0.1);color:var(--red);cursor:pointer;font-size:.75rem;font-weight:700;transition:all .2s}
+.btn-bulk-remove:hover{background:rgba(239,68,68,0.2);border-color:var(--red)}
+.btn-bulk-clear{padding:6px 12px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;font-size:.75rem;font-weight:700;transition:all .2s}
+.btn-bulk-clear:hover{border-color:var(--border2);color:var(--text)}
 
 /* EDIT PANEL (inline no detail) */
 .edit-panel{background:linear-gradient(135deg,rgba(33,194,94,0.03),rgba(59,130,246,0.03));border:1px solid rgba(33,194,94,0.2);border-radius:16px;padding:24px;margin-top:16px}
@@ -612,23 +619,28 @@ function renderTable(){
         var bCls=t.progress>=70?'pf-green':t.progress>=30?'pf-yellow':'pf-red';
         var tCls=t.type==='soft'?'dt-type-soft':'dt-type-hard';
         var statusTxt={nao_iniciado:'Não iniciado',em_andamento:'Em andamento',concluido:'Concluído'};
-        dhtml+='<div class="dt-card'+(t.approved?' tdi-is-approved':'')+'"><div class="dt-card-header"><span class="dt-card-name"><span class="dt-card-type '+tCls+'">'+(t.type==='soft'?'Soft':'Hard')+'</span> '+esc(t.name)+'</span><button onclick="event.stopPropagation();openEditPanel(\''+uid.toString().replace(/'/g,"\\'")+'\');" style="padding:4px 12px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;font-size:.7rem;font-weight:700;transition:all .2s">Editar</button></div>'+
-          '<div class="dt-bar"><div class="dt-bar-fill '+bCls+'" style="width:'+t.progress+'%"></div></div>'+
-          '<div class="dt-meta"><span>'+(statusTxt[t.status]||t.status)+(t.deadline?' &nbsp;&middot;&nbsp; <span style="color:var(--yellow);font-weight:700">Prazo: '+new Date(t.deadline+'T00:00:00').toLocaleDateString('pt-BR')+'</span>':'')+'</span><span style="font-weight:800">'+t.progress+'%</span></div>'+
-          '' +
+        var uidEsc=uid.toString().replace(/"/g,'&quot;');
+        dhtml+='<div class="dt-card'+(t.approved?' tdi-is-approved':'')+(t.flagged?' flagged':'')+'">' +
+          '<input type="checkbox" class="tdi-flag-cb" data-uid="'+uidEsc+'" data-idx="'+i+'" '+(t.flagged?'checked':'')+' onclick="event.stopPropagation();toggleTdiFlag(this)" title="Selecionar">' +
+          '<div class="dt-card-header">' +
+            '<span class="dt-card-name">' +
+              '<span class="dt-card-type '+tCls+'">'+(t.type==='soft'?'Soft':'Hard')+'</span> '+
+              esc(t.name)+
+              (t.approved?'<span class="tdi-approved-badge">✔ Aprovado</span>':'')+
+            '</span>' +
+            '<button onclick="event.stopPropagation();openEditPanel(&quot;'+uidEsc+'&quot;);" style="padding:4px 12px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;font-size:.7rem;font-weight:700;transition:all .2s">Editar</button>' +
+          '</div>' +
+          '<div class="dt-bar"><div class="dt-bar-fill '+bCls+'" style="width:'+t.progress+'%"></div></div>' +
+          '<div class="dt-meta"><span>'+(statusTxt[t.status]||t.status)+(t.deadline?' &nbsp;&middot;&nbsp; <span style="color:var(--yellow);font-weight:700">Prazo: '+new Date(t.deadline+'T00:00:00').toLocaleDateString('pt-BR')+'</span>':'')+'</span><span style="font-weight:800">'+t.progress+'%</span></div>' +
           (t.notes?'<div class="dt-notes">'+esc(t.notes)+'</div>':'')+
           (t.resources&&t.resources.length?'<div class="dt-resources">'+t.resources.map(function(r){return '<a class="dt-res-tag" href="'+esc(r)+'" target="_blank">'+shortenUrl(r)+'</a>'}).join('')+'</div>':'')+
-          '<div class="tdi-approve-bar">'+
-          '<button class="btn-approve'+(t.approved?' approved':'')+'" onclick="event.stopPropagation();approveTdiTheme(\'+uid+\','+i+');">\u2705 Aprovar</button>'+
-          '<button class="btn-disapprove" onclick="event.stopPropagation();disapproveTdiTheme(\'+uid+\','+i+',\''+esc(t.name).replace(/\'/g,"\\\\'")+'\');">\u274c Desaprovar</button>'+
-          (t.approved?'<span class="tdi-approved-badge">\u2714 Aprovado</span>':'')+
-          '</div>'+
           '</div>';
       });
       dhtml+='</div>';
     } else {
       dhtml+='<div style="color:var(--muted);padding:12px;text-align:center">Este aluno ainda nao preencheu o TDI.</div>';
     }
+    dhtml+='<div class="tdi-bulk-bar" id="bulk-'+uid+'">' +'<span class="tdi-bulk-count"></span>' +'<button class="btn-bulk-approve" onclick="event.stopPropagation();bulkApproveTdi(\''+uid+'\')">✅ Aprovar selecionados</button>' +'<button class="btn-bulk-remove" onclick="event.stopPropagation();bulkRemoveTdi(\''+uid+'\')">❌ Remover selecionados</button>' +'<button class="btn-bulk-clear" onclick="event.stopPropagation();clearTdiFlags(\''+uid+'\')">❏ Limpar seleção</button>' +'</div>';
     // Edit button
     dhtml+='<div style="display:flex;gap:8px;margin-top:8px"><button class="btn btn-primary" onclick="event.stopPropagation();openEditPanel(\''+uid.toString().replace(/'/g,"\\'")+'\')" style="font-size:.78rem">Editar TDI deste aluno</button></div>';
     // Edit panel (rendered when editing)
@@ -781,31 +793,66 @@ function exportCSV(){
 
 // ──────── Navigation ────────
 
-// ──────── Aprovar / Desaprovar TDI ────────
-function approveTdiTheme(uid, idx) {
+// ──────── TDI Flags (checkbox seleção) ────────
+function toggleTdiFlag(cb) {
+  var uid = cb.dataset.uid;
+  var idx = parseInt(cb.dataset.idx);
   var user = findUserByUid(uid);
   if (!user || !user.tdi || !user.tdi.themes) return;
-  var theme = user.tdi.themes[idx];
-  if (!theme) return;
-  theme.approved = true;
+  user.tdi.themes[idx].flagged = cb.checked;
+  // Atualizar visual do card
+  var card = cb.closest('.dt-card');
+  if (card) card.classList.toggle('flagged', cb.checked);
+  // Atualizar barra bulk
+  updateBulkBar(uid);
+}
+
+function updateBulkBar(uid) {
+  var bar = document.getElementById('bulk-' + uid);
+  if (!bar) return;
+  var user = findUserByUid(uid);
+  if (!user || !user.tdi) return;
+  var flagged = (user.tdi.themes || []).filter(function(t){return t.flagged});
+  bar.classList.toggle('visible', flagged.length > 0);
+  var cnt = bar.querySelector('.tdi-bulk-count');
+  if (cnt) cnt.textContent = flagged.length + ' tema(s) selecionado(s)';
+}
+
+function bulkApproveTdi(uid) {
+  var user = findUserByUid(uid);
+  if (!user || !user.tdi || !user.tdi.themes) return;
+  var count = 0;
+  user.tdi.themes.forEach(function(t) {
+    if (t.flagged) { t.approved = true; t.flagged = false; count++; }
+  });
+  if (!count) return;
   user.tdi.lastUpdatedBy = 'coordenador:' + (localStorage.getItem(SESSION_KEY) || '');
   user.tdi.lastUpdatedAt = new Date().toISOString();
   syncTdiToApi(user);
-  showToast('\u2705 TDI "' + theme.name + '" aprovado!', 'success');
+  showToast('✅ ' + count + ' tema(s) aprovado(s)!', 'success');
   renderTable();
 }
 
-function disapproveTdiTheme(uid, idx, themeName) {
-  var label = themeName || ('tema #' + (idx + 1));
-  if (!confirm('Desaprovar e REMOVER o tema "' + label + '"?\n\nEsta ação não pode ser desfeita.')) return;
+function bulkRemoveTdi(uid) {
   var user = findUserByUid(uid);
   if (!user || !user.tdi || !user.tdi.themes) return;
-  user.tdi.themes.splice(idx, 1);
+  var flagged = user.tdi.themes.filter(function(t){return t.flagged});
+  if (!flagged.length) return;
+  var names = flagged.map(function(t){return '"' + t.name + '"'}).join(', ');
+  if (!confirm('Remover ' + flagged.length + ' tema(s)?\n' + names + '\n\nEsta ação não pode ser desfeita.')) return;
+  user.tdi.themes = user.tdi.themes.filter(function(t){return !t.flagged});
   user.tdi.lastUpdatedBy = 'coordenador:' + (localStorage.getItem(SESSION_KEY) || '');
   user.tdi.lastUpdatedAt = new Date().toISOString();
   syncTdiToApi(user);
-  showToast('\u274c Tema "' + label + '" removido.', 'error');
+  showToast('❌ ' + flagged.length + ' tema(s) removido(s).', 'error');
   renderDashboard();
+}
+
+function clearTdiFlags(uid) {
+  var user = findUserByUid(uid);
+  if (!user || !user.tdi || !user.tdi.themes) return;
+  user.tdi.themes.forEach(function(t){ t.flagged = false; });
+  renderTable();
 }
 
 function syncTdiToApi(user) {
