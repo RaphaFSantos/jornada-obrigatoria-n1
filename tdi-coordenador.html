@@ -650,6 +650,7 @@ function renderTable(){
     } else {
       dhtml+='<div style="color:var(--muted);padding:12px;text-align:center">Este aluno ainda nao preencheu o TDI.</div>';
     }
+    dhtml+='<button class="ep-add-btn" style="margin-top:10px" onclick="event.stopPropagation();addThemeForUser(\''+uid+'\')">+ Novo tema</button>';
     dhtml+='<div class="tdi-bulk-bar" id="bulk-'+uid+'">' +'<span class="tdi-bulk-count"></span>' +'<button class="btn-bulk-approve" onclick="event.stopPropagation();bulkApproveTdi(\''+uid+'\')">✅ Aprovar selecionados</button>' +'<button class="btn-bulk-remove" onclick="event.stopPropagation();bulkRemoveTdi(\''+uid+'\')">❌ Remover selecionados</button>' +'<button class="btn-bulk-clear" onclick="event.stopPropagation();clearTdiFlags(\''+uid+'\')">❏ Limpar seleção</button>' +'</div>';
     // Edit panel (rendered when editing)
     if(editingUser===uid){
@@ -723,6 +724,21 @@ function renderEditPanel(user){
   return html;
 }
 
+
+function addThemeForUser(uid) {
+  var user = findUserByUid(uid);
+  if (!user) return;
+  if (!user.tdi) user.tdi = {user:user.name,email:user.email||'',lastUpdatedBy:'coordenador',lastUpdatedAt:new Date().toISOString(),themes:[]};
+  user.tdi.themes.push({id:'tdi_'+Date.now().toString(36),name:'',type:'hard',progress:0,status:'nao_iniciado',notes:'',resources:[],deadline:''});
+  editingUser = uid;
+  editingThemeIdx = user.tdi.themes.length - 1;
+  if (!expandedRows.has(uid)) expandedRows.add(uid);
+  renderTable();
+  setTimeout(function(){
+    var inp = document.querySelector('.ep-single-body .ep-input[data-field="name"]');
+    if (inp) { inp.focus(); inp.scrollIntoView({behavior:'smooth',block:'center'}); }
+  }, 80);
+}
 function addEditTheme(){
   var user=findUserByUid(editingUser);
   if(!user)return;
