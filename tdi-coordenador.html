@@ -127,7 +127,7 @@ td{padding:10px 14px;font-size:.82rem;border-bottom:1px solid var(--border)}
 .dt-card-type{font-size:.6rem;padding:3px 10px;border-radius:12px;font-weight:700;text-transform:uppercase;letter-spacing:.3px;flex-shrink:0}
 .dt-type-hard{background:rgba(59,130,246,0.15);color:var(--blue)}
 .dt-type-soft{background:rgba(168,85,247,0.15);color:var(--purple)}
-.dt-approved-stamp{position:absolute;top:10px;right:10px;display:flex;align-items:center;gap:4px;font-size:.65rem;font-weight:700;color:var(--accent);background:rgba(33,194,94,0.12);border:1px solid rgba(33,194,94,0.3);border-radius:8px;padding:3px 8px;pointer-events:none}
+.dt-approved-stamp{display:inline-flex;align-items:center;gap:4px;font-size:.65rem;font-weight:700;color:var(--accent);background:rgba(33,194,94,0.12);border:1px solid rgba(33,194,94,0.3);border-radius:8px;padding:3px 9px}
 .tdi-flag-cb{width:16px;height:16px;accent-color:var(--accent);cursor:pointer;flex-shrink:0;margin:0}
 .dt-bar{height:8px;border-radius:4px;background:var(--card3);margin:8px 0;overflow:hidden}
 .dt-bar-fill{height:100%;border-radius:4px;transition:width .6s ease}
@@ -641,7 +641,9 @@ function renderTable(){
           '<div class="dt-meta"><span>'+(statusTxt[t.status]||t.status)+(t.deadline?' &nbsp;&middot;&nbsp; <span style="color:var(--yellow);font-weight:700">Prazo: '+new Date(t.deadline+'T00:00:00').toLocaleDateString('pt-BR')+'</span>':'')+'</span><span style="font-weight:800">'+t.progress+'%</span></div>'+
           (t.notes?'<div class="dt-notes">'+esc(t.notes)+'</div>':'')+
           (t.resources&&t.resources.length?'<div class="dt-resources">'+t.resources.map(function(r){return '<a class="dt-res-tag" href="'+esc(r)+'" target="_blank">'+shortenUrl(r)+'</a>'}).join('')+'</div>':'')+
+          '<div style="display:flex;justify-content:flex-end;margin-top:8px">'+
           (t.approved?'<div class="dt-approved-stamp">✔ Aprovado</div>':'')+
+          '</div>'+
           '</div>';
       });
       dhtml+='</div>';
