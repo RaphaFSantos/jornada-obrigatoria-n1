@@ -146,28 +146,27 @@ td{padding:10px 14px;font-size:.82rem;border-bottom:1px solid var(--border)}
 .dt-edit-btn:hover{border-color:var(--accent);color:var(--text)}
 
 /* EDIT PANEL (inline no detail) */
-.edit-panel{background:linear-gradient(135deg,rgba(33,194,94,0.03),rgba(59,130,246,0.03));border:1px solid rgba(33,194,94,0.2);border-radius:16px;padding:24px;margin-top:16px}
-.edit-panel h4{font-size:.92rem;font-weight:800;margin-bottom:16px;display:flex;align-items:center;gap:8px;color:var(--accent)}
-.ep-themes{display:flex;flex-direction:column;gap:12px;margin-bottom:16px}
-.ep-theme{background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:16px;transition:all .2s}
-.ep-theme:hover{border-color:var(--border2)}
-.ep-row{display:grid;grid-template-columns:2fr 1fr;gap:10px;margin-bottom:8px}
-@media(max-width:600px){.ep-row{grid-template-columns:1fr}}
-.ep-row input,.ep-row select,.ep-row textarea{padding:10px 14px;border-radius:10px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:.85rem;outline:none;font-family:inherit;transition:border-color .2s}
-.ep-row input:focus,.ep-row select:focus,.ep-row textarea:focus{border-color:var(--accent);box-shadow:0 0 0 2px rgba(33,194,94,0.1)}
-.ep-row textarea{resize:vertical;min-height:60px;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:10px;padding:10px 14px;font-size:.85rem;font-family:inherit;outline:none}
-.ep-row select{cursor:pointer;-webkit-appearance:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%238b8fa3' d='M6 8L1 3h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center}
-.ep-slider{display:flex;align-items:center;gap:10px;padding:4px 0}
-.ep-slider span:first-child{font-size:.72rem;color:var(--muted);font-weight:600}
-.ep-slider input[type=number]{width:70px;padding:8px 12px;border-radius:10px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:.9rem;font-weight:700;outline:none;text-align:center;font-family:inherit}
-.ep-slider input[type=number]:focus{border-color:var(--accent);box-shadow:0 0 0 2px rgba(33,194,94,0.1)}
-.ep-slider-val{font-size:.82rem;color:var(--muted);font-weight:600}
-.ep-actions{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;margin-top:8px}
-.ep-row input[type=date],.ep-theme input[type=date]{padding:10px 14px;border-radius:10px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:.85rem;outline:none;font-family:inherit;cursor:pointer;color-scheme:dark}
+/* EDIT PANEL SINGLE */
+.ep-single{background:var(--bg3);border:1px solid var(--border2);border-radius:16px;overflow:hidden;margin-top:14px}
+.ep-single-header{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;background:rgba(33,194,94,0.05);border-bottom:1px solid var(--border)}
+.ep-single-body{padding:18px;display:flex;flex-direction:column;gap:14px}
+.ep-single-actions{display:flex;align-items:center;justify-content:space-between;padding-top:12px;border-top:1px solid var(--border);flex-wrap:wrap;gap:8px}
+.ep-close-btn{width:28px;height:28px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;font-size:.85rem;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.ep-close-btn:hover{border-color:var(--red);color:var(--red);background:rgba(239,68,68,0.08)}
+.ep-field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:600px){.ep-field-row{grid-template-columns:1fr}}
+.ep-field{display:flex;flex-direction:column;gap:5px}
+.ep-field-sm{max-width:200px}
+@media(max-width:600px){.ep-field-sm{max-width:100%}}
+.ep-label{font-size:.72rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px}
+.ep-input{padding:10px 14px;border-radius:10px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:.88rem;outline:none;font-family:inherit;transition:border-color .2s;width:100%}
+.ep-input:focus{border-color:var(--accent);box-shadow:0 0 0 2px rgba(33,194,94,0.1)}
+.ep-input select{cursor:pointer}
+.ep-textarea{resize:vertical;min-height:72px;line-height:1.5}
+.ep-del-btn{background:none;border:1px solid rgba(239,68,68,0.25);color:var(--red);padding:7px 14px;border-radius:8px;cursor:pointer;font-size:.75rem;font-weight:700;transition:all .2s}
+.ep-del-btn:hover{background:rgba(239,68,68,0.1);border-color:var(--red)}
 .ep-add-btn{width:100%;padding:12px;border:2px dashed var(--border);border-radius:10px;background:transparent;color:var(--muted);cursor:pointer;font-size:.82rem;font-weight:700;transition:all .3s}
 .ep-add-btn:hover{border-color:var(--accent);color:var(--accent);background:rgba(33,194,94,0.03)}
-.ep-del-btn{background:none;border:1px solid rgba(239,68,68,0.2);color:var(--red);padding:6px 12px;border-radius:8px;cursor:pointer;font-size:.72rem;font-weight:700;transition:all .2s}
-.ep-del-btn:hover{background:rgba(239,68,68,0.1);border-color:var(--red)}
 
 /* TOP THEMES BAR */
 .panel{background:var(--card2);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:24px;position:relative;overflow:hidden}
@@ -410,7 +409,7 @@ var API_URL='https://script.google.com/a/macros/picpay.com/s/AKfycbyGSJXeR6PvMqk
 var allUsers=[];
 var sortCol='name',sortAsc=true;
 var expandedRows=new Set();
-var editingUser=null;
+var editingUser=null; var editingThemeIdx=0;
 
 document.addEventListener('DOMContentLoaded',function(){
   var s=localStorage.getItem(SESSION_KEY);
@@ -627,7 +626,7 @@ function renderTable(){
         var uidEsc=uid.toString().replace(/"/g,'&quot;');
         dhtml+=
           '<div class="dt-card '+cardTypeCls+(t.approved?' tdi-is-approved':'')+(t.flagged?' flagged':'')+'">'+
-          (t.approved?'<div class="dt-approved-stamp">✔ Aprovado</div>':'')+
+
           '<div class="dt-card-header">'+
             '<div class="dt-card-header-left">'+
               '<span class="dt-card-type '+tCls+'">'+(t.type==='soft'?'Soft':'Hard')+'</span>'+
@@ -635,13 +634,14 @@ function renderTable(){
             '</div>'+
             '<div class="dt-card-header-right">'+
               '<input type="checkbox" class="tdi-flag-cb" data-uid="'+uidEsc+'" data-idx="'+i+'" '+(t.flagged?'checked':'')+' onclick="event.stopPropagation();toggleTdiFlag(this)" title="Selecionar tema">'+
-              '<button class="dt-edit-btn" onclick="event.stopPropagation();openEditPanel(&quot;'+uidEsc+'&quot;);">Editar</button>'+
+              '<button class="dt-edit-btn" onclick="event.stopPropagation();openEditPanel(&quot;'+uidEsc+'&quot;, '+i+');">Editar</button>'+
             '</div>'+
           '</div>'+
           '<div class="dt-bar"><div class="dt-bar-fill '+bCls+'" style="width:'+t.progress+'%"></div></div>'+
           '<div class="dt-meta"><span>'+(statusTxt[t.status]||t.status)+(t.deadline?' &nbsp;&middot;&nbsp; <span style="color:var(--yellow);font-weight:700">Prazo: '+new Date(t.deadline+'T00:00:00').toLocaleDateString('pt-BR')+'</span>':'')+'</span><span style="font-weight:800">'+t.progress+'%</span></div>'+
           (t.notes?'<div class="dt-notes">'+esc(t.notes)+'</div>':'')+
           (t.resources&&t.resources.length?'<div class="dt-resources">'+t.resources.map(function(r){return '<a class="dt-res-tag" href="'+esc(r)+'" target="_blank">'+shortenUrl(r)+'</a>'}).join('')+'</div>':'')+
+          (t.approved?'<div class="dt-approved-stamp">✔ Aprovado</div>':'')+
           '</div>';
       });
       dhtml+='</div>';
@@ -649,8 +649,6 @@ function renderTable(){
       dhtml+='<div style="color:var(--muted);padding:12px;text-align:center">Este aluno ainda nao preencheu o TDI.</div>';
     }
     dhtml+='<div class="tdi-bulk-bar" id="bulk-'+uid+'">' +'<span class="tdi-bulk-count"></span>' +'<button class="btn-bulk-approve" onclick="event.stopPropagation();bulkApproveTdi(\''+uid+'\')">✅ Aprovar selecionados</button>' +'<button class="btn-bulk-remove" onclick="event.stopPropagation();bulkRemoveTdi(\''+uid+'\')">❌ Remover selecionados</button>' +'<button class="btn-bulk-clear" onclick="event.stopPropagation();clearTdiFlags(\''+uid+'\')">❏ Limpar seleção</button>' +'</div>';
-    // Edit button
-    dhtml+='<div style="display:flex;gap:8px;margin-top:8px"><button class="btn btn-primary" onclick="event.stopPropagation();openEditPanel(\''+uid.toString().replace(/'/g,"\\'")+'\')" style="font-size:.78rem">Editar TDI deste aluno</button></div>';
     // Edit panel (rendered when editing)
     if(editingUser===uid){
       dhtml+=renderEditPanel(user);
@@ -670,32 +668,56 @@ function toggleDetails(uid){if(expandedRows.has(uid))expandedRows.delete(uid);el
 function sortTable(col){if(sortCol===col)sortAsc=!sortAsc;else{sortCol=col;sortAsc=true}renderTable()}
 
 // ──────── Edit Panel ────────
-function openEditPanel(uid){
-  editingUser=uid;
+function openEditPanel(uid, themeIdx){
+  editingUser=uid; editingThemeIdx=(themeIdx!==undefined?themeIdx:0);
   if(!expandedRows.has(uid))expandedRows.add(uid);
   renderTable();
 }
 
 function renderEditPanel(user){
   var themes=getTdiThemes(user);
-  var html='<div class="edit-panel"><h4>Editar TDI — '+esc(user.name)+'</h4>'+(user.email?'<div style="font-size:.75rem;color:var(--muted);margin:-8px 0 12px">'+esc(user.email)+'</div>':'');
-  html+='<div class="ep-themes">';
-  themes.forEach(function(t,i){
-    html+='<div class="ep-theme" data-idx="'+i+'">'+
-      '<div class="ep-row"><input type="text" value="'+esc(t.name).replace(/"/g,'&quot;')+'" data-field="name" placeholder="Nome do tema">'+
-      '<select data-field="type"><option value="hard"'+(t.type==='hard'?' selected':'')+'>Hard Skill</option><option value="soft"'+(t.type==='soft'?' selected':'')+'>Soft Skill</option></select></div>'+
-      '<div class="ep-slider"><span>Progresso:</span><input type="number" min="0" max="100" step="5" value="'+(t.progress||0)+'" data-field="progress"><span class="ep-slider-val">%</span></div>'+
-      '<div class="ep-row" style="margin-top:6px"><select data-field="status"><option value="nao_iniciado"'+(t.status==='nao_iniciado'?' selected':'')+'>Não iniciado</option><option value="em_andamento"'+(t.status==='em_andamento'?' selected':'')+'>Em andamento</option><option value="concluido"'+(t.status==='concluido'?' selected':'')+'>Concluído</option></select>'+
-      '<button class="ep-del-btn" onclick="event.stopPropagation();removeEditTheme('+i+')">Remover</button></div>'+
-      '<div class="ep-row" style="margin-top:6px"><input type="date" data-field="deadline" value="'+(t.deadline||'')+'"><span style="font-size:.75rem;color:var(--yellow);font-weight:600;align-self:center">Data prevista</span></div>'+
-      '<textarea data-field="notes" placeholder="Notas..." style="width:100%;margin-top:6px">'+(t.notes||'')+'</textarea>'+
-      '<textarea data-field="resources" placeholder="Links (um por linha)" style="width:100%;margin-top:4px">'+(t.resources||[]).join('\n')+'</textarea>'+
-      '</div>';
-  });
+  var idx=editingThemeIdx;
+  if(idx>=themes.length)idx=0;
+  var t=themes[idx];
+  if(!t)return'';
+  var typeCls=t.type==='soft'?'dt-type-soft':'dt-type-hard';
+  var html='';
+  html+='<div class="ep-single">';
+  // Header do painel
+  html+='<div class="ep-single-header">';
+  html+='<div style="display:flex;align-items:center;gap:8px">';
+  html+='<span class="dt-card-type '+typeCls+'">'+(t.type==='soft'?'Soft':'Hard')+'</span>';
+  html+='<span style="font-weight:700;font-size:.9rem">'+esc(t.name||'Novo tema')+'</span>';
   html+='</div>';
-  html+='<button class="ep-add-btn" onclick="event.stopPropagation();addEditTheme()">+ Adicionar tema</button>';
-  html+='<div class="ep-actions" style="margin-top:12px"><button class="btn" onclick="event.stopPropagation();cancelEdit()">Cancelar</button><button class="btn btn-primary" onclick="event.stopPropagation();saveEditTdi()">Salvar TDI</button></div>';
+  html+='<button class="ep-close-btn" onclick="event.stopPropagation();cancelEdit()" title="Fechar">✕</button>';
   html+='</div>';
+  // Corpo
+  html+='<div class="ep-single-body">';
+  // Nome + Tipo
+  html+='<div class="ep-field-row">';
+  html+='<div class="ep-field"><label class="ep-label">Nome do tema</label><input class="ep-input" type="text" value="'+esc(t.name).replace(/"/g,'&quot;')+'" data-field="name" placeholder="Ex: Python, Comunicação..."></div>';
+  html+='<div class="ep-field ep-field-sm"><label class="ep-label">Tipo</label><select class="ep-input" data-field="type"><option value="hard"'+(t.type==='hard'?' selected':'')+'>Hard Skill</option><option value="soft"'+(t.type==='soft'?' selected':'')+'>Soft Skill</option></select></div>';
+  html+='</div>';
+  // Progresso + Status
+  html+='<div class="ep-field-row">';
+  html+='<div class="ep-field ep-field-sm"><label class="ep-label">Progresso</label><div style="display:flex;align-items:center;gap:8px"><input class="ep-input" type="number" min="0" max="100" step="5" value="'+(t.progress||0)+'" data-field="progress" style="width:80px;text-align:center;font-weight:700"><span style="color:var(--muted);font-size:.85rem">%</span></div></div>';
+  html+='<div class="ep-field"><label class="ep-label">Status</label><select class="ep-input" data-field="status"><option value="nao_iniciado"'+(t.status==='nao_iniciado'?' selected':'')+'>Não iniciado</option><option value="em_andamento"'+(t.status==='em_andamento'?' selected':'')+'>Em andamento</option><option value="concluido"'+(t.status==='concluido'?' selected':'')+'>Concluído</option></select></div>';
+  html+='<div class="ep-field ep-field-sm"><label class="ep-label">Data prevista</label><input class="ep-input" type="date" data-field="deadline" value="'+(t.deadline||'')+'" style="color-scheme:dark"></div>';
+  html+='</div>';
+  // Notas
+  html+='<div class="ep-field"><label class="ep-label">Notas</label><textarea class="ep-input ep-textarea" data-field="notes" placeholder="Observações, contexto...">'+esc(t.notes||'')+'</textarea></div>';
+  // Links
+  html+='<div class="ep-field"><label class="ep-label">Links de recurso <span style="font-weight:400;color:var(--muted)">(um por linha)</span></label><textarea class="ep-input ep-textarea" data-field="resources" placeholder="https://...">'+esc((t.resources||[]).join('\n'))+'</textarea></div>';
+  // Actions
+  html+='<div class="ep-single-actions">';
+  html+='<button class="ep-del-btn" onclick="event.stopPropagation();removeEditTheme('+idx+')">🗑 Remover tema</button>';
+  html+='<div style="display:flex;gap:8px">';
+  html+='<button class="btn" onclick="event.stopPropagation();cancelEdit()">Cancelar</button>';
+  html+='<button class="btn btn-primary" onclick="event.stopPropagation();saveEditTdi()">💾 Salvar</button>';
+  html+='</div>';
+  html+='</div>';
+  html+='</div>';// ep-single-body
+  html+='</div>';// ep-single
   return html;
 }
 
