@@ -106,40 +106,44 @@ td{padding:10px 14px;font-size:.82rem;border-bottom:1px solid var(--border)}
 .detail-row td{padding:0;background:var(--bg2)}
 .detail-content{padding:20px 24px}
 .detail-themes{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px;margin-bottom:16px}
-.dt-card{background:var(--card2);border:1px solid var(--border);border-radius:14px;padding:18px;transition:all .3s;position:relative;overflow:hidden}
-.dt-card:hover{border-color:var(--border2);transform:translateY(-2px);box-shadow:0 4px 16px rgba(0,0,0,0.2)}
+.dt-card{background:var(--card2);border:2px solid var(--border);border-radius:14px;padding:16px;transition:all .3s;position:relative;overflow:hidden}
+.dt-card:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,0.25)}
 .dt-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:14px 14px 0 0}
-.dt-card:nth-child(odd)::before{background:var(--blue)}.dt-card:nth-child(even)::before{background:var(--purple)}
-.dt-card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
-.dt-card-name{font-weight:700;font-size:.88rem;display:flex;align-items:center;gap:8px}
-.dt-card-type{font-size:.6rem;padding:3px 10px;border-radius:12px;font-weight:700;text-transform:uppercase;letter-spacing:.3px}
+.dt-card.card-soft{border-color:rgba(168,85,247,0.35)}
+.dt-card.card-soft::before{background:var(--purple)}
+.dt-card.card-soft:hover{border-color:rgba(168,85,247,0.6);box-shadow:0 6px 20px rgba(168,85,247,0.1)}
+.dt-card.card-hard{border-color:rgba(59,130,246,0.35)}
+.dt-card.card-hard::before{background:var(--blue)}
+.dt-card.card-hard:hover{border-color:rgba(59,130,246,0.6);box-shadow:0 6px 20px rgba(59,130,246,0.1)}
+.dt-card.tdi-is-approved{border-color:rgba(33,194,94,0.5)!important}
+.dt-card.tdi-is-approved::before{background:var(--accent)!important}
+.dt-card.tdi-is-approved:hover{border-color:rgba(33,194,94,0.75)!important;box-shadow:0 6px 20px rgba(33,194,94,0.12)!important}
+.dt-card.flagged{border-color:rgba(239,68,68,0.5)!important;box-shadow:0 0 0 2px rgba(239,68,68,0.12)!important}
+.dt-card.flagged::before{background:var(--red)!important}
+.dt-card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:8px}
+.dt-card-header-left{display:flex;align-items:center;gap:8px;flex:1;min-width:0}
+.dt-card-header-right{display:flex;align-items:center;gap:6px;flex-shrink:0}
+.dt-card-name{font-weight:700;font-size:.88rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dt-card-type{font-size:.6rem;padding:3px 10px;border-radius:12px;font-weight:700;text-transform:uppercase;letter-spacing:.3px;flex-shrink:0}
 .dt-type-hard{background:rgba(59,130,246,0.15);color:var(--blue)}
 .dt-type-soft{background:rgba(168,85,247,0.15);color:var(--purple)}
+.dt-approved-stamp{position:absolute;top:10px;right:10px;display:flex;align-items:center;gap:4px;font-size:.65rem;font-weight:700;color:var(--accent);background:rgba(33,194,94,0.12);border:1px solid rgba(33,194,94,0.3);border-radius:8px;padding:3px 8px;pointer-events:none}
+.tdi-flag-cb{width:16px;height:16px;accent-color:var(--accent);cursor:pointer;flex-shrink:0;margin:0}
 .dt-bar{height:8px;border-radius:4px;background:var(--card3);margin:8px 0;overflow:hidden}
 .dt-bar-fill{height:100%;border-radius:4px;transition:width .6s ease}
 .dt-meta{font-size:.75rem;color:var(--muted);display:flex;justify-content:space-between;align-items:center}
 .dt-meta .dt-pct{font-weight:800}
-.dt-notes{font-size:.75rem;color:var(--muted);margin-top:8px;font-style:italic;padding:8px 10px;background:rgba(255,255,255,0.02);border-radius:8px;border-left:3px solid var(--accent)}
-.dt-resources{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
-.dt-res-tag{font-size:.68rem;padding:4px 10px;border-radius:8px;background:rgba(59,130,246,0.08);color:var(--blue);border:1px solid rgba(59,130,246,0.15);transition:all .2s;text-decoration:none}
-.dt-res-tag:hover{background:rgba(59,130,246,0.15);border-color:var(--blue)}
-/* TDI FLAG / CHECKBOX */
-.tdi-flag-cb{position:absolute;top:12px;right:12px;width:18px;height:18px;accent-color:var(--accent);cursor:pointer;z-index:2}
-.dt-card{position:relative}
-.dt-card.flagged{border-color:rgba(239,68,68,0.45);box-shadow:0 0 0 2px rgba(239,68,68,0.12)}
-.dt-card.flagged::before{background:var(--red)!important}
-.dt-card.tdi-is-approved{border-color:rgba(33,194,94,0.4)}
-.dt-card.tdi-is-approved::before{background:var(--accent)!important}
-.tdi-approved-badge{display:inline-flex;align-items:center;gap:4px;font-size:.62rem;padding:2px 8px;border-radius:10px;background:rgba(33,194,94,0.15);color:var(--accent);font-weight:700;border:1px solid rgba(33,194,94,0.25);margin-left:6px}
 .tdi-bulk-bar{display:none;align-items:center;gap:8px;padding:10px 14px;background:rgba(239,68,68,0.05);border:1px solid rgba(239,68,68,0.18);border-radius:12px;margin-top:10px;flex-wrap:wrap}
 .tdi-bulk-bar.visible{display:flex}
-.tdi-bulk-count{font-size:.8rem;font-weight:700;color:var(--red);flex:1}
+.tdi-bulk-count{font-size:.8rem;font-weight:700;color:var(--muted);flex:1}
 .btn-bulk-approve{padding:6px 16px;border-radius:8px;border:1px solid rgba(33,194,94,0.35);background:rgba(33,194,94,0.1);color:var(--accent);cursor:pointer;font-size:.75rem;font-weight:700;transition:all .2s}
-.btn-bulk-approve:hover{background:rgba(33,194,94,0.2);border-color:var(--accent)}
+.btn-bulk-approve:hover{background:rgba(33,194,94,0.22);border-color:var(--accent)}
 .btn-bulk-remove{padding:6px 16px;border-radius:8px;border:1px solid rgba(239,68,68,0.35);background:rgba(239,68,68,0.1);color:var(--red);cursor:pointer;font-size:.75rem;font-weight:700;transition:all .2s}
-.btn-bulk-remove:hover{background:rgba(239,68,68,0.2);border-color:var(--red)}
+.btn-bulk-remove:hover{background:rgba(239,68,68,0.22);border-color:var(--red)}
 .btn-bulk-clear{padding:6px 12px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;font-size:.75rem;font-weight:700;transition:all .2s}
 .btn-bulk-clear:hover{border-color:var(--border2);color:var(--text)}
+.dt-edit-btn{padding:4px 12px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;font-size:.7rem;font-weight:700;transition:all .2s;white-space:nowrap}
+.dt-edit-btn:hover{border-color:var(--accent);color:var(--text)}
 
 /* EDIT PANEL (inline no detail) */
 .edit-panel{background:linear-gradient(135deg,rgba(33,194,94,0.03),rgba(59,130,246,0.03));border:1px solid rgba(33,194,94,0.2);border-radius:16px;padding:24px;margin-top:16px}
@@ -618,20 +622,24 @@ function renderTable(){
       themes.forEach(function(t,i){
         var bCls=t.progress>=70?'pf-green':t.progress>=30?'pf-yellow':'pf-red';
         var tCls=t.type==='soft'?'dt-type-soft':'dt-type-hard';
+        var cardTypeCls=t.type==='soft'?'card-soft':'card-hard';
         var statusTxt={nao_iniciado:'Não iniciado',em_andamento:'Em andamento',concluido:'Concluído'};
         var uidEsc=uid.toString().replace(/"/g,'&quot;');
-        dhtml+='<div class="dt-card'+(t.approved?' tdi-is-approved':'')+(t.flagged?' flagged':'')+'">' +
-          '<input type="checkbox" class="tdi-flag-cb" data-uid="'+uidEsc+'" data-idx="'+i+'" '+(t.flagged?'checked':'')+' onclick="event.stopPropagation();toggleTdiFlag(this)" title="Selecionar">' +
-          '<div class="dt-card-header">' +
-            '<span class="dt-card-name">' +
-              '<span class="dt-card-type '+tCls+'">'+(t.type==='soft'?'Soft':'Hard')+'</span> '+
-              esc(t.name)+
-              (t.approved?'<span class="tdi-approved-badge">✔ Aprovado</span>':'')+
-            '</span>' +
-            '<button onclick="event.stopPropagation();openEditPanel(&quot;'+uidEsc+'&quot;);" style="padding:4px 12px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;font-size:.7rem;font-weight:700;transition:all .2s">Editar</button>' +
-          '</div>' +
-          '<div class="dt-bar"><div class="dt-bar-fill '+bCls+'" style="width:'+t.progress+'%"></div></div>' +
-          '<div class="dt-meta"><span>'+(statusTxt[t.status]||t.status)+(t.deadline?' &nbsp;&middot;&nbsp; <span style="color:var(--yellow);font-weight:700">Prazo: '+new Date(t.deadline+'T00:00:00').toLocaleDateString('pt-BR')+'</span>':'')+'</span><span style="font-weight:800">'+t.progress+'%</span></div>' +
+        dhtml+=
+          '<div class="dt-card '+cardTypeCls+(t.approved?' tdi-is-approved':'')+(t.flagged?' flagged':'')+'">'+
+          (t.approved?'<div class="dt-approved-stamp">✔ Aprovado</div>':'')+
+          '<div class="dt-card-header">'+
+            '<div class="dt-card-header-left">'+
+              '<span class="dt-card-type '+tCls+'">'+(t.type==='soft'?'Soft':'Hard')+'</span>'+
+              '<span class="dt-card-name">'+esc(t.name)+'</span>'+
+            '</div>'+
+            '<div class="dt-card-header-right">'+
+              '<input type="checkbox" class="tdi-flag-cb" data-uid="'+uidEsc+'" data-idx="'+i+'" '+(t.flagged?'checked':'')+' onclick="event.stopPropagation();toggleTdiFlag(this)" title="Selecionar tema">'+
+              '<button class="dt-edit-btn" onclick="event.stopPropagation();openEditPanel(&quot;'+uidEsc+'&quot;);">Editar</button>'+
+            '</div>'+
+          '</div>'+
+          '<div class="dt-bar"><div class="dt-bar-fill '+bCls+'" style="width:'+t.progress+'%"></div></div>'+
+          '<div class="dt-meta"><span>'+(statusTxt[t.status]||t.status)+(t.deadline?' &nbsp;&middot;&nbsp; <span style="color:var(--yellow);font-weight:700">Prazo: '+new Date(t.deadline+'T00:00:00').toLocaleDateString('pt-BR')+'</span>':'')+'</span><span style="font-weight:800">'+t.progress+'%</span></div>'+
           (t.notes?'<div class="dt-notes">'+esc(t.notes)+'</div>':'')+
           (t.resources&&t.resources.length?'<div class="dt-resources">'+t.resources.map(function(r){return '<a class="dt-res-tag" href="'+esc(r)+'" target="_blank">'+shortenUrl(r)+'</a>'}).join('')+'</div>':'')+
           '</div>';
